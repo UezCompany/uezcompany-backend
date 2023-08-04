@@ -6,6 +6,10 @@ const port = 3000;
 // Middleware para fazer o parsing do corpo das requisições
 app.use(express.json());
 
+// Importa o cors
+const cors = require('cors');
+app.use(cors());
+
 // Importa a conexão com o banco de dados
 const connection = require('./models/db');
 
