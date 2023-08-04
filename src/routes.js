@@ -27,7 +27,7 @@ module.exports = (connection) => {
 
   // Rota /clientes - POST
   router.post('/clientes', (req, res) => {
-    connection.query('INSERT INTO cliente SET ?', req.body, (error, results, fields) => {
+    connection.query('INSERT INTO cliente(emailCliente, senhaCliente, cpfCliente, rgCliente) VALUES (?, ?, ?, ?)', [req.body.emailCliente, req.body.senhaCliente, req.body.cpfCliente, req.body.rgCliente], (error, results, fields) => {
       if (error) {
         console.error('Erro ao executar consulta: ' + error.stack);
         return res.status(500).json({ message: 'Erro ao executar consulta' });
