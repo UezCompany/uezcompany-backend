@@ -1,4 +1,4 @@
-const ClienteModel = require('../models/Cliente');
+const ClienteModel = require('../models/ClienteModel');
 
 const ClienteController = {
     getAllClientes: async (req, res) => {
@@ -24,7 +24,15 @@ const ClienteController = {
             res.status(500).json({ message: 'Erro ao obter cliente por ID' });
         }
     },
-    // Outras funções para o controlador de Cliente
+    createCliente: async (req, res) => {
+        try {
+            const cliente = await ClienteModel.createCliente(req.body);
+            res.status(201).json(cliente);
+        } catch (error) {
+            console.error('Erro ao criar cliente: ' + error.stack);
+            res.status(500).json({ message: 'Erro ao criar cliente' });
+        }
+    },
 };
 
 module.exports = ClienteController;
