@@ -1,4 +1,5 @@
 const ClienteModel = require('../models/clienteModel');
+const jwt = require('jsonwebtoken');
 
 const ClienteController = {
     getAllClientes: async (req, res) => {
@@ -59,7 +60,8 @@ const ClienteController = {
             console.error('Erro ao deletar cliente: ' + error.stack);
             res.status(500).json({ message: 'Erro ao deletar cliente' });
         }
-    }
+    },
+
 };
 
 module.exports = ClienteController;
