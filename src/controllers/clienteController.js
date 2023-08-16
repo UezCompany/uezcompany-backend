@@ -1,4 +1,4 @@
-const ClienteModel = require('../models/ClienteModel');
+const ClienteModel = require('../models/clienteModel');
 
 const ClienteController = {
     getAllClientes: async (req, res) => {
@@ -25,7 +25,14 @@ const ClienteController = {
         }
     },
     createCliente: async (req, res) => {
+        const { emailCliente } = req.body;
         try {
+            // Verifica se o cliente já existe com base no email
+            const existingCliente = await ClienteModel.getClienteByEmail(emailCliente);
+            if (existingCliente) {
+                return res.status(400).json({ message: 'Cliente já cadastrado com este email' });
+            }
+
             const cliente = await ClienteModel.createCliente(req.body);
             res.status(201).json(cliente);
         } catch (error) {
@@ -33,6 +40,16 @@ const ClienteController = {
             res.status(500).json({ message: 'Erro ao criar cliente' });
         }
     },
+    updateCliente: async (req, res) => {
+        const { id } = req.params;
+        try {
+            const cliente = await ClienteModel.updateCliente(id, req.body);
+            res.json(cliente);
+        } catch (error) {
+            console.error('Erro ao atualizar cliente: ' + error.stack);
+            res.status(500).json({ message: 'Erro ao atualizar cliente' });
+        }
+    }
 };
 
 module.exports = ClienteController;
