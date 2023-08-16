@@ -54,6 +54,16 @@ const ClienteModel = {
         })
     })
   },
+  deleteCliente: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.execute('DELETE FROM cliente WHERE idCliente = ?', [id], (error, results, fields) => {
+        if (error) {
+          return reject(error);
+        }
+        resolve(results[0]);
+      });
+    });
+  },
   // Outras funções para o modelo de Cliente
 };
 

@@ -44,10 +44,20 @@ const ClienteController = {
         const { id } = req.params;
         try {
             const cliente = await ClienteModel.updateCliente(id, req.body);
-            res.json(cliente);
+            res.status(200).json(cliente);
         } catch (error) {
             console.error('Erro ao atualizar cliente: ' + error.stack);
             res.status(500).json({ message: 'Erro ao atualizar cliente' });
+        }
+    },
+    deleteCliente: async (req, res) => {
+        const { id } = req.params;
+        try {
+            const cliente = await ClienteModel.deleteCliente(id);
+            res.status(200).json(cliente);
+        } catch (error) {
+            console.error('Erro ao deletar cliente: ' + error.stack);
+            res.status(500).json({ message: 'Erro ao deletar cliente' });
         }
     }
 };
