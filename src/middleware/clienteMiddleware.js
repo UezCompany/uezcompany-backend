@@ -7,7 +7,7 @@ const validateBody = (req, res, next) => {
         emailCliente === null || cpfCliente === null || rgCliente === null || senhaCliente === null) {
         return res.status(400).json({ message: 'Todos os campos devem ser preenchidos' });
     }
-
+    console.log("Passou pelo validateBody com sucesso!")
     next();
 }
 

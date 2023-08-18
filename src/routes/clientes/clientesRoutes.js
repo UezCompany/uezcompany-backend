@@ -7,7 +7,9 @@ router.get('/clientes', getAllClientes);
 router.get('/clientes/:id', getClienteById);
 
 router.post('/clientes', validateBody, createCliente);
+
 router.put('/clientes/:id', validateBody, updateCliente);
+
 router.delete('/clientes/:id', deleteCliente);
 // Outras rotas para o modelo de Cliente
 

@@ -23,11 +23,12 @@ const ClienteModel = {
   },
   getClienteByEmail: (email) => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM cliente WHERE emailCliente = ?', [email], (error, results, fields) => {
+      connection.execute('SELECT * FROM cliente WHERE emailCliente = ?', [email], (error, results, fields) => {
         if (error) {
           return reject(error);
         }
-        resolve(results[0]); // Retorna o primeiro resultado ou null
+        console.log(results[0]);
+        resolve(results[0]); 
       });
     });
   },
@@ -38,7 +39,7 @@ const ClienteModel = {
           if (error) {
             return reject(error);
           }
-          resolve(results[0]);
+          resolve(results);
         });
     });
   },

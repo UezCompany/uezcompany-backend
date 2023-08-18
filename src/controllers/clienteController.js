@@ -35,7 +35,7 @@ const ClienteController = {
             }
 
             const cliente = await ClienteModel.createCliente(req.body);
-            res.status(201).json(cliente);
+            res.status(201).json({ message: 'Cliente criado com sucesso', cliente });
         } catch (error) {
             console.error('Erro ao criar cliente: ' + error.stack);
             res.status(500).json({ message: 'Erro ao criar cliente' });

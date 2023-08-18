@@ -5,3 +5,5 @@ const router = express.Router();
 
 
 router.post('/login', userTypeMiddleware, authController.login);
+
+module.exports = router;
