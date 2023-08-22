@@ -11,9 +11,6 @@ app.use('/api', clientesRoutes); // Use /api como prefixo para todas as rotas de
 const authRoutes = require('./routes/auth/authRoutes');
 app.use('/api', authRoutes); // Use /api como prefixo para todas as rotas de autorização
 
-
-
-
 app.listen(PORT, () => {
   console.log(`Servidor iniciado na porta ${PORT}`);
 });

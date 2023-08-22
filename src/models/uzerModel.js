@@ -1,65 +1,31 @@
-const Uzer = require('./Schemas/Uzer');
+const Uzer = require('./Schemas/Uzer')
 
 const UzerModel = {
-  getAllUzers: () => {
-    return new Promise((resolve, reject) => {
-      Uzer.find({}, (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    });
+  getAllUzers: async () => {
+    console.log('Consultando coleção:', Uzer.collection.collectionName);
+    const uzers = await Uzer.find({});
+    console.log('Uzers encontrados:', uzers);
+    return uzers;
   },
-  getUzerById: (id) => {
-    return new Promise((resolve, reject) => {
-      Uzer.findById(id, (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    });
+  getUzerById: async (id) => {
+    const uzer = await Uzer.findById(id).catch(err => console.error(err));
+    return uzer
   },
-  getUzerByEmail: (email) => {
-    return new Promise((resolve, reject) => {
-      Uzer.findOne({ emailUzer: email }, (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    });
+  getUzerByEmail: async (email) => {
+    const uzer = await Uzer.findOne({ emailUzer: email });
+    return uzer
   },
-  createUzer: (uzer) => {
-    return new Promise((resolve, reject) => {
-      Uzer.create(uzer, (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    });
+  createUzer: async (uzer) => {
+    const newUzer = await Uzer.create(uzer).catch(err => console.error(err));
+    return newUzer
   },
-  updateUzer: (id, { emailUzer, cpfUzer, rgUzer, senhaUzer }) => {
-    return new Promise((resolve, reject) => {
-      Uzer.updateOne({ _id: id }, { emailUzer, cpfUzer, rgUzer, senhaUzer }, (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    })
+  updateUzer: async (id, { emailUzer, cpfUzer, rgUzer, senhaUzer }) => {
+    const updateUzer = await Uzer.updateOne({ _id: id }, { emailUzer, cpfUzer, rgUzer, senhaUzer }).catch(err => console.error(err));
+    return updateUzer
   },
-  deleteUzer: (id) => {
-    return new Promise((resolve, reject) => {
-      Uzer.deleteOne({ _id: id }, (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    });
+  deleteUzer: async (id) => {
+    const deleteUzer = Uzer.deleteOne({ _id: id }).catch(err => console.error(err));
+    return deleteUzer
   },
   // Outras funções para o modelo de Uzer
 };

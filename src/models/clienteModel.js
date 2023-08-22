@@ -1,62 +1,31 @@
 const Cliente = require('./Schemas/Cliente')
 
 const ClienteModel = {
-  getAllClientes: () => {
-    return new Promise(async (resolve, reject) => {
-      const clientes = await Cliente.find({});
-      resolve(clientes);
-
-    });
+  getAllClientes: async () => {
+    console.log('Consultando coleção:', Cliente.collection.collectionName);
+    const clientes = await Cliente.find({});
+    console.log('Clientes encontrados:', clientes);
+    return clientes;
   },
-  getClienteById: (id) => {
-    return new Promise((resolve, reject) => {
-      Cliente.findById(id, (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      })
-    });
+  getClienteById: async (id) => {
+    const cliente = await Cliente.findById(id).catch(err => console.error(err));
+    return cliente
   },
-  getClienteByEmail: (email) => {
-    return new Promise((resolve, reject) => {
-      Cliente.findOne({ emailCliente: email }, (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    });
+  getClienteByEmail: async (email) => {
+    const cliente = await Cliente.findOne({ emailCliente: email });
+    return cliente
   },
-  createCliente: (cliente) => {
-    return new Promise((resolve, reject) => {
-      Cliente.create(cliente, (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    });
+  createCliente: async (cliente) => {
+    const newCliente = await Cliente.create(cliente).catch(err => console.error(err));
+    return newCliente
   },
-  updateCliente: (id, { emailCliente, cpfCliente, rgCliente, senhaCliente }) => {
-    return new Promise((resolve, reject) => {
-      Cliente.updateOne({ _id: id }, { emailCliente, cpfCliente, rgCliente, senhaCliente }, (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    })
+  updateCliente: async (id, { emailCliente, cpfCliente, rgCliente, senhaCliente }) => {
+    const updateCliente = await Cliente.updateOne({ _id: id }, { emailCliente, cpfCliente, rgCliente, senhaCliente }).catch(err => console.error(err));
+    return updateCliente
   },
-  deleteCliente: (id) => {
-    return new Promise((resolve, reject) => {
-      Cliente.deleteOne({ _id: id }, (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    });
+  deleteCliente: async (id) => {
+    const deleteCliente = Cliente.deleteOne({ _id: id }).catch(err => console.error(err));
+    return deleteCliente
   },
   // Outras funções para o modelo de Cliente
 };
