@@ -1,69 +1,31 @@
-const connection = require('./db');
+const Cliente = require('./Schemas/Cliente')
 
 const ClienteModel = {
-  getAllClientes: () => {
-    return new Promise((resolve, reject) => {
-      connection.execute('SELECT * FROM cliente', (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results);
-      });
-    });
+  getAllClientes: async () => {
+    console.log('Consultando coleção:', Cliente.collection.collectionName);
+    const clientes = await Cliente.find({});
+    console.log('Clientes encontrados:', clientes);
+    return clientes;
   },
-  getClienteById: (id) => {
-    return new Promise((resolve, reject) => {
-      connection.execute('SELECT * FROM cliente WHERE idCliente = ?', [id], (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results[0]); // Retorna o primeiro resultado ou null
-      });
-    });
+  getClienteById: async (id) => {
+    const cliente = await Cliente.findById(id).catch(err => console.error(err));
+    return cliente
   },
-  getClienteByEmail: (email) => {
-    return new Promise((resolve, reject) => {
-      connection.execute('SELECT * FROM cliente WHERE emailCliente = ?', [email], (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        console.log(results[0]);
-        resolve(results[0]); 
-      });
-    });
+  getClienteByEmail: async (email) => {
+    const cliente = await Cliente.findOne({ emailCliente: email });
+    return cliente
   },
-  createCliente: (cliente) => {
-    return new Promise((resolve, reject) => {
-      connection.execute('INSERT INTO cliente (emailCliente, cpfCliente, rgCliente, senhaCliente) VALUES (?, ?, ?, ?)',
-        [cliente.emailCliente, cliente.cpfCliente, cliente.rgCliente, cliente.senhaCliente], (error, results, fields) => {
-          if (error) {
-            return reject(error);
-          }
-          resolve(results);
-        });
-    });
+  createCliente: async (cliente) => {
+    const newCliente = await Cliente.create(cliente).catch(err => console.error(err));
+    return newCliente
   },
-  updateCliente: (id, { emailCliente, cpfCliente, rgCliente, senhaCliente }) => {
-    return new Promise((resolve, reject) => {
-      connection.execute('UPDATE cliente SET emailCliente = ?, cpfCliente = ?, rgCliente = ?, senhaCliente = ? WHERE idCliente = ?',
-        [emailCliente, cpfCliente, rgCliente, senhaCliente, id],
-        (error, results, fields) => {
-          if (error) {
-            return reject(error);
-          }
-          resolve(results[0]);
-        })
-    })
+  updateCliente: async (id, { emailCliente, cpfCliente, rgCliente, senhaCliente }) => {
+    const updateCliente = await Cliente.updateOne({ _id: id }, { emailCliente, cpfCliente, rgCliente, senhaCliente }).catch(err => console.error(err));
+    return updateCliente
   },
-  deleteCliente: (id) => {
-    return new Promise((resolve, reject) => {
-      connection.execute('DELETE FROM cliente WHERE idCliente = ?', [id], (error, results, fields) => {
-        if (error) {
-          return reject(error);
-        }
-        resolve(results[0]);
-      });
-    });
+  deleteCliente: async (id) => {
+    const deleteCliente = Cliente.deleteOne({ _id: id }).catch(err => console.error(err));
+    return deleteCliente
   },
   // Outras funções para o modelo de Cliente
 };

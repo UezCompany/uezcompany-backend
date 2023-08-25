@@ -5,7 +5,7 @@ const ClienteController = {
     getAllClientes: async (req, res) => {
         try {
             const clientes = await ClienteModel.getAllClientes();
-            res.json(clientes);
+            res.status(200).json(clientes);
         } catch (error) {
             console.error('Erro ao obter clientes: ' + error.stack);
             res.status(500).json({ message: 'Erro ao obter clientes' });

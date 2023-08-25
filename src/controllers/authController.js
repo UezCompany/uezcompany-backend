@@ -2,6 +2,8 @@ const ClienteModel = require('../models/clienteModel');
 const UzerModel = require('../models/uzerModel');
 const jwt = require('jsonwebtoken');
 
+require('dotenv').config();
+
 const AuthController = {
     login: async (req, res) => {
         const { email, senha, userType } = req.body;
@@ -24,8 +26,8 @@ const AuthController = {
                 return res.status(401).json({ message: 'Credenciais inválidas' });
             }
 
-            const token = jwt.sign({ id: user.id, tipo: userType }, 'seuSegredo', { expiresIn: '24h' });
-            const decryptedToken = jwt.verify(token, 'seuSegredo');
+            const token = jwt.sign({ id: user.id, tipo: userType }, process.env.SECRET, { expiresIn: '24h' });
+            const decryptedToken = jwt.verify(token, process.env.SECRET);
 
             res.status(200).json({ token, decryptedToken });
         } catch (error) {
