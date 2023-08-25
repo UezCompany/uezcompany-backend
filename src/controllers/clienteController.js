@@ -1,5 +1,4 @@
 const ClienteModel = require('../models/clienteModel');
-const jwt = require('jsonwebtoken');
 
 const ClienteController = {
     getAllClientes: async (req, res) => {
@@ -34,7 +33,18 @@ const ClienteController = {
                 return res.status(400).json({ message: 'Cliente já cadastrado com este email' });
             }
 
+            const bcrypt = require('bcrypt');
+            const saltRounds = 17;
+            const hash = bcrypt.hashSync(req.body.senhaCliente, saltRounds);
+            req.body.senhaCliente = hash;
+
             const cliente = await ClienteModel.createCliente(req.body);
+            
+            if (cliente.errors) {
+                console.log("Log: ", cliente);
+                return res.status(400).json(cliente.errors);
+            }
+
             res.status(201).json({ message: 'Cliente criado com sucesso', cliente });
         } catch (error) {
             console.error('Erro ao criar cliente: ' + error.stack);
@@ -61,7 +71,6 @@ const ClienteController = {
             res.status(500).json({ message: 'Erro ao deletar cliente' });
         }
     },
-
 };
 
 module.exports = ClienteController;

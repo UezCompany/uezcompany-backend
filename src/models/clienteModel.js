@@ -16,17 +16,18 @@ const ClienteModel = {
     return cliente
   },
   createCliente: async (cliente) => {
-    const newCliente = await Cliente.create(cliente).catch(err => console.error(err));
+    const newCliente = await Cliente.create(cliente).catch(err => err);
     return newCliente
   },
-  updateCliente: async (id, { emailCliente, cpfCliente, rgCliente, senhaCliente }) => {
-    const updateCliente = await Cliente.updateOne({ _id: id }, { emailCliente, cpfCliente, rgCliente, senhaCliente }).catch(err => console.error(err));
-    return updateCliente
+ updateCliente: async (id, updateData) => {
+    const updateCliente = await Cliente.updateOne({ _id: id }, updateData).catch(err => console.error(err));
+    return updateCliente;
   },
   deleteCliente: async (id) => {
     const deleteCliente = Cliente.deleteOne({ _id: id }).catch(err => console.error(err));
     return deleteCliente
   },
+
   // Outras funções para o modelo de Cliente
 };
 

@@ -1,5 +1,6 @@
 const ClienteModel = require('../models/clienteModel');
 const UzerModel = require('../models/uzerModel');
+const funcionarioModel = require('../models/funcionarioModel');
 const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
@@ -35,6 +36,22 @@ const AuthController = {
             res.status(500).json({ message: 'Erro ao fazer login' });
         }
     },
+    loginFuncionario: async (req, res) => {
+        const { idFuncionario, senhaFuncionario } = req.body;
+        
+        try {
+            let funcionario = await funcionarioModel.getFuncionarioById(idFuncionario);
+            if(senhaFuncionario != funcionario.senhaFuncionario) {
+                console.log('Credenciais inválidas');
+                return res.status(401).json({ message: 'Credenciais inválidas' });
+            }
+
+            res.status(200).json({nomeFuncionario: funcionario.nomeFuncionario, message: 'Login efetuado com sucesso' });
+        } catch (error) {
+            console.error('Erro ao fazer login: ' + error.stack);
+            res.status(401).json({ message: 'Erro ao fazer login' });
+        }
+    }
 };
 
 module.exports = AuthController;
