@@ -12,7 +12,7 @@ const funcionariosRoutes = require('./routes/funcionarios/funcionariosRoutes');
 app.use('/api', funcionariosRoutes); // Use /api como prefixo para todas as rotas de funcionários
 
 const authRoutes = require('./routes/auth/authRoutes');
-app.use('/api', authRoutes); // Use /api como prefixo para todas as rotas de autorização
+app.use(authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor iniciado na porta ${PORT}`);

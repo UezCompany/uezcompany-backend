@@ -1,7 +1,8 @@
 const ClienteModel = require('../models/clienteModel');
 const UzerModel = require('../models/uzerModel');
 
-const userTypeMiddleware = async (req, res, next) => {
+
+const getUserTypeMiddleware = async (req, res, next) => {
     const { email } = req.body;
 
     // Verifique se o email está presente na tabela Cliente
@@ -24,4 +25,22 @@ const userTypeMiddleware = async (req, res, next) => {
     return res.status(401).json({ message: 'Usuário não encontrado' });
 };
 
-module.exports = userTypeMiddleware;
+const userTypeMiddleware = async (req, res, next) => {
+    const { validateClienteRegisterBody, validateUzerRegisterBody, validateFuncionarioRegisterBody } = require('./validateMiddlewares');
+    const { userType } = req.body;
+
+    if (userType === 'cliente') {
+        validateClienteRegisterBody(req, res, next);
+    } else if (userType === 'uzer') {
+        validateUzerRegisterBody(req, res, next);
+    } else if (userType === 'funcionario') {
+        validateFuncionarioRegisterBody(req, res, next);
+    } else {
+        return res.status(400).json({ message: 'Tipo de usuário inválido' });
+    }
+}
+
+module.exports = {
+    getUserTypeMiddleware,
+    userTypeMiddleware
+};

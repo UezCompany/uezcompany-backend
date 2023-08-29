@@ -1,39 +1,39 @@
 const { Schema, model } = require('../connection');
 
 const clienteSchema = new Schema({
-    nomeCliente: {
+    nome: {
         type: String,
         required: true
     },
-    emailCliente: {
+    email: {
         type: String,
         required: true
     },
-    cpfCliente: {
+    CPF: {
         type: String,
         required: true
     },
-    rgCliente: {
+    RG: {
         type: String,
         default: null
     },
-    senhaCliente: {
+    senha: {
         type: String,
         required: true,
     },
-    situacaoCliente: {
+    situacao: {
         type: String,
-        default: "null"
+        default: "Pendente..."
     },
-    motivobanCliente: {
-        type: String,
-        default: null
-    },
-    cepCliente: {
+    motivoBloqueio: {
         type: String,
         default: null
     },
-    enderecoCliente: {
+    CEP: {
+        type: String,
+        default: null
+    },
+    endereco: {
         type: Object,
         default: {
             logradouro: null,
@@ -44,31 +44,31 @@ const clienteSchema = new Schema({
             estado: null
         }
     },
-    historicocriminalCliente: {
-        type: String,
-        default: null
+    dataNascimento: {
+        type: Date,
+        default: ""
     },
-    datacadCliente: {
+    dataCadastro: {
         type: Date,
         default: new Date()
     },
-    telefoneCliente: {
+    telefone: {
         type: String,
         default: null
     },
-    aprovacaoCliente: {
+    aprovacao: {
         type: Boolean,
         default: false
     },
-    avaliacaoCliente: {
+    avaliacao: {
         type: Number,
         default: 0
     },
-    reprovacaoCliente: {
+    reprovacao: {
         type: Boolean,
         default: false
     },
-    quantidadepedidosCliente: {
+    quantidadePedidos: {
         type: Number,
         default: 0
     }

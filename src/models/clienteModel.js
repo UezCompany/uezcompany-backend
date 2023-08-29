@@ -4,7 +4,6 @@ const ClienteModel = {
   getAllClientes: async () => {
     console.log('Consultando coleção:', Cliente.collection.collectionName);
     const clientes = await Cliente.find({});
-    console.log('Clientes encontrados:', clientes);
     return clientes;
   },
   getClienteById: async (id) => {
@@ -13,6 +12,10 @@ const ClienteModel = {
   },
   getClienteByEmail: async (email) => {
     const cliente = await Cliente.findOne({ emailCliente: email });
+    return cliente
+  },
+  getClienteByCpf: async (cpf) => {
+    const cliente = await Cliente.findOne({ cpfCliente: cpf });
     return cliente
   },
   createCliente: async (cliente) => {

@@ -30,7 +30,8 @@ const ClienteController = {
             // Verifica se o cliente já existe com base no email
             const existingCliente = await ClienteModel.getClienteByEmail(emailCliente);
             if (existingCliente) {
-                return res.status(400).json({ message: 'Cliente já cadastrado com este email' });
+                console.log('Ja existe um cliente com este email');
+                return res.status(400).json({ message: 'Ja existe um cliente com este email' });
             }
 
             const bcrypt = require('bcrypt');

@@ -2,7 +2,7 @@ const {Schema, model} = require('../connection');
 
 const servicoSchema = new Schema({
     idServico: {
-        type: String,
+        type: Number,
         required: true
     },
     nomeServico: {
@@ -16,6 +16,14 @@ const servicoSchema = new Schema({
     categoriaServico: {
         type: String,
         required: true
+    },
+    descricaoServico: {
+        type: String,
+        required: true
+    },
+    quantidadeFeitos: {
+        type: Number,
+        default: 0
     }
 })
 
