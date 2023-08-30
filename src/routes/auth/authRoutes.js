@@ -1,9 +1,8 @@
 const express = require('express');
-const userTypeMiddleware = require('../../middleware/userMiddleware');
 const authController = require('../../controllers/authController');
 const ClienteController = require('../../controllers/clienteController');
 const { validateBody } = require('../../middleware/validateMiddlewares');
-const { getUserTypeMiddleware, userTypeMiddleware } = require('../../middleware/userMiddleware');
+const { getUserTypeByDbMiddleware, userTypeMiddleware } = require('../../middleware/userMiddleware');
 const router = express.Router();
 
 /*
@@ -12,8 +11,21 @@ const router = express.Router();
     
     ...
 */
-router.post('/register', validateBody, userTypeMiddleware);
-router.post('/login', getUserTypeMiddleware, authController.login);
+router.post('/register', validateBody, userTypeMiddleware, (req, res) => {
+    const { userType } = req.body;
+
+    if (userType === 'cliente') {
+        ClienteController.createCliente(req, res);
+    } else if (userType === 'uzer') {
+        UzerController.createUzer(req, res);
+    } else if (userType === 'funcionario') {
+        FuncionarioController.createFuncionario(req, res);
+    } else {
+        res.status(400).json({ message: 'Tipo de usuário inválido' });
+    }
+});
+
+router.post('/login', getUserTypeByDbMiddleware, authController.login);
 
 router.post('/funcionario/login', authController.loginFuncionario);
 

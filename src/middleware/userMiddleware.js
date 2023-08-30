@@ -1,8 +1,8 @@
 const ClienteModel = require('../models/clienteModel');
 const UzerModel = require('../models/uzerModel');
 
-
-const getUserTypeMiddleware = async (req, res, next) => {
+// Esse middleware verifica o tipo de usuário de acordo com o banco de dados
+const getUserTypeByDbMiddleware = async (req, res, next) => {
     const { email } = req.body;
 
     // Verifique se o email está presente na tabela Cliente
@@ -25,6 +25,8 @@ const getUserTypeMiddleware = async (req, res, next) => {
     return res.status(401).json({ message: 'Usuário não encontrado' });
 };
 
+
+// Esse middleware verifica o tipo de usuário, de acordo com o userType enviado no body da requisição, e encaminhar para a sua respectiva forma de validação
 const userTypeMiddleware = async (req, res, next) => {
     const { validateClienteRegisterBody, validateUzerRegisterBody, validateFuncionarioRegisterBody } = require('./validateMiddlewares');
     const { userType } = req.body;
@@ -41,6 +43,6 @@ const userTypeMiddleware = async (req, res, next) => {
 }
 
 module.exports = {
-    getUserTypeMiddleware,
+    getUserTypeByDbMiddleware,
     userTypeMiddleware
 };
