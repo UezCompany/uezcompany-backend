@@ -32,13 +32,16 @@ const userTypeMiddleware = async (req, res, next) => {
     const { userType } = req.body;
 
     if (userType === 'cliente') {
+        console.log('Passou no userMiddleware, é um cliente');
         validateClienteRegisterBody(req, res, next);
     } else if (userType === 'uzer') {
+        console.log('Passou no userMiddleware, é um uzer');
         validateUzerRegisterBody(req, res, next);
     } else if (userType === 'funcionario') {
+        console.log('Passou no userMiddleware, é um funcionário');
         validateFuncionarioRegisterBody(req, res, next);
     } else {
-        return res.status(400).json({ message: 'Tipo de usuário inválido' });
+        return res.json({ message: 'Tipo de usuário inválido' }).status(400);
     }
 }
 

@@ -5,7 +5,7 @@ const validateMiddlewares = {
         for (const field in requestData) {
             if (
                 requestData[field] === undefined ||
-                requestData[field].trim() === '' ||
+                requestData[field] === '' ||
                 requestData[field] === null
             ) {
                 return res.status(400).json({ message: 'Todos os campos devem ser preenchidos' });
@@ -30,34 +30,37 @@ const validateMiddlewares = {
 
         //Validação do Nome do Cliente
         if (!nome || nome === '' || nome.length < 3) {
+            console.log("O nome do cliente é inválido");
             return res.status(400).json({ message: 'O nome do cliente é inválido' });
         }
 
         //Validação do Email do Cliente
         if (!email || email === '') {
+            console.log("O email do cliente é inválido");
             return res.status(400).json({ message: 'O email do cliente é inválido' });
         }
 
         //Validação da Senha do Cliente
         if (!senha || senha === '') {
+            console.log("A senha do cliente é inválida");
             return res.status(400).json({ message: 'A senha do cliente é inválida' });
         }
 
         //Validação do CPF do Cliente
-        const cpfRegex = new RegExp('[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}');
-        if (!cpf || cpf === '' || cpfRegex.test(cpf) === false) {
+        if (!cpf || cpf === '') {
+            console.log("O CPF do cliente é inválido");
             return res.status(400).json({ message: 'O CPF do cliente é inválido' });
         }
 
         //Validação do RG do Cliente
-        const rgRegex = new RegExp('[0-9]{2}.[0-9]{3}.[0-9]{3}-[0-9]{1}');
-        if (!rg || rg === '' || rgRegex.test(rg) === false) {
+        if (!rg || rg === '') {
+            console.log("O RG do cliente é inválido");
             return res.status(400).json({ message: 'O RG do cliente é inválido' });
         }
 
         //Validação do CEP do Cliente
-        const cepRegex = new RegExp('[0-9]{5}-[0-9]{3}');
-        if (!cep || cep === '' || cepRegex.test(cep) === false) {
+        if (!cep || cep === '') {
+            console.log("O CEP do cliente é inválido");
             return res.status(400).json({ message: 'O CEP do cliente é inválido' });
         }
 
@@ -75,17 +78,34 @@ const validateMiddlewares = {
             cidade === '' ||
             estado === ''
         ) {
+            console.log("O endereço do cliente é inválido");
             return res.status(400).json({ message: 'O endereço do cliente é inválido' });
         }
 
-        //Validação do Telefone do 
-        if (!telefone || telefone === '' || telefone.length < 10) {
+        //Validação do Telefone
+        if (!telefone || telefone === '' ) {
+            console.log("O telefone do cliente é inválido");
             return res.status(400).json({ message: 'O telefone do cliente é inválido' });
         }
 
         //Validação da Data de Nascimento do 
         if (!dataNasc || dataNasc === '') {
+            console.log("A data de nascimento do cliente é inválida");
             return res.status(400).json({ message: 'A data de nascimento do cliente é inválida' });
+        }
+
+        req.body = {
+            nome: nome,
+            email: email,
+            CPF: cpf,
+            RG: rg,
+            senha: senha,
+            CEP: cep,
+            endereco: endereco,
+            dataNascimento: dataNasc,
+            dataCadastro: new Date(),
+            numeroTelefone: telefone,
+            userType: "cliente"
         }
 
         console.log("Passou pelo validateClienteRegisterBody com sucesso!")

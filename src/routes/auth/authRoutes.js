@@ -21,7 +21,8 @@ router.post('/register', validateBody, userTypeMiddleware, (req, res) => {
     } else if (userType === 'funcionario') {
         FuncionarioController.createFuncionario(req, res);
     } else {
-        res.status(400).json({ message: 'Tipo de usuário inválido' });
+        console.log('Tipo de usuário inválido');
+        res.json({ message: 'Tipo de usuário inválido' }).status(400);
     }
 });
 

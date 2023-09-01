@@ -35,10 +35,9 @@ const ClienteController = {
             }
 
             const bcrypt = require('bcrypt');
-            const SECRET = process.env.SECRET2;
 
             bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(SECRET, req.body.senha, salt, (err, hash) => {
+                bcrypt.hash(req.body.senha, salt, (err, hash) => {
                     req.body.senha = hash;
                 });
             })
