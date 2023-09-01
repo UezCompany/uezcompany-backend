@@ -82,7 +82,8 @@ const uzerSchema = new Schema({
             idServico: null, //Id do Serviço
             nomeServico: null, //Nome do Serviço
             tipoServico: null, //Online ou Presencial
-            categoriaServico: null //categoria do Serviço
+            categoriaServico: null, //categoria do Serviço
+            areaAtuacao: null //Area de Atuação em Km
         }]
     }
 }, {

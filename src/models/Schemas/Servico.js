@@ -3,7 +3,7 @@ const {Schema, model} = require('../connection');
 const servicoSchema = new Schema({
     idServico: {
         type: Number,
-        required: true
+        
     },
     nomeServico: {
         type: String,
@@ -19,7 +19,7 @@ const servicoSchema = new Schema({
     },
     descricaoServico: {
         type: String,
-        required: true
+        default: 'Serviço oferecido pela UezCompany'
     },
     quantidadeFeitos: {
         type: Number,

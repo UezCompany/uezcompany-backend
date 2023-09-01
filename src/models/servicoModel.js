@@ -19,4 +19,4 @@ const ServicoModel = {
     }
 }
 
-module.exports = Servico
+module.exports = ServicoModel

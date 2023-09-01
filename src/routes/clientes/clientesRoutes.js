@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getAllClientes, getClienteById, createCliente, updateCliente, deleteCliente } = require('../../controllers/clienteController');
-const { validateBody } = require('../../middleware/validateMiddlewares');
+const { validateBody, validateClienteRegisterBody } = require('../../middleware/validateMiddlewares');
 const validateJWT = require('../../middleware/authMiddleware');
 
 // router.get('/clientes', validateJWT, getAllClientes);
@@ -9,7 +9,7 @@ const validateJWT = require('../../middleware/authMiddleware');
 router.get('/clientes', getAllClientes);
 router.get('/clientes/:id', getClienteById);
 
-router.post('/clientes', createCliente);
+router.post('/clientes', validateClienteRegisterBody, createCliente);
 
 router.put('/clientes/:id', validateBody, updateCliente);
 

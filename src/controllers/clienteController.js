@@ -25,22 +25,27 @@ const ClienteController = {
         }
     },
     createCliente: async (req, res) => {
-        const { emailCliente } = req.body;
+        const { email } = req.body;
         try {
             // Verifica se o cliente já existe com base no email
-            const existingCliente = await ClienteModel.getClienteByEmail(emailCliente);
+            const existingCliente = await ClienteModel.getClienteByEmail(email);
             if (existingCliente) {
                 console.log('Ja existe um cliente com este email');
                 return res.status(400).json({ message: 'Ja existe um cliente com este email' });
             }
 
             const bcrypt = require('bcrypt');
-            const saltRounds = 17;
-            const hash = bcrypt.hashSync(req.body.senhaCliente, saltRounds);
-            req.body.senhaCliente = hash;
+            const SECRET = process.env.SECRET2;
+
+            bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.hash(SECRET, req.body.senha, salt, (err, hash) => {
+                    req.body.senha = hash;
+                });
+            })
+
 
             const cliente = await ClienteModel.createCliente(req.body);
-            
+
             if (cliente.errors) {
                 console.log("Log: ", cliente);
                 return res.status(400).json(cliente.errors);
