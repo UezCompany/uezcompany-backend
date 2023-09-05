@@ -3,7 +3,9 @@ const http = require('http');
 
 const server = http.createServer(app);
 
-const PORT = process.env.PORT || 3333;
-server.listen(PORT, () => {
-  console.log(`Servidor iniciado na porta ${PORT}`);
+const port = process.env.PORT || 3333;
+const host = process.env.HOST || 'localhost';
+
+server.listen(port, host, () => {
+  console.log(`Servidor iniciado em http://${host}:${port}`);
 });

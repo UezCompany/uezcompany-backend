@@ -23,7 +23,7 @@ const AuthController = {
                 return res.status(401).json({ message: 'Credenciais inválidas' });
             }
 
-            const senhaCorrespondente = userType === 'cliente' ? user.senhaCliente : user.senhaUzer;
+            const senhaCorrespondente = user.senha;
 
             bcrypt.compare(senha, senhaCorrespondente, function (err, bcryptResult) {
                 if (err || !bcryptResult) {

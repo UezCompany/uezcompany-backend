@@ -25,7 +25,7 @@ const UzerController = {
         }
     },
     createUzer: async (req, res) => {
-        const { email } = req.body;
+        const { email, senha } = req.body;
         try {
             // Verifica se o uzer já existe com base no email
             const existingUzer = await UzerModel.getUzerByEmail(email);
@@ -35,16 +35,16 @@ const UzerController = {
             }
 
             const bcrypt = require('bcrypt');
-            const SECRET = process.env.SECRET2;
+            const saltRounds = 10;
 
-            bcrypt.genSalt(10, (err, salt) => {
-                bcrypt.hash(SECRET, req.body.senha, salt, (err, hash) => {
-                    req.body.senhaCliente = hash;
-                });
-            })
+            // Gere o hash da senha
+            const hash = await bcrypt.hash(senha, saltRounds);
+
+            // Substitua a senha original pelo hash
+            req.body.senha = hash;
 
             const uzer = await UzerModel.createUzer(req.body);
-            
+
             if (uzer.errors) {
                 console.log("Log: ", uzer);
                 return res.status(400).json(uzer.errors);

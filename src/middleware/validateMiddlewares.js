@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 const validateMiddlewares = {
     validateBody: (req, res, next) => {
         const requestData = req.body;
@@ -47,19 +49,19 @@ const validateMiddlewares = {
         }
 
         //Validação do CPF do Cliente
-        if (!cpf || cpf === '') {
+        if (!validateCPF(cpf)) {
             console.log("O CPF do cliente é inválido");
             return res.status(400).json({ message: 'O CPF do cliente é inválido' });
         }
 
         //Validação do RG do Cliente
-        if (!rg || rg === '') {
+        if (!validateRG(rg)) {
             console.log("O RG do cliente é inválido");
             return res.status(400).json({ message: 'O RG do cliente é inválido' });
         }
 
         //Validação do CEP do Cliente
-        if (!cep || cep === '') {
+        if (!validateCEP(cep)) {
             console.log("O CEP do cliente é inválido");
             return res.status(400).json({ message: 'O CEP do cliente é inválido' });
         }
@@ -83,7 +85,7 @@ const validateMiddlewares = {
         }
 
         //Validação do Telefone
-        if (!telefone || telefone === '' ) {
+        if (!telefone || telefone === '') {
             console.log("O telefone do cliente é inválido");
             return res.status(400).json({ message: 'O telefone do cliente é inválido' });
         }
@@ -103,7 +105,7 @@ const validateMiddlewares = {
             CEP: cep,
             endereco: endereco,
             dataNascimento: dataNasc,
-            dataCadastro: new Date(),
+            dataCadastro: moment().format('HH:mm:ss DD/MM/YYYY'),
             numeroTelefone: telefone,
             userType: "cliente"
         }
@@ -221,7 +223,7 @@ const validateMiddlewares = {
             CEP: cep,
             endereco: endereco,
             dataNascimento: dataNasc,
-            dataCadastro: new Date(),
+            dataCadastro: moment().format('HH:mm:ss DD/MM/YYYY'),
             numeroTelefone: telefone,
             servicosPrestados: {
                 nomeServico: nomeServico,
@@ -266,6 +268,29 @@ const validateMiddlewares = {
         console.log("Passou pelo validateServicoRegisterBody com sucesso!")
         next();
 
+    }
+}
+
+const validateCPF = (cpf) => {
+    const cpfRegex = new RegExp('[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}');
+    return cpfRegex.test(cpf);
+}
+
+const validateRG = (rg) => {
+    const rgRegex = new RegExp('[0-9]{2}.[0-9]{3}.[0-9]{3}-[0-9]{1}');
+    return rgRegex.test(rg);
+}
+
+const validateCEP = (cep) => {
+    const cepRegex = new RegExp('[0-9]{5}-[0-9]{3}');
+    return cepRegex.test(cep);
+}
+
+const validateGeneric = (field) => {
+    if (!field || field === '') {
+        return false
+    } else {
+        return true
     }
 }
 
