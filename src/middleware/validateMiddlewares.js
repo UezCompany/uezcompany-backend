@@ -127,10 +127,12 @@ const validateMiddlewares = {
             areaAtuacao,
             categoriaServico,
             nomeServico,
+            telefone
         } = req.body;
 
         //Validação do Nome do Uzer
         if (!nome || nome === '' || nome.length < 3) {
+
             return res.status(400).json({ message: 'O nome do uzer é inválido' });
         }
 
@@ -183,31 +185,37 @@ const validateMiddlewares = {
 
         //Validação do Telefone do Uzer
         if (!telefone || telefone === '' || telefone.length < 10) {
+            console.log("O telefone do uzer é inválido");
             return res.status(400).json({ message: 'O telefone do uzer é inválido' });
         }
 
         //Validação da Data de Nascimento do Uzer
         if (!dataNasc || dataNasc === '') {
+            console.log("A data de nascimento do uzer é inválida");
             return res.status(400).json({ message: 'A data de nascimento do uzer é inválida' });
         }
 
         //Validação do Tipo de Serviço do Uzer
-        if (!tipoServico || tipoServico === '' || tipoServico.length < 3) {
+        if (!tipoServico || tipoServico === '' || tipoServico.length < 1) {
+            console.log("O tipo de serviço do uzer é inválido");
             return res.status(400).json({ message: 'O tipo de serviço do uzer é inválido' });
         }
 
         //Validação da Area de Atuação do Uzer
         if (!areaAtuacao || areaAtuacao === '') {
+            console.log("A área de atuação do uzer é inválida");
             return res.status(400).json({ message: 'A área de atuação do uzer é inválida' });
         }
 
         //Validação da Categoria do Serviço do Uzer
         if (!categoriaServico || categoriaServico === '' || categoriaServico.length < 3) {
+            console.log("A categoria do serviço do uzer é inválida");
             return res.status(400).json({ message: 'A categoria do serviço do uzer é inválida' });
         }
 
         //Validação do Nome do Serviço do Uzer
         if (!nomeServico || nomeServico === '' || nomeServico.length < 3) {
+            console.log("O nome do serviço do uzer é inválido");
             return res.status(400).json({ message: 'O nome do serviço do uzer é inválido' });
         }
 
@@ -230,7 +238,8 @@ const validateMiddlewares = {
                 tipoServico: tipoServico,
                 categoriaServico: categoriaServico,
                 areaAtuacao: areaAtuacao,
-            }
+            },
+            userType: "uzer"
 
         }
 

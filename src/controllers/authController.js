@@ -28,6 +28,7 @@ const AuthController = {
             bcrypt.compare(senha, senhaCorrespondente, function (err, bcryptResult) {
                 if (err || !bcryptResult) {
                     console.log('Credenciais inválidas');
+                    console.error(err);
                     return res.status(401).json({ message: 'Credenciais inválidas' });
                 } else {
                     // Send JWT

@@ -15,7 +15,7 @@ const ServicoController = {
         try {
             const servico = await servicoModel.getServicoById(id);
             if (servico) {
-                res.json(servico);
+                res.status(200).json(servico);
             } else {
                 res.status(404).json({ message: 'Servico não encontrado' });
             }
