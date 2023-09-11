@@ -28,15 +28,20 @@ const AuthController = {
             console.log(senhaCorrespondente)
 
             await bcrypt.compare(senha, senhaCorrespondente, (err, bcryptResult) => {
-                if (err || !bcryptResult) {
-                    console.log('Credenciais inválidas');
+                if (err) {
+                    // Erro do bcrypt
                     console.error(err);
-                    return res.status(401).json({ message: 'Credenciais inválidas' });
-                } else {
+                    return res.status(500).json({ message: 'Erro interno.' });
+                } else if (bcryptResult) {
+                    // A senha está correta
                     // Send JWT
                     const token = jwt.sign({ id: user.id, tipo: userType }, process.env.SECRET, { expiresIn: '24h' });
                     const decryptedToken = jwt.verify(token, process.env.SECRET);
                     res.status(200).json({ token, decryptedToken });
+                } else {
+                    // A senha está incorreta
+                    console.log('Credenciais inválidas');
+                    return res.status(401).json({ message: 'Credenciais inválidas' });
                 }
             });
         } catch (error) {
