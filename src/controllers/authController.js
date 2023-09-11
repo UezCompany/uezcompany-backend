@@ -27,7 +27,7 @@ const AuthController = {
             console.log(senha)
             console.log(senhaCorrespondente)
 
-            bcrypt.compare(senha, senhaCorrespondente, (err, bcryptResult) => {
+            await bcrypt.compare(senha, senhaCorrespondente, (err, bcryptResult) => {
                 if (err || !bcryptResult) {
                     console.log('Credenciais inválidas');
                     console.error(err);
