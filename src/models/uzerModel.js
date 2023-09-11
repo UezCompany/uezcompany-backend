@@ -2,7 +2,7 @@ const Uzer = require('./Schemas/Uzer')
 
 const UzerModel = {
   getAllUzers: async () => {
-    console.log('Consultando coleção:', Uzer.collection.collectionName);
+    //console.log('Consultando coleção:', Uzer.collection.collectionName);
     const uzers = await Uzer.find({});
     console.log('Uzers encontrados:', uzers);
     return uzers;
@@ -12,16 +12,16 @@ const UzerModel = {
     return uzer
   },
   getUzerByEmail: async (email) => {
-    const uzer = await Uzer.findOne({ emailUzer: email });
+    const uzer = await Uzer.findOne({ email: email });
     return uzer
   },
   createUzer: async (uzer) => {
     const newUzer = await Uzer.create(uzer).catch(err => console.error(err));
     return newUzer
   },
-  updateUzer: async (id, { emailUzer, cpfUzer, rgUzer, senhaUzer }) => {
-    const updateUzer = await Uzer.updateOne({ _id: id }, { emailUzer, cpfUzer, rgUzer, senhaUzer }).catch(err => console.error(err));
-    return updateUzer
+  updateUzer: async (id, updateData) => {
+    const updateUzer = await Uzer.updateOne({ _id: id }, updateData).catch(err => console.error(err));
+    return updateUzer;
   },
   deleteUzer: async (id) => {
     const deleteUzer = Uzer.deleteOne({ _id: id }).catch(err => console.error(err));
