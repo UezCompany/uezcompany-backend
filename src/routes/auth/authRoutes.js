@@ -12,7 +12,7 @@ const router = express.Router();
     
     ...
 */
-router.post('/register', validateBody, userTypeMiddleware, (req, res) => {
+router.post('/register', userTypeMiddleware, (req, res) => {
     const { userType } = req.body;
 
     if (userType === 'cliente') {

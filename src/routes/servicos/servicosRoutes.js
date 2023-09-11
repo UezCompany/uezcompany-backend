@@ -2,17 +2,21 @@ const express = require('express');
 const router = express.Router();
 const { getAllServicos, getServicoById, createServico, deleteServico } = require('../../controllers/servicoController');
 const { validateCreateServicoBody } = require('../../middleware/validateMiddlewares');
-const validateJWT = require('../../middleware/authMiddleware');
 
 const categorias = [
-    { nomeCategoria: 'Informatica' },
-    { nomeCategoria: 'Saúde' },
-    { nomeCategoria: 'Vestuário' },
+    { nomeCategoria: 'Design' },
+    { nomeCategoria: 'Desenvolvimento de Software' },
+    { nomeCategoria: 'Marketing' },
+    { nomeCategoria: 'Consultoria' },
+    { nomeCategoria: 'Serviços de TI' },
+    { nomeCategoria: 'Educação' },
+    { nomeCategoria: 'Saúde e Bem-estar' },
+    { nomeCategoria: 'Manutenção e Reparos' },
+    { nomeCategoria: 'Serviços Domésticos' },
+    { nomeCategoria: 'Eventos' },
     { nomeCategoria: 'Outros' },
 ]
 
-// router.get('/servicos', validateJWT, getAllClientes);
-// router.get('/servicos/:id', validateJWT, getClienteById);
 router.get('/servicos', getAllServicos);
 router.get('/servicos/:id', getServicoById);
 router.get('/categorias', (req, res) => {

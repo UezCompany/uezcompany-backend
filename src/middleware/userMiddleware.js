@@ -27,25 +27,28 @@ const getUserTypeByDbMiddleware = async (req, res, next) => {
 
 
 // Esse middleware verifica o tipo de usuário, de acordo com o userType enviado no body da requisição, e encaminhar para a sua respectiva forma de validação
-const userTypeMiddleware = async (req, res, next) => {
+const getUserTypeMiddleware = async (req, res, next) => {
     const { validateClienteRegisterBody, validateUzerRegisterBody, validateFuncionarioRegisterBody } = require('./validateMiddlewares');
     const { userType } = req.body;
-
-    if (userType === 'cliente') {
+    console.log(userType)
+    console.log(req.body)
+    
+    if (userType === "cliente") {
         console.log('Passou no userMiddleware, é um cliente');
-        validateClienteRegisterBody(req, res, next);
+        return validateClienteRegisterBody(req, res, next);
     } else if (userType === 'uzer') {
         console.log('Passou no userMiddleware, é um uzer');
-        validateUzerRegisterBody(req, res, next);
+        return validateUzerRegisterBody(req, res, next);
     } else if (userType === 'funcionario') {
         console.log('Passou no userMiddleware, é um funcionário');
-        validateFuncionarioRegisterBody(req, res, next);
+        return validateFuncionarioRegisterBody(req, res, next);
     } else {
-        return res.json({ message: 'Tipo de usuário inválido' }).status(400);
+        console.log('Tipo de usuário inválido');
+        return res.status(400).json({ message: 'Tipo de usuário inválido' });
     }
 }
 
 module.exports = {
     getUserTypeByDbMiddleware,
-    userTypeMiddleware
+    userTypeMiddleware: getUserTypeMiddleware
 };

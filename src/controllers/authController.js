@@ -20,12 +20,14 @@ const AuthController = {
 
             if (!user) {
                 console.log('Usuário não encontrado');
-                return res.status(401).json({ message: 'Credenciais inválidas' });
+                return res.status(401).json({ message: 'Usuário não encontrado' });
             }
 
             const senhaCorrespondente = user.senha;
+            console.log(senha)
+            console.log(senhaCorrespondente)
 
-            bcrypt.compare(senha, senhaCorrespondente, function (err, bcryptResult) {
+            bcrypt.compare(senha, senhaCorrespondente, (err, bcryptResult) => {
                 if (err || !bcryptResult) {
                     console.log('Credenciais inválidas');
                     console.error(err);
