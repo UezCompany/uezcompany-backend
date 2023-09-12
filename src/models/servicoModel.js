@@ -6,12 +6,12 @@ const ServicoModel = {
         return servicos
     },
     getServicoByName: async (name) => {
-        const servico = await Servico.findOne({ nomeServico: name }).catch(err => console.error(err));
+        const servico = await Servico.findOne({ nome: name }).catch(err => console.error(err));
         return servico
     },
     getServicoByCategory: async (category) => {
         const lowercaseCategory = category.toLowerCase();
-        const servico = await Servico.find({ categoriaServico: { $regex: new RegExp('^' + lowercaseCategory + '$', 'i') } }).catch(err => console.error(err));
+        const servico = await Servico.find({ categoria: { $regex: new RegExp('^' + lowercaseCategory + '$', 'i') } }).catch(err => console.error(err));
         return servico;
     },
     createServico: async (servico) => {

@@ -1,23 +1,24 @@
-const {Schema, model} = require('../connection');
+const { Schema, model } = require('../connection');
 
 const servicoSchema = new Schema({
     idServico: {
         type: Number,
-        
+
     },
-    nomeServico: {
+    nome: {
         type: String,
         required: true
     },
-    tipoServico: {
+    tipo: {
+        type: Array,
+        required: true,
+        default: ["Online"]
+    },
+    categoria: {
         type: String,
         required: true
     },
-    categoriaServico: {
-        type: String,
-        required: true
-    },
-    descricaoServico: {
+    descricao: {
         type: String,
         default: 'Serviço oferecido pela UezCompany'
     },
@@ -25,6 +26,8 @@ const servicoSchema = new Schema({
         type: Number,
         default: 0
     }
+}, {
+    versionKey: '__versionOfSchema__'
 })
 
 const Servico = model('Servico', servicoSchema);
