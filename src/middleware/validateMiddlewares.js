@@ -26,7 +26,6 @@ const validateMiddlewares = {
             validateField(requestData[field], 'Todos os campos devem ser corretamente preenchidos', res);
         }
 
-        console.log('Passou pelo validateBody com sucesso!');
         next();
     },
 
@@ -74,7 +73,6 @@ const validateMiddlewares = {
             userType: 'cliente'
         };
 
-        console.log('Passou pelo validateClienteRegisterBody com sucesso!');
         next();
     },
 
@@ -137,7 +135,6 @@ const validateMiddlewares = {
             userType: 'uzer'
         };
 
-        console.log('Passou pelo validateUzerRegisterBody com sucesso!');
         next();
     },
 
@@ -159,7 +156,6 @@ const validateMiddlewares = {
             categoriaServico: categoria
         };
 
-        console.log('Passou pelo validateServicoRegisterBody com sucesso!');
         next();
     }
 };

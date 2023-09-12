@@ -24,19 +24,31 @@ const ServicoController = {
             res.status(500).json({ message: 'Erro ao obter servico por ID' });
         }
     },
+    getServicoByCategoryName: async (req, res) => {
+        const { categoria } = req.query;
+        try {
+            const servico = await servicoModel.getServicoByCategory(categoria);
+            if (servico && servico.length > 0) {
+                return res.status(200).json(servico);
+            } else {
+                return res.status(404).json({ message: 'Categoria não encontrada. Consulte as categorias disponíveis para consulta.' });
+            }
+        } catch (error) {
+            console.error('Erro ao obter servico por categoria: ' + error.stack);
+            res.status(500).json({ message: 'Erro ao obter servico por categoria' });
+        }
+    },
     createServico: async (req, res) => {
         const { nomeServico } = req.body;
         try {
             // Verifica se o servico já existe com base no nome
             const existingServico = await servicoModel.getServicoByName(nomeServico);
             if (existingServico) {
-                console.log('Ja existe um servico com este nome');
                 return res.status(400).json({ message: 'Ja existe um servico com este nome' });
             }
 
             const servico = await servicoModel.createServico(req.body);
             if (servico.errors) {
-                console.log("Log: ", servico);
                 return res.status(400).json(servico.errors);
             }
             res.status(201).json({ message: 'Servico criado com sucesso', servico });

@@ -30,7 +30,6 @@ const UzerController = {
             // Verifica se o uzer já existe com base no email
             const existingUzer = await UzerModel.getUzerByEmail(email);
             if (existingUzer) {
-                console.log('Ja existe um uzer com este email');
                 return res.status(400).json({ message: 'Ja existe um uzer com este email' });
             }
 
@@ -46,7 +45,6 @@ const UzerController = {
             const uzer = await UzerModel.createUzer(req.body);
 
             if (uzer.errors) {
-                console.log("Log: ", uzer);
                 return res.status(400).json(uzer.errors);
             }
 

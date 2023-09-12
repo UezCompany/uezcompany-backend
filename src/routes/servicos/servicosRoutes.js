@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllServicos, getServicoById, createServico, deleteServico } = require('../../controllers/servicoController');
+const { getAllServicos, getServicoById, getServicoByCategoryName, createServico, deleteServico } = require('../../controllers/servicoController');
 const { validateCreateServicoBody } = require('../../middleware/validateMiddlewares');
 
 const categorias = [
@@ -18,6 +18,8 @@ const categorias = [
 ]
 
 router.get('/servicos', getAllServicos);
+router.get('/servicosPorCategoria', getServicoByCategoryName);
+
 router.get('/servicos/:id', getServicoById);
 router.get('/categorias', (req, res) => {
     res.status(200).json(categorias);

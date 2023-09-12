@@ -2,7 +2,6 @@ const Cliente = require('./Schemas/Cliente')
 
 const ClienteModel = {
   getAllClientes: async () => {
-    console.log('Consultando coleção:', Cliente.collection.collectionName);
     const clientes = await Cliente.find({});
     return clientes;
   },

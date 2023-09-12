@@ -2,9 +2,7 @@ const Uzer = require('./Schemas/Uzer')
 
 const UzerModel = {
   getAllUzers: async () => {
-    //console.log('Consultando coleção:', Uzer.collection.collectionName);
     const uzers = await Uzer.find({});
-    console.log('Uzers encontrados:', uzers);
     return uzers;
   },
   getUzerById: async (id) => {

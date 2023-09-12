@@ -30,7 +30,6 @@ const ClienteController = {
             // Verifica se o cliente já existe com base no email
             const existingCliente = await ClienteModel.getClienteByEmail(email);
             if (existingCliente) {
-                console.log('Já existe um cliente com este email');
                 return res.status(400).json({ message: 'Já existe um cliente com este email' });
             }
 
@@ -46,7 +45,6 @@ const ClienteController = {
             const cliente = await ClienteModel.createCliente(req.body);
 
             if (cliente.errors) {
-                console.log("Log: ", cliente);
                 return res.status(400).json(cliente.errors);
             }
 

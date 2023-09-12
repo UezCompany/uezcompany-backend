@@ -19,13 +19,10 @@ const AuthController = {
             }
 
             if (!user) {
-                console.log('Usuário não encontrado');
                 return res.status(401).json({ message: 'Usuário não encontrado' });
             }
 
             const senhaCorrespondente = user.senha;
-            console.log(senha)
-            console.log(senhaCorrespondente)
 
             await bcrypt.compare(senha, senhaCorrespondente, (err, bcryptResult) => {
                 if (err) {
@@ -40,7 +37,6 @@ const AuthController = {
                     res.status(200).json({ token, decryptedToken });
                 } else {
                     // A senha está incorreta
-                    console.log('Credenciais inválidas');
                     return res.status(401).json({ message: 'Credenciais inválidas' });
                 }
             });
@@ -55,12 +51,10 @@ const AuthController = {
         try {
             let funcionario = await funcionarioModel.getFuncionarioById(idFuncionario);
             if (!funcionario) {
-                console.log('Funcionário não encontrado');
                 return res.status(401).json({ message: 'Credenciais inválidas' });
             }
 
             if (senhaFuncionario !== funcionario.senhaFuncionario) {
-                console.log('Credenciais inválidas');
                 return res.status(401).json({ message: 'Credenciais inválidas' });
             }
 
