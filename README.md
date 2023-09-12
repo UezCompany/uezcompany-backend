@@ -93,6 +93,18 @@ A API da UEZ Company oferece as seguintes rotas principais:
 }
 ```
 
+- `POST /api/servicos`: Realiza o registro de um serviço na plataforma.
+
+``` json
+// Dados da Requisição
+{
+    "nome": "Decorações com Gesso",
+    "tipo": ["Online", "Presencial"],
+    "categoria": "Artesanato",
+    "dataCriacao": "01/01/2021" //automática
+}
+```
+
 Consulte a documentação completa da API [aqui](link-para-documentacao-da-api) para obter informações detalhadas sobre cada rota, os parâmetros aceitos e as respostas retornadas.
 
 ## Contribuição
