@@ -11,7 +11,7 @@ const ServicoModel = {
     },
     getServicoByCategory: async (category) => {
         const lowercaseCategory = category.toLowerCase();
-        const servico = await Servico.find({ categoria: { $regex: new RegExp('^' + lowercaseCategory + '$', 'i') } }).catch(err => console.error(err));
+        const servico = await Servico.find({ categoriaServico: { $regex: new RegExp('^' + lowercaseCategory + '$', 'i') } }).catch(err => console.error(err));
         return servico;
     },
     createServico: async (servico) => {
