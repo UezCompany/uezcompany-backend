@@ -25,12 +25,18 @@ const UzerController = {
         }
     },
     createUzer: async (req, res) => {
-        const { email, senha } = req.body;
+        const { email, senha, cpf } = req.body;
         try {
             // Verifica se o uzer já existe com base no email
             const existingUzer = await UzerModel.getUzerByEmail(email);
             if (existingUzer) {
                 return res.status(400).json({ message: 'Ja existe um uzer com este email' });
+            }
+
+            // Verifica se o uzer já existe com base no CPF
+            const existingUzerCPF = await UzerModel.getUzerByCpf(cpf);
+            if (existingUzerCPF) {
+                return res.status(400).json({ message: 'Ja existe um uzer com este CPF' });
             }
 
             const bcrypt = require('bcrypt');

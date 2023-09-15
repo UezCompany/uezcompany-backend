@@ -13,6 +13,10 @@ const UzerModel = {
     const uzer = await Uzer.findOne({ email: email });
     return uzer
   },
+  getUzerByCpf: async (cpf) => {
+    const uzer = await Uzer.findOne({ CPF: cpf });
+    return uzer
+  },
   createUzer: async (uzer) => {
     const newUzer = await Uzer.create(uzer).catch(err => console.error(err));
     return newUzer

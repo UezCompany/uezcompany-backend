@@ -14,7 +14,7 @@ const ClienteModel = {
     return cliente
   },
   getClienteByCpf: async (cpf) => {
-    const cliente = await Cliente.findOne({ cpf: cpf });
+    const cliente = await Cliente.findOne({ CPF: cpf });
     return cliente
   },
   createCliente: async (cliente) => {
