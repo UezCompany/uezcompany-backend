@@ -1,4 +1,4 @@
-const moment = require('moment');
+
 
 const validateField = (field, message, res, optionalValidationFunction = undefined) => {
 
@@ -68,7 +68,7 @@ const validateMiddlewares = {
             CEP: cep,
             endereco,
             dataNascimento: dataNasc,
-            dataCadastro: moment().format('HH:mm:ss DD/MM/YYYY'),
+            dataCadastro: new Date().toISOString(),
             numeroTelefone: telefone,
             userType: 'cliente'
         };
@@ -124,7 +124,7 @@ const validateMiddlewares = {
             CEP: cep,
             endereco,
             dataNascimento: dataNasc,
-            dataCadastro: moment().format('HH:mm:ss DD/MM/YYYY'),
+            dataCadastro: new Date().toISOString(),
             numeroTelefone: telefone,
             servicosPrestados: {
                 nomeServico,
