@@ -3,7 +3,7 @@ const { Schema, model } = require('../connection');
 const servicoSchema = new Schema({
     idServico: {
         type: Number,
-
+        default: null
     },
     nome: {
         type: String,

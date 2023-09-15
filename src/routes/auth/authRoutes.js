@@ -4,7 +4,7 @@ const ClienteController = require('../../controllers/clienteController');
 const UzerController = require('../../controllers/uzerController');
 const { validateBody } = require('../../middleware/validateMiddlewares');
 const { getUserTypeByDbMiddleware, userTypeMiddleware } = require('../../middleware/userMiddleware');
-const router = express.Router();
+const   router = express.Router();
 
 /*
     /register - POST

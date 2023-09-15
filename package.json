@@ -19,6 +19,7 @@
     "jsonwebtoken": "^9.0.1",
     "moment": "^2.29.4",
     "mongoose": "^7.4.3",
+    "mongoose-auto-increment": "^5.0.1",
     "socket.io": "^4.7.2"
   },
   "devDependencies": {

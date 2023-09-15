@@ -39,10 +39,12 @@ const ServicoController = {
         }
     },
     createServico: async (req, res) => {
-        const { nomeServico } = req.body;
+        console.log(req.body);
+        const { nome } = req.body;
         try {
             // Verifica se o servico já existe com base no nome
-            const existingServico = await servicoModel.getServicoByName(nomeServico);
+            const existingServico = await servicoModel.getServicoByName(nome);
+            console.log(existingServico);
             if (existingServico) {
                 return res.status(400).json({ message: 'Ja existe um servico com este nome' });
             }
@@ -51,7 +53,8 @@ const ServicoController = {
             if (servico.errors) {
                 return res.status(400).json(servico.errors);
             }
-            res.status(201).json({ message: 'Servico criado com sucesso', servico });
+            console.log(servico);
+            res.status(200).json({ message: 'Servico criado com sucesso', servico });
         } catch (error) {
             console.error('Erro ao criar servico: ' + error.stack);
             res.status(500).json({ message: 'Erro ao criar servico' });
