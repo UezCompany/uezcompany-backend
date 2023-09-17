@@ -6,7 +6,7 @@ const ClienteModel = {
     return clientes;
   },
   getClienteById: async (id) => {
-    const cliente = await Cliente.findById(id).catch(err => console.error(err));
+    const cliente = await Cliente.findById(id, {nome: 1, email: 1, quantidadePedidos: 1, photoUrl: 1, endereco: 1}).catch(err => console.error(err));
     return cliente
   },
   getClienteByEmail: async (email) => {

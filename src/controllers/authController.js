@@ -12,9 +12,9 @@ const AuthController = {
         try {
             let user = null;
 
-            if (userType === 'cliente') {
+            if (userType === 'cliente' || userType === 'both') {
                 user = await ClienteModel.getClienteByEmail(email);
-            } else if (userType === 'uzer') {
+            } else if (userType === 'uzer' || userType === 'both') {
                 user = await UzerModel.getUzerByEmail(email);
             }
 
@@ -33,8 +33,7 @@ const AuthController = {
                     // A senha está correta
                     // Send JWT
                     const token = jwt.sign({ id: user.id, tipo: userType }, process.env.SECRET, { expiresIn: '24h' });
-                    const decryptedToken = jwt.verify(token, process.env.SECRET);
-                    res.status(200).json({ token, decryptedToken });
+                    res.status(200).json({ token });
                 } else {
                     // A senha está incorreta
                     return res.status(401).json({ message: 'Credenciais inválidas' });

@@ -6,8 +6,6 @@ const validateJWT = require('../../middleware/authMiddleware');
 
 router.get('/clientes', validateJWT, getAllClientes);
 router.get('/clientes/:id', validateJWT, getClienteById);
-// router.get('/clientes', getAllClientes);
-// router.get('/clientes/:id', getClienteById);
 
 router.put('/clientes/:id', validateBody, updateCliente);
 

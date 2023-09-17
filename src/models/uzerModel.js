@@ -10,11 +10,11 @@ const UzerModel = {
     return uzer
   },
   getUzerByEmail: async (email) => {
-    const uzer = await Uzer.findOne({ email: email });
+    const uzer = await Uzer.findOne({ email: email }).catch(err => console.error(err));
     return uzer
   },
   getUzerByCpf: async (cpf) => {
-    const uzer = await Uzer.findOne({ CPF: cpf });
+    const uzer = await Uzer.findOne({ CPF: cpf }).catch(err => console.error(err));
     return uzer
   },
   createUzer: async (uzer) => {

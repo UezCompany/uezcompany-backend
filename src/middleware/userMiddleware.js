@@ -3,17 +3,17 @@ const UzerModel = require('../models/uzerModel');
 
 // Esse middleware verifica o tipo de usuário de acordo com o banco de dados
 const getUserTypeByDbMiddleware = async (req, res, next) => {
-    const { email } = req.body;
+    const { userId, email } = req.body;
 
     // Verifique se o email está presente na tabela Cliente
-    const cliente = await ClienteModel.getClienteByEmail(email);
+    const cliente = !userId ? await ClienteModel.getClienteByEmail(email) : await ClienteModel.getClienteById(userId);
     if (cliente) {
         req.body.userType = 'cliente';
         return next();
     }
 
     // Verifique se o email está presente na tabela Uzer
-    const uzer = await UzerModel.getUzerByEmail(email);
+    const uzer = !userId ? await UzerModel.getUzerByEmail(email) : await UzerModel.getUzerById(userId);
     if (uzer) {
         req.body.userType = 'uzer';
         return next();

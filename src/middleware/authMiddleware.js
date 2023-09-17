@@ -8,7 +8,8 @@ const validateJWT = async (req, res, next) => {
     const [, token] = authorization.split(' '); // Extrai o token da string com "Bearer"
     try {
         const { id } = jwt.verify(token, process.env.SECRET);
-        req.userId = id;
+        req.body.userId = id;
+        console.log("JWT Válido");
         return next();
     } catch (error) {
         console.error('Erro ao validar token: ' + error.stack);
