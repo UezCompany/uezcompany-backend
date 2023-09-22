@@ -25,7 +25,7 @@ const ClienteController = {
         }
     },
     createCliente: async (req, res) => {
-        const { email, senha, cpf } = req.body;
+        const { email, senha, CPF } = req.body;
         try {
             // Verifica se o cliente já existe com base no email
             const existingCliente = await ClienteModel.getClienteByEmail(email);
@@ -34,7 +34,7 @@ const ClienteController = {
             }
 
             // Verifica se o cliente já existe com base no CPF
-            const existingClienteCPF = await ClienteModel.getClienteByCpf(cpf);
+            const existingClienteCPF = await ClienteModel.getClienteByCpf(CPF);
             if (existingClienteCPF) {
                 return res.status(400).json({ message: 'Já existe um cliente com este CPF' });
             }

@@ -25,7 +25,7 @@ const UzerController = {
         }
     },
     createUzer: async (req, res) => {
-        const { email, senha, cpf } = req.body;
+        const { email, senha, CPF } = req.body;
         try {
             // Verifica se o uzer já existe com base no email
             const existingUzer = await UzerModel.getUzerByEmail(email);
@@ -34,7 +34,7 @@ const UzerController = {
             }
 
             // Verifica se o uzer já existe com base no CPF
-            const existingUzerCPF = await UzerModel.getUzerByCpf(cpf);
+            const existingUzerCPF = await UzerModel.getUzerByCpf(CPF);
             if (existingUzerCPF) {
                 return res.status(400).json({ message: 'Ja existe um uzer com este CPF' });
             }
