@@ -2,19 +2,19 @@ const Cliente = require('./Schemas/Cliente')
 
 const ClienteModel = {
   getAllClientes: async () => {
-    const clientes = await Cliente.find({});
+    const clientes = await Cliente.find({}, '-CPF -RG -senha');
     return clientes;
   },
   getClienteById: async (id) => {
-    const cliente = await Cliente.findById(id, {nome: 1, email: 1, quantidadePedidos: 1, photoUrl: 1, endereco: 1}).catch(err => console.error(err));
+    const cliente = await Cliente.findById(id, '-CPF -RG -senha').catch(err => console.error(err));
     return cliente
   },
   getClienteByEmail: async (email) => {
-    const cliente = await Cliente.findOne({ email: email });
+    const cliente = await Cliente.findOne({ email: email }, 'email');
     return cliente
   },
   getClienteByCpf: async (cpf) => {
-    const cliente = await Cliente.findOne({ CPF: cpf });
+    const cliente = await Cliente.findOne({ CPF: cpf }, 'CPF');
     return cliente
   },
   createCliente: async (cliente) => {

@@ -4,14 +4,14 @@ const { getAllUzers, getUzerById, createUzer, updateUzer, deleteUzer } = require
 const { validateBody } = require('../../middleware/validateMiddlewares');
 const validateJWT = require('../../middleware/authMiddleware');
 
-router.get('/uzers', validateJWT, getAllUzers);
-router.get('/uzers/:id', validateJWT, getUzerById);
+router.get('/uzers', getAllUzers);
+router.get('/uzers/:id', getUzerById);
 // router.get('/uzers', getAllUzers);
 // router.get('/uzers/:id', getUzerById);
 
 
-router.put('/uzers/:id', validateBody, updateUzer);
-router.delete('/uzers/:id', deleteUzer);
+router.put('/uzers/:id', validateJWT, validateBody, updateUzer);
+router.delete('/uzers/:id', validateJWT, deleteUzer);
 
 
 module.exports = router;

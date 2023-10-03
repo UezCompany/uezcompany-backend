@@ -5,6 +5,10 @@ const clienteSchema = new Schema({
         type: String,
         required: true
     },
+    username: {
+        type: String,
+        default: null
+    },
     email: {
         type: String,
         required: true
@@ -55,6 +59,10 @@ const clienteSchema = new Schema({
     telefone: {
         type: String,
         default: null
+    },
+    userType: {
+        type: String,
+        default: "cliente"
     },
     aprovacao: {
         type: Boolean,

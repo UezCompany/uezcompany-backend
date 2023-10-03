@@ -2,11 +2,11 @@ const Uzer = require('./Schemas/Uzer')
 
 const UzerModel = {
   getAllUzers: async () => {
-    const uzers = await Uzer.find({});
+    const uzers = await Uzer.find({}, '-CPF -RG -senha');
     return uzers;
   },
   getUzerById: async (id) => {
-    const uzer = await Uzer.findById(id).catch(err => console.error(err));
+    const uzer = await Uzer.findById(id, '-CPF -RG -senha').catch(err => console.error(err));
     return uzer
   },
   getUzerByEmail: async (email) => {

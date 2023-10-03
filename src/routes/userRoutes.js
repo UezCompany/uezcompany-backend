@@ -9,8 +9,6 @@ const { getUserTypeByDbMiddleware } = require('../middleware/userMiddleware');
 
 router.get('/users/me', validateJWT, getUserTypeByDbMiddleware, async (req, res) => {
     const { userId, userType } = req.body;
-
-
     if (userType === 'both') {
         try {
             const cliente = await getClienteById(userId);
@@ -49,5 +47,15 @@ router.get('/users/me', validateJWT, getUserTypeByDbMiddleware, async (req, res)
 
 
 });
+
+router.post('validate-email', (req, res) => {
+    res.status(200).json({message: `O e-mail ${req.body.email} é valido`})
+})
+router.post('validate-username', (req, res) => {
+    res.status(200).json({message: `O username ${req.body.username} é valido`})
+})
+router.post('validate-jwt', (req, res) => {
+    res.status(200).json({message: `O Token JWT: ${req.body.token} é valido`})
+})
 
 module.exports = router;
