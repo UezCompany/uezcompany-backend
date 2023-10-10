@@ -157,6 +157,41 @@ const validateMiddlewares = {
         };
 
         next();
+    },
+    validateCreatePedidoBody: (req, res, next) => {
+        let valor;
+
+        if (valor in req.body) {
+            valor = req.body[valor];
+        } else valor = 0
+
+        const {
+            tipoPedido,
+            categoriaServico,
+            nomeServico,
+            descricao,
+            userId,
+        } = req.body;
+
+        validateField(tipoPedido, 'O tipo do pedido é inválido', res);
+        validateField(categoriaServico, 'A categoria do serviço é inválida', res);
+        validateField(nomeServico, 'O nome do serviço é inválido', res);
+        validateField(descricao, 'A descrição do serviço é inválida', res);
+        validateField(userId, 'O id do cliente é inválido', res);
+        validateField(valor, 'O valor do serviço é inválido', res);
+
+        req.body = {
+            tipo: tipoPedido,
+            categoriaServico: categoriaServico,
+            nomeServico: nomeServico,
+            descricao: descricao,
+            idCliente: userId,
+            valor: valor,
+            dataCriacao: new Date().toISOString(),
+        }
+
+        next();
+
     }
 };
 
