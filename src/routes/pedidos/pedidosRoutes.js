@@ -7,7 +7,7 @@ const { validateCreatePedidoBody } = require('../../middleware/validateMiddlewar
 
 router.get('/pedidos', getActivePedidos);
 
-router.post('/pedidos', validateJWT, validateCreatePedidoBody, createPedido);
+router.post('/create/pedido', validateJWT, validateCreatePedidoBody, createPedido);
 
 router.put('/pedidos/:id', validateJWT, assignUzerToPedido);
 // Outras rotas para o modelo de Cliente

@@ -161,8 +161,9 @@ const validateMiddlewares = {
     validateCreatePedidoBody: (req, res, next) => {
         let valor;
 
-        if (valor in req.body) {
-            valor = req.body[valor];
+        if (req.body?.valor) {
+            valor = req.body.valor;
+            validateField(valor, 'O valor do serviço é inválido', res);
         } else valor = 0
 
         const {
@@ -178,7 +179,6 @@ const validateMiddlewares = {
         validateField(nomeServico, 'O nome do serviço é inválido', res);
         validateField(descricao, 'A descrição do serviço é inválida', res);
         validateField(userId, 'O id do cliente é inválido', res);
-        validateField(valor, 'O valor do serviço é inválido', res);
 
         req.body = {
             tipo: tipoPedido,
@@ -189,7 +189,7 @@ const validateMiddlewares = {
             valor: valor,
             dataCriacao: new Date().toISOString(),
         }
-
+        console.log("Ok", req.body);
         next();
 
     }
