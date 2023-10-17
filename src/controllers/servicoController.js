@@ -38,6 +38,20 @@ const ServicoController = {
             res.status(500).json({ message: 'Erro ao obter servico por categoria' });
         }
     },
+    getCategoryByServicoName: async (req, res) => {
+        const { servico } = req.query;
+        try {
+            const category = await servicoModel.getCategoryByServico(servico);
+            if (category && category.length > 0) {
+                return res.status(200).json(category);
+            } else {
+                return res.status(404).json({ message: 'Categoria não encontrada. Consulte as categorias disponíveis para consulta.' });
+            }
+        } catch (error) {
+            console.error('Erro ao obter a categoria por serviço: ' + error.stack);
+            res.status(500).json({ message: 'Erro ao obter a categoria por servico' });
+        }
+    },
     createServico: async (req, res) => {
         console.log(req.body);
         const { nome } = req.body;

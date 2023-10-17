@@ -1,3 +1,4 @@
+const { getCategoryByServicoName } = require("../controllers/servicoController");
 
 
 const validateField = (field, message, res, optionalValidationFunction = undefined) => {
@@ -168,21 +169,22 @@ const validateMiddlewares = {
 
         const {
             tipoPedido,
-            categoriaServico,
+            tituloPedido,
             nomeServico,
             descricao,
             userId,
         } = req.body;
 
         validateField(tipoPedido, 'O tipo do pedido é inválido', res);
-        validateField(categoriaServico, 'A categoria do serviço é inválida', res);
+        validateField(tituloPedido, 'A categoria do serviço é inválida', res);
         validateField(nomeServico, 'O nome do serviço é inválido', res);
         validateField(descricao, 'A descrição do serviço é inválida', res);
         validateField(userId, 'O id do cliente é inválido', res);
 
         req.body = {
             tipo: tipoPedido,
-            categoriaServico: categoriaServico,
+            categoriaServico: getCategoryByServicoName(nomeServico),
+            tituloPedido: tituloPedido,
             nomeServico: nomeServico,
             descricao: descricao,
             idCliente: userId,

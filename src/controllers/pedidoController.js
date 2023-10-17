@@ -20,7 +20,7 @@ const PedidoController = {
         }
     },
     createPedido: async (req, res) => {
-        const { tipo, categoriaServico, nomeServico, descricao, idCliente, valor, dataCriacao } = req.body;
+        const { tipo, categoriaServico, nomeServico, descricao, idCliente, valor, dataCriacao, tituloPedido } = req.body;
         const pedidoData = {
             tipo: tipo,
             _categoriaServico: categoriaServico,
@@ -28,7 +28,8 @@ const PedidoController = {
             descricao: descricao,
             _id_cliente: idCliente,
             valor: valor,
-            dataCriacao: dataCriacao
+            dataCriacao: dataCriacao,
+            titulo: tituloPedido
         }
         try {
             const pedido = await pedidoModel.createPedido(pedidoData);

@@ -14,6 +14,10 @@ const pedidoSchema = new Schema(
             type: String,
             required: true
         },
+        titulo: {
+            type: String,
+            required: true
+        },
         descricao: {
             type: String,
             default: 'Pedido criado na UezCompany, somente um Uzer pode finaliza-lo.'
