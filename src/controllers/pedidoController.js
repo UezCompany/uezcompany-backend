@@ -19,6 +19,16 @@ const PedidoController = {
             res.status(500).json({ message: 'Erro ao obter os pedidos disponiveis' });
         }
     },
+    getRespectivePedidos: async (req, res) => {
+        console.log(req.body.nomeServico)
+        try {
+            const pedidos = await pedidoModel.getRespectivePedidos(req.body.nomeServico)
+            res.status(200).json(pedidos)
+        } catch (error) {
+            console.error('Erro ao obter pedidos: ' + error.stack);
+            res.status(500).json({ message: 'Erro ao obter os pedidos disponiveis' });
+        }
+    },
     createPedido: async (req, res) => {
         const { tipo, categoriaServico, nomeServico, descricao, idCliente, valor, dataCriacao, tituloPedido } = req.body;
         const pedidoData = {

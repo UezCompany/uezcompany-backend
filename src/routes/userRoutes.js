@@ -55,7 +55,7 @@ router.post('validate-username', (req, res) => {
     res.status(200).json({message: `O username ${req.body.username} é valido`})
 })
 router.post('validate-jwt', (req, res) => {
-    res.status(200).json({message: `O Token JWT: ${req.body.token} é valido`})
+    res.status(200).json({message: `O Token JWT: ${req.body.token} é valido`, token: req.body.token})
 })
 
 module.exports = router;
