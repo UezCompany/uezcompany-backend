@@ -105,6 +105,15 @@ A API da UEZ Company oferece as seguintes rotas principais:
 }
 ```
 
+- `GET /api/pedidos`: Obtém todos os pedidos que um respectivo uzer pode realizar.
+
+``` json
+// Headers da Requisição
+{
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MWZmNmQzMmY4MGU3ZDVjYWE0OTZmNCIsInRpcG8iOiJ1emVyIiwiaWF0IjoxNjk3NjI4NDE5LCJleHAiOjE2OTc3MTQ4MTl9.HPBuzYOnAuE2TNjD2VmARwE2-RTQe0TUsQnjtfR2hp8"
+}
+```
+
 Consulte a documentação completa da API [aqui](link-para-documentacao-da-api) para obter informações detalhadas sobre cada rota, os parâmetros aceitos e as respostas retornadas.
 
 ## Contribuição
