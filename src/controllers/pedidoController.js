@@ -41,6 +41,7 @@ const PedidoController = {
             dataCriacao: dataCriacao,
             titulo: tituloPedido
         }
+        console.log("CREATEPEDIDOCONTROLLER", pedidoData)
         try {
             const pedido = await pedidoModel.createPedido(pedidoData);
             if (pedido.errors) {

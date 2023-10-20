@@ -1,4 +1,5 @@
 const { getCategoryByServicoName } = require("../controllers/servicoController");
+const { getCategoryByServico } = require("../models/servicoModel");
 
 
 const validateField = (field, message, res, optionalValidationFunction = undefined) => {
@@ -159,7 +160,7 @@ const validateMiddlewares = {
 
         next();
     },
-    validateCreatePedidoBody: (req, res, next) => {
+    validateCreatePedidoBody: async (req, res, next) => {
         let valor;
 
         if (req.body?.valor) {
@@ -169,29 +170,32 @@ const validateMiddlewares = {
 
         const {
             tipoPedido,
-            tituloPedido,
+            titulo,
             nomeServico,
             descricao,
             userId,
         } = req.body;
 
         validateField(tipoPedido, 'O tipo do pedido é inválido', res);
-        validateField(tituloPedido, 'A categoria do serviço é inválida', res);
+        validateField(titulo, 'A categoria do serviço é inválida', res);
         validateField(nomeServico, 'O nome do serviço é inválido', res);
         validateField(descricao, 'A descrição do serviço é inválida', res);
         validateField(userId, 'O id do cliente é inválido', res);
 
+        const categoriaServico = await getCategoryByServico(nomeServico)
+        console.log("category", categoriaServico)
+
         req.body = {
             tipo: tipoPedido,
-            categoriaServico: getCategoryByServicoName(nomeServico),
-            tituloPedido: tituloPedido,
+            categoriaServico: categoriaServico,
+            tituloPedido: titulo,
             nomeServico: nomeServico,
             descricao: descricao,
             idCliente: userId,
             valor: valor,
             dataCriacao: new Date().toISOString(),
         }
-        console.log("Ok", req.body);
+        console.log("Req.body", req.body);
         next();
 
     }
