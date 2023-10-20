@@ -3,9 +3,7 @@ const app = express();
 const cors = require('cors');
 
 app.use(express.json());
-app.use(cors({
-    origin: "*"
-}));
+app.use(cors());
 
 const clientesRoutes = require('./routes/clientes/clientesRoutes');
 const uzersRoutes = require('./routes/uzers/uzersRoutes');
