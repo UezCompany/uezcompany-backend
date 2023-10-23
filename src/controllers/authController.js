@@ -21,7 +21,6 @@ const AuthController = {
             if (!user) {
                 return res.status(401).json({ message: 'Usuário não encontrado' });
             }
-
             const senhaCorrespondente = user.senha;
 
             await bcrypt.compare(senha, senhaCorrespondente, (err, bcryptResult) => {

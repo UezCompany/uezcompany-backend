@@ -10,7 +10,7 @@ const ClienteModel = {
     return cliente
   },
   getClienteByEmail: async (email) => {
-    const cliente = await Cliente.findOne({ email: email }, 'email');
+    const cliente = await Cliente.findOne({ email: email }, 'email senha');
     return cliente
   },
   getClienteByCpf: async (cpf) => {
