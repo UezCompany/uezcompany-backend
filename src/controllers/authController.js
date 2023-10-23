@@ -33,7 +33,7 @@ const AuthController = {
                     // A senha está correta
                     // Send JWT
                     const token = jwt.sign({ id: user.id, tipo: userType }, process.env.SECRET, { expiresIn: '24h' });
-                    res.status(200).json({ token });
+                    res.status(200).json({ token, userType });
                 } else {
                     // A senha está incorreta
                     return res.status(401).json({ message: 'Credenciais inválidas' });
