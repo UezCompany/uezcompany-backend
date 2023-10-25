@@ -13,14 +13,14 @@ const authRoutes = require('./routes/auth/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const pedidosRoutes = require('./routes/pedidos/pedidosRoutes');
 
-app.use('/api', clientesRoutes);
-app.use('/api', uzersRoutes);
-app.use('/api', funcionariosRoutes);
-app.use('/api', servicosRoutes);
+app.use(clientesRoutes);
+app.use(uzersRoutes);
+app.use(funcionariosRoutes);
+app.use(servicosRoutes);
 
-app.use('/api', pedidosRoutes);
+app.use(pedidosRoutes);
 
-app.use('/api', authRoutes);
-app.use('/api', userRoutes)
+app.use(authRoutes);
+app.use(userRoutes)
 
 module.exports = app;
