@@ -31,7 +31,7 @@ const AuthController = {
                 } else if (bcryptResult) {
                     // A senha está correta
                     // Send JWT
-                    const token = jwt.sign({ id: user.id, tipo: userType }, process.env.SECRET, { expiresIn: '24h' });
+                    const token = jwt.sign({ id: user._id, tipo: userType }, process.env.SECRET, { expiresIn: '24h' });
                     return res.status(200).json({ token, userType });
                 } else {
                     // A senha está incorreta
