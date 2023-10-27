@@ -11,18 +11,16 @@ const pedidosRoutes = require('./routes/pedidos/pedidosRoutes');
 
 app.use(express.json());
 
-const FRONTEND_DOMAIN = process.env.FRONTEND_DOMAIN || "*"
+const FRONTEND_DOMAIN = process.env.FRONTEND_DOMAIN || "*";
 
 // Configurando o CORS para permitir acesso apenas a partir do domínio uezcompany.com
 const corsOptions = {
-  origin: String(FRONTEND_DOMAIN),
+  origin: FRONTEND_DOMAIN,
   optionsSuccessStatus: 200, // Algumas configurações adicionais, se necessário
 };
 
-app.use(cors(corsOptions), (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", FRONTEND_DOMAIN);
-});
-console.log("CORS Habilitado. URL do dominio: " + corsOptions.origin)
+app.use(cors(corsOptions); // Usar o middleware cors corretamente
+console.log("CORS Habilitado. URL do domínio: " + corsOptions.origin);
 
 app.use(clientesRoutes);
 app.use(uzersRoutes);
