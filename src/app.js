@@ -19,7 +19,9 @@ const corsOptions = {
   optionsSuccessStatus: 200, // Algumas configurações adicionais, se necessário
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions), (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", FRONTEND_DOMAIN);
+});
 console.log("CORS Habilitado. URL do dominio: " + corsOptions.origin)
 
 app.use(clientesRoutes);
