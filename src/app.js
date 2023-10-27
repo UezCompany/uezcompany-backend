@@ -3,7 +3,14 @@ const app = express();
 const cors = require('cors');
 
 app.use(express.json());
-app.use(cors());
+
+// Configurando o CORS para permitir acesso apenas a partir do domínio uezcompany.com
+const corsOptions = {
+  origin: 'https://uezcompany.com',
+  optionsSuccessStatus: 200, // Algumas configurações adicionais, se necessário
+};
+
+app.use(cors(corsOptions));
 
 const clientesRoutes = require('./routes/clientes/clientesRoutes');
 const uzersRoutes = require('./routes/uzers/uzersRoutes');
@@ -17,10 +24,8 @@ app.use(clientesRoutes);
 app.use(uzersRoutes);
 app.use(funcionariosRoutes);
 app.use(servicosRoutes);
-
 app.use(pedidosRoutes);
-
 app.use(authRoutes);
-app.use(userRoutes)
+app.use(userRoutes);
 
 module.exports = app;

@@ -1,16 +1,17 @@
-const { getCategoryByServicoName } = require("../controllers/servicoController");
 const { getCategoryByServico } = require("../models/servicoModel");
 
 
 const validateField = (field, message, res, optionalValidationFunction = undefined) => {
 
     if (optionalValidationFunction) {
-        if (!optionalValidationFunction(field) || !field || field === '') {
-            return res.status(400).json({ message });
+        if (optionalValidationFunction && !optionalValidationFunction(field)) {
+            res.status(400).json({ message });
+            console.error(new Error(message))
         }
     } else {
-        if (!field || field === '') {
-            return res.status(400).json({ message });
+        if (!field) {
+            res.status(400).json({ message });
+            console.error(new Error(message))
         }
     }
 
@@ -37,26 +38,31 @@ const validateMiddlewares = {
             email,
             senha,
             cpf,
-            rg,
             cep,
             endereco,
             telefone,
             dataNasc
         } = req.body;
 
+        if (req.body.rg) {
+            validateField(req.body.rg, 'O RG do cliente é inválido', res, validateRG);
+            console.log(req.body.rg)
+        }
+
         validateField(nome, 'O nome do cliente é inválido', res);
         validateField(email, 'O email do cliente é inválido', res);
         validateField(senha, 'A senha do cliente é inválida', res);
         validateField(cpf, 'O CPF do cliente é inválido', res, validateCPF);
-        validateField(rg, 'O RG do cliente é inválido', res, validateRG);
         validateField(cep, 'O CEP do cliente é inválido', res, validateCEP);
 
-        const { logradouro, numero, bairro, cidade, estado } = endereco;
-        validateField(logradouro, 'O endereço do cliente é inválido', res);
-        validateField(numero, 'O endereço do cliente é inválido', res);
-        validateField(bairro, 'O endereço do cliente é inválido', res);
-        validateField(cidade, 'O endereço do cliente é inválido', res);
-        validateField(estado, 'O endereço do cliente é inválido', res);
+        if (endereco) {
+            const { logradouro, numero, bairro, cidade, estado } = endereco;
+            validateField(logradouro, 'O endereço do cliente é inválido', res);
+            validateField(numero, 'O endereço do cliente é inválido', res);
+            validateField(bairro, 'O endereço do cliente é inválido', res);
+            validateField(cidade, 'O endereço do cliente é inválido', res);
+            validateField(estado, 'O endereço do cliente é inválido', res);
+        } else { res.status(400).json({ messsage: "Informe o endereço corretamente." }) }
 
         validateField(telefone, 'O telefone do cliente é inválido', res);
         validateField(dataNasc, 'A data de nascimento do cliente é inválida', res);
@@ -65,7 +71,7 @@ const validateMiddlewares = {
             nome,
             email,
             CPF: cpf,
-            RG: rg,
+            RG: req.body.rg || null,
             senha,
             CEP: cep,
             endereco,
@@ -78,14 +84,13 @@ const validateMiddlewares = {
         next();
     },
 
-    validateUzerRegisterBody: (req, res, next) => {
+    validateUzerRegisterBody: async (req, res, next) => {
         const {
             email,
             nome,
             senha,
             dataNasc,
             cpf,
-            rg,
             cep,
             endereco,
             tipoServico,
@@ -95,20 +100,25 @@ const validateMiddlewares = {
             telefone
         } = req.body;
 
+        if (req.body.rg) {
+            validateField(req.body.rg, 'O RG do cliente é inválido', res, validateRG);
+            console.log("Tem rg")
+        }
+
         validateField(nome, 'O nome do uzer é inválido', res);
         validateField(email, 'O email do uzer é inválido', res);
         validateField(senha, 'A senha do uzer é inválida', res);
         validateField(cpf, 'O CPF do uzer é inválido', res, validateCPF);
-        validateField(rg, 'O RG do uzer é inválido', res, validateRG);
         validateField(cep, 'O CEP do uzer é inválido', res, validateCEP);
 
-        const { logradouro, numero, bairro, cidade, estado, complemento } = endereco;
-        validateField(logradouro, 'O endereço do uzer é inválido', res);
-        validateField(numero, 'O endereço do uzer é inválido', res);
-        validateField(bairro, 'O endereço do uzer é inválido', res);
-        validateField(cidade, 'O endereço do uzer é inválido', res);
-        validateField(estado, 'O endereço do uzer é inválido', res);
-        validateField(complemento, 'O endereço do uzer é inválido', res);
+        if (endereco) {
+            const { logradouro, numero, bairro, cidade, estado } = endereco;
+            validateField(logradouro, 'O endereço do cliente é inválido', res);
+            validateField(numero, 'O endereço do cliente é inválido', res);
+            validateField(bairro, 'O endereço do cliente é inválido', res);
+            validateField(cidade, 'O endereço do cliente é inválido', res);
+            validateField(estado, 'O endereço do cliente é inválido', res);
+        } else { res.status(400).json({ messsage: "Informe o endereço corretamente." }) }
 
         validateField(telefone, 'O telefone do uzer é inválido', res);
         validateField(dataNasc, 'A data de nascimento do uzer é inválida', res);
@@ -121,7 +131,7 @@ const validateMiddlewares = {
             nome,
             email,
             CPF: cpf,
-            RG: rg,
+            RG: req.body.rg || null,
             senha,
             CEP: cep,
             endereco,
