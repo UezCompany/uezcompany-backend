@@ -19,7 +19,7 @@ const corsOptions = {
   optionsSuccessStatus: 200, // Algumas configurações adicionais, se necessário
 };
 
-app.use(cors(corsOptions); // Usar o middleware cors corretamente
+app.use(cors(corsOptions)); // Usar o middleware cors corretamente
 console.log("CORS Habilitado. URL do domínio: " + corsOptions.origin);
 
 app.use(clientesRoutes);
