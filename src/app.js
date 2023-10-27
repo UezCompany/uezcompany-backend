@@ -1,6 +1,13 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const clientesRoutes = require('./routes/clientes/clientesRoutes');
+const uzersRoutes = require('./routes/uzers/uzersRoutes');
+const funcionariosRoutes = require('./routes/funcionarios/funcionariosRoutes');
+const servicosRoutes = require('./routes/servicos/servicosRoutes');
+const authRoutes = require('./routes/auth/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const pedidosRoutes = require('./routes/pedidos/pedidosRoutes');
 
 app.use(express.json());
 
@@ -11,14 +18,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-const clientesRoutes = require('./routes/clientes/clientesRoutes');
-const uzersRoutes = require('./routes/uzers/uzersRoutes');
-const funcionariosRoutes = require('./routes/funcionarios/funcionariosRoutes');
-const servicosRoutes = require('./routes/servicos/servicosRoutes');
-const authRoutes = require('./routes/auth/authRoutes');
-const userRoutes = require('./routes/userRoutes');
-const pedidosRoutes = require('./routes/pedidos/pedidosRoutes');
+console.log("CORS Habilitado. URL do dominio: " + corsOptions.origin)
 
 app.use(clientesRoutes);
 app.use(uzersRoutes);
