@@ -23,7 +23,9 @@ const chatSchema = new Schema({
         horaEnvio: {
             type: String
         },
-
+        senderId: {
+            type: String
+        },
     }]
 }, {
     versionKey: '__versionOfSchema__'
