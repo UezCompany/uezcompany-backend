@@ -83,9 +83,15 @@ const clienteSchema = new Schema({
     photoUrl: {
         type: String,
         default: 'https://i.pinimg.com/280x280_RS/53/66/5d/53665d574976a6b66d283d7e3323bab9.jpg'
-    }
+    },
+    chats: [{
+        _idChat: {
+            type: String,
+            required: true
+        }
+    }]
 }, {
-    versionKey: '__versionOfSchema__'  
+    versionKey: '__versionOfSchema__'
 });
 
 const Cliente = model('Cliente', clienteSchema);

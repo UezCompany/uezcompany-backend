@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-router.post('/sendMessage', );
+router.get('/chat/',);
+router.post('/chat/create',);
+router.post('/chat/',);
 
 
 module.exports = router;
