@@ -1,4 +1,6 @@
 const Chat = require('./Schemas/Chat')
+const Uzer = require('./Schemas/Uzer')
+const Cliente = require('./Schemas/Cliente')
 
 const ChatModel = {
     getChats: async (id, userType) => {
@@ -11,7 +13,19 @@ const ChatModel = {
     },
     // creatorId é quem está solicitando a criação do chat, requestedContactId é o id do usuário que ele quer contatar
     createChat: async (creatorId, requestedContactId, userType) => {
-        const newChat = userType === 'uzer' ? await Chat.create({ uzerId: creatorId, clienteId: requestedContactId }) : await Chat.create({ clienteId: creatorId, uzerId: requestedContactId })
+        let newChat;
+        if (userType === 'uzer') {
+            newChat = await Chat.create({ uzerId: creatorId, clienteId: requestedContactId })
+            await Uzer.updateOne({ _id: creatorId }, { $push: { chats: newChat._id } })
+            await Cliente.updateOne({ _id: requestedContactId }, { $push: { chats: newChat._id } })
+        }
+
+        if (userType === 'cliente') {
+            newChat = await Chat.create({ clienteId: creatorId, uzerId: requestedContactId })
+            await Cliente.updateOne({ _id: creatorId }, { $push: { chats: newChat._id } })
+            await Uzer.updateOne({ _id: requestedContactId }, { $push: { chats: newChat._id } })
+        }
+
         return newChat
     },
     sendMessage: async (chatId, message, senderId, userType) => {
