@@ -1,4 +1,4 @@
-const { Schema, model } = require('../connection');
+const { Schema, model } = require('../connection')
 
 const funcionarioSchema = new Schema({
     idFuncionario: {
@@ -22,7 +22,7 @@ const funcionarioSchema = new Schema({
         required: true
     },
     senhaFuncionario: {
-        type: String,   
+        type: String,
         required: true
     },
     telefoneFuncionario: {
@@ -47,9 +47,9 @@ const funcionarioSchema = new Schema({
 
 })
 
-const Funcionario = model('Funcionario', funcionarioSchema);
+const Funcionario = model('Funcionario', funcionarioSchema)
 
-module.exports = Funcionario;
+module.exports = Funcionario
 
 
 /* 

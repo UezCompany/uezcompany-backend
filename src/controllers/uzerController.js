@@ -1,85 +1,85 @@
-const UzerModel = require('../models/uzerModel');
+const UzerModel = require('../models/uzerModel')
 
 const UzerController = {
     getAllUzers: async (req, res) => {
         try {
-            const uzers = await UzerModel.getAllUzers();
-            res.status(200).json(uzers);
+            const uzers = await UzerModel.getAllUzers()
+            res.status(200).json(uzers)
         } catch (error) {
-            console.error('Erro ao obter uzers: ' + error.stack);
-            res.status(500).json({ message: 'Erro ao obter uzers' });
+            console.error('Erro ao obter uzers: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao obter uzers' })
         }
     },
     getUzerById: async (req, res) => {
-        const { id } = req.params;
+        const { id } = req.params
         try {
-            const uzer = await UzerModel.getUzerById(id);
+            const uzer = await UzerModel.getUzerById(id)
             if (uzer) {
-                res.json(uzer);
+                res.json(uzer)
             } else {
-                res.status(404).json({ message: 'Uzer não encontrado' });
+                res.status(404).json({ message: 'Uzer não encontrado' })
             }
         } catch (error) {
-            console.error('Erro ao obter uzer por ID: ' + error.stack);
-            res.status(500).json({ message: 'Erro ao obter uzer por ID' });
+            console.error('Erro ao obter uzer por ID: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao obter uzer por ID' })
         }
     },
     createUzer: async (req, res) => {
-        const { email, senha, CPF } = req.body;
+        const { email, senha, CPF } = req.body
         try {
             // Verifica se o uzer já existe com base no email
-            const existingUzer = await UzerModel.getUzerByEmail(email);
+            const existingUzer = await UzerModel.getUzerByEmail(email)
             if (existingUzer) {
-                return res.status(400).json({ message: 'Ja existe um uzer com este email' });
+                return res.status(400).json({ message: 'Ja existe um uzer com este email' })
             }
 
             // Verifica se o uzer já existe com base no CPF
-            const existingUzerCPF = await UzerModel.getUzerByCpf(CPF);
+            const existingUzerCPF = await UzerModel.getUzerByCpf(CPF)
             if (existingUzerCPF) {
-                return res.status(400).json({ message: 'Ja existe um uzer com este CPF' });
+                return res.status(400).json({ message: 'Ja existe um uzer com este CPF' })
             }
 
-            const bcrypt = require('bcrypt');
-            const saltRounds = 10;
+            const bcrypt = require('bcrypt')
+            const saltRounds = 10
 
             // Gere o hash da senha
-            const hash = await bcrypt.hash(senha, saltRounds);
+            const hash = await bcrypt.hash(senha, saltRounds)
 
             // Substitua a senha original pelo hash
-            req.body.senha = hash;
+            req.body.senha = hash
 
-            const uzer = await UzerModel.createUzer(req.body);
+            const uzer = await UzerModel.createUzer(req.body)
 
             if (uzer.errors) {
-                return res.status(400).json(uzer.errors);
+                return res.status(400).json(uzer.errors)
             }
 
-            res.status(201).json({ message: 'Uzer criado com sucesso', uzer });
+            res.status(201).json({ message: 'Uzer criado com sucesso', uzer })
         } catch (error) {
-            console.error('Erro ao criar uzer: ' + error.stack);
-            res.status(500).json({ message: 'Erro ao criar uzer' });
+            console.error('Erro ao criar uzer: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao criar uzer' })
         }
     },
     updateUzer: async (req, res) => {
-        const { id } = req.params;
+        const { id } = req.params
         try {
-            const uzer = await UzerModel.updateUzer(id, req.body);
-            res.status(200).json(uzer);
+            const uzer = await UzerModel.updateUzer(id, req.body)
+            res.status(200).json(uzer)
         } catch (error) {
-            console.error('Erro ao atualizar uzer: ' + error.stack);
-            res.status(500).json({ message: 'Erro ao atualizar uzer' });
+            console.error('Erro ao atualizar uzer: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao atualizar uzer' })
         }
     },
     deleteUzer: async (req, res) => {
-        const { id } = req.params;
+        const { id } = req.params
         try {
-            const uzer = await UzerModel.deleteUzer(id);
-            res.status(200).json(uzer);
+            const uzer = await UzerModel.deleteUzer(id)
+            res.status(200).json(uzer)
         } catch (error) {
-            console.error('Erro ao deletar uzer: ' + error.stack);
-            res.status(500).json({ message: 'Erro ao deletar uzer' });
+            console.error('Erro ao deletar uzer: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao deletar uzer' })
         }
     },
-};
+}
 
 module.exports = UzerController

@@ -1,4 +1,4 @@
-const { Schema, model } = require('../connection');
+const { Schema, model } = require('../connection')
 
 const uzerSchema = new Schema({
     nome: {
@@ -103,8 +103,8 @@ const uzerSchema = new Schema({
 
 }, {
     versionKey: '__versionOfSchema__'
-});
+})
 
-const Uzer = model('Uzer', uzerSchema);
+const Uzer = model('Uzer', uzerSchema)
 
-module.exports = Uzer;   
+module.exports = Uzer   

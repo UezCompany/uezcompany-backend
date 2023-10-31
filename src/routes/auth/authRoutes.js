@@ -1,26 +1,26 @@
-const express = require('express');
-const authController = require('../../controllers/authController');
-const ClienteController = require('../../controllers/clienteController');
-const UzerController = require('../../controllers/uzerController');
-const { getUserTypeByDbMiddleware, userTypeMiddleware } = require('../../middleware/userMiddleware');
-const   router = express.Router();
+const express = require('express')
+const authController = require('../../controllers/authController')
+const ClienteController = require('../../controllers/clienteController')
+const UzerController = require('../../controllers/uzerController')
+const { getUserTypeByDbMiddleware, userTypeMiddleware } = require('../../middleware/userMiddleware')
+const router = express.Router()
 
 router.post('/register', userTypeMiddleware, (req, res) => {
-    const { userType } = req.body;
+    const { userType } = req.body
 
     if (userType === 'cliente') {
-        ClienteController.createCliente(req, res);
+        ClienteController.createCliente(req, res)
     } else if (userType === 'uzer') {
-        UzerController.createUzer(req, res);
+        UzerController.createUzer(req, res)
     } else if (userType === 'funcionario') {
-        FuncionarioController.createFuncionario(req, res);
+        FuncionarioController.createFuncionario(req, res)
     } else {
-        res.json({ message: 'Tipo de usuário inválido' }).status(400);
+        res.json({ message: 'Tipo de usuário inválido' }).status(400)
     }
-});
+})
 
-router.post('/login', getUserTypeByDbMiddleware, authController.login);
+router.post('/login', getUserTypeByDbMiddleware, authController.login)
 
-router.post('/funcionario/login', authController.loginFuncionario);
+router.post('/funcionario/login', authController.loginFuncionario)
 
-module.exports = router;
+module.exports = router

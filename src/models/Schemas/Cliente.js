@@ -1,4 +1,4 @@
-const { Schema, model } = require('../connection');
+const { Schema, model } = require('../connection')
 
 const clienteSchema = new Schema({
     nome: {
@@ -92,8 +92,8 @@ const clienteSchema = new Schema({
     }]
 }, {
     versionKey: '__versionOfSchema__'
-});
+})
 
-const Cliente = model('Cliente', clienteSchema);
+const Cliente = model('Cliente', clienteSchema)
 
-module.exports = Cliente;   
+module.exports = Cliente   

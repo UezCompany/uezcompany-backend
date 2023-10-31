@@ -1,36 +1,54 @@
-const { Schema, model } = require('../connection');
+const { Schema, model } = require('../connection')
 
 const chatSchema = new Schema({
-    _idCliente: {
+    _id: {
         type: String,
         required: true
     },
-    _idUzer: {
+    uzerId: {
         type: String,
         required: true
     },
-    criadoEm: {
+    uzerService: {
+        type: String,
+    },
+    clienteId: {
+        type: String,
+    },
+    createdAt: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
-    mensagens: [{
-        conteudo: {
-            type: String
+    messages: [{
+        _id: {
+            type: String,
         },
-        dataEnvio: {
-            type: String
+        sendDate: {
+            type: String,
         },
-        horaEnvio: {
-            type: String
+        sendHour: {
+            type: String,
         },
         senderId: {
-            type: String
+            type: String,
         },
-    }]
+        content: {
+            type: String,
+        }
+    }],
+    photo: {
+        type: String,
+    },
+    clienteName: {
+        type: String,
+    },
+    uzerName: {
+        type: String,
+    }
 }, {
     versionKey: '__versionOfSchema__'
-});
+})
 
-const Chat = model('Chat', chatSchema);
+const Chat = model('Chat', chatSchema)
 
-module.exports = Chat;   
+module.exports = Chat
