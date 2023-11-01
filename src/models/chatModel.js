@@ -43,9 +43,9 @@ const ChatModel = {
 
         return newChat;
     },
-    sendMessage: async (chatId, message, senderId, userType) => {
-        const newMessage = await Chat.findOneAndUpdate({ _id: chatId }, { $push: { messages: { content: message, sendDate: new Date().toLocaleDateString(), sendHour: new Date().toLocaleTimeString(), senderId } } }, { new: true })
-        return newMessage
+    sendMessage: async (chatId, message, senderId, sendDate, sendHour) => {
+        const chatWithNewMessage = await Chat.findOneAndUpdate({ _id: chatId }, { $push: { messages: { content: message, sendDate, sendHour, senderId } } }, { new: true })
+        return chatWithNewMessage
     }
 }
 

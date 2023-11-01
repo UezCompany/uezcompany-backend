@@ -31,6 +31,16 @@ const ChatController = {
             console.error('Erro ao criar chat: ' + error.stack)
             res.status(500).json({ message: 'Erro ao criar chat' })
         }
+    },
+    sendMessage: async (req, res) => {
+        const { userId: senderId, chatId, message, sendDate, sendHour } = req.body
+        try {
+            const chatWithNewMessage = await chatModel.sendMessage(chatId, message, senderId, sendDate, sendHour)
+            res.status(200).json(chatWithNewMessage.messages[chatWithNewMessage.messages.length - 1])
+        } catch (error) {
+            console.error('Erro ao enviar mensagem: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao enviar mensagem' })
+        }
     }
 
 }
