@@ -5,9 +5,9 @@ const validateJWT = require('../middleware/authMiddleware')
 const { getClienteById } = require('../models/clienteModel')
 const { getUzerById } = require('../models/uzerModel')
 
-const { getUserTypeByDbMiddleware } = require('../middleware/userMiddleware')
+const { getUserDataByDbMiddleware } = require('../middleware/userMiddleware')
 
-router.get('/users/me', validateJWT, getUserTypeByDbMiddleware, async (req, res) => {
+router.get('/users/me', validateJWT, getUserDataByDbMiddleware, async (req, res) => {
     const { userId, userType } = req.body
     if (userType === 'both') {
         try {

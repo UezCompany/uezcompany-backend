@@ -1,8 +1,12 @@
 const express = require('express')
 const router = express.Router()
+const ChatController = require('../controllers/chatController')
+const validateJWT = require('../middleware/authMiddleware')
+const { getUserDataByDbMiddleware } = require('../middleware/userMiddleware')
+const { default: getUserDataById } = require('../functions/getUserDataById')
 
-router.get('/chat/',)
-router.post('/chat/create',)
+router.get('/chats', validateJWT, getUserDataByDbMiddleware, ChatController.getChats)
+router.post('/chat/create/:requestedContactId',validateJWT, ChatController.createChat)
 router.post('/chat/',)
 
 

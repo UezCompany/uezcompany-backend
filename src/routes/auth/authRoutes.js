@@ -2,7 +2,7 @@ const express = require('express')
 const authController = require('../../controllers/authController')
 const ClienteController = require('../../controllers/clienteController')
 const UzerController = require('../../controllers/uzerController')
-const { getUserTypeByDbMiddleware, userTypeMiddleware } = require('../../middleware/userMiddleware')
+const { getUserDataByDbMiddleware, userTypeMiddleware } = require('../../middleware/userMiddleware')
 const router = express.Router()
 
 router.post('/register', userTypeMiddleware, (req, res) => {
@@ -19,7 +19,7 @@ router.post('/register', userTypeMiddleware, (req, res) => {
     }
 })
 
-router.post('/login', getUserTypeByDbMiddleware, authController.login)
+router.post('/login', getUserDataByDbMiddleware, authController.login)
 
 router.post('/funcionario/login', authController.loginFuncionario)
 

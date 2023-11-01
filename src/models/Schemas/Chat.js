@@ -1,19 +1,17 @@
 const { Schema, model } = require('../connection')
 
 const chatSchema = new Schema({
-    _id: {
-        type: String,
-        required: true
-    },
     uzerId: {
         type: String,
         required: true
     },
     uzerService: {
         type: String,
+        required: true
     },
     clienteId: {
         type: String,
+        required: true
     },
     createdAt: {
         type: Date,
@@ -38,12 +36,15 @@ const chatSchema = new Schema({
     }],
     photo: {
         type: String,
+        default: "https://cdn-icons-png.flaticon.com/512/149/149071.png"
     },
     clienteName: {
         type: String,
+        default: "null"
     },
     uzerName: {
         type: String,
+        default: "null"
     }
 }, {
     versionKey: '__versionOfSchema__'
