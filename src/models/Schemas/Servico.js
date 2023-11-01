@@ -1,4 +1,4 @@
-const { Schema, model } = require('../connection');
+const { Schema, model } = require('../connection')
 
 const servicoSchema = new Schema({
     idServico: {
@@ -30,6 +30,6 @@ const servicoSchema = new Schema({
     versionKey: '__versionOfSchema__'
 })
 
-const Servico = model('Servico', servicoSchema);
+const Servico = model('Servico', servicoSchema)
 
-module.exports = Servico;
+module.exports = Servico

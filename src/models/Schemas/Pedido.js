@@ -1,4 +1,4 @@
-const { Schema, model } = require('../connection');
+const { Schema, model } = require('../connection')
 
 const pedidoSchema = new Schema(
     {
@@ -56,6 +56,6 @@ const pedidoSchema = new Schema(
     }
 )
 
-const Pedido = model('Pedido', pedidoSchema);
+const Pedido = model('Pedido', pedidoSchema)
 
-module.exports = Pedido;
+module.exports = Pedido

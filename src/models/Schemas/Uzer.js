@@ -1,4 +1,4 @@
-const { Schema, model } = require('../connection');
+const { Schema, model } = require('../connection')
 
 const uzerSchema = new Schema({
     nome: {
@@ -90,14 +90,25 @@ const uzerSchema = new Schema({
             areaAtuacao: null //Area de Atuação em Km
         }]
     },
+    userType: {
+        type: String,
+        default: 'uzer'
+    },
     photoUrl: {
         type: String,
         default: 'https://i.pinimg.com/280x280_RS/53/66/5d/53665d574976a6b66d283d7e3323bab9.jpg'
-    }
+    },
+    chats: [{
+        _idChat: {
+            type: String,
+            required: true
+        }
+    }]
+
 }, {
     versionKey: '__versionOfSchema__'
-});
+})
 
-const Uzer = model('Uzer', uzerSchema);
+const Uzer = model('Uzer', uzerSchema)
 
-module.exports = Uzer;   
+module.exports = Uzer   
