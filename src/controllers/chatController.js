@@ -34,6 +34,7 @@ const ChatController = {
     },
     sendMessage: async (req, res) => {
         const { userId: senderId, chatId, message, sendDate, sendHour } = req.body
+
         try {
             const chatWithNewMessage = await chatModel.sendMessage(chatId, message, senderId, sendDate, sendHour)
             res.status(200).json(chatWithNewMessage.messages[chatWithNewMessage.messages.length - 1])
@@ -41,7 +42,44 @@ const ChatController = {
             console.error('Erro ao enviar mensagem: ' + error.stack)
             res.status(500).json({ message: 'Erro ao enviar mensagem' })
         }
-    }
+    },
+    sendBudgetMessage: async (req, res) => {
+        //nesse caso, o message vai ser o valor do orçamento
+        const { userId: senderId, chatId, message, sendDate, sendHour } = req.body
+
+        try {
+            const chatWithNewMessage = await chatModel.sendBudgetMessage(chatId, message, senderId, sendDate, sendHour)
+            res.status(200).json(chatWithNewMessage.messages[chatWithNewMessage.messages.length - 1])
+        } catch (error) {
+            console.error('Erro ao enviar mensagem: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao enviar mensagem' })
+        }
+    },
+    sendImageMessage: async (req, res) => {
+        const { userId: senderId, chatId, message, sendDate, sendHour } = req.body
+
+        if (req.params.messageType) {
+            console.log("Tipo da mensagem: " + req.params.messageType)
+            switch (req.params.messageType) {
+                case 'text':
+                    break;
+                case 'image':
+                    break;
+                case 'budget':
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        try {
+            const chatWithNewMessage = await chatModel.sendMessage(chatId, message, senderId, sendDate, sendHour)
+            res.status(200).json(chatWithNewMessage.messages[chatWithNewMessage.messages.length - 1])
+        } catch (error) {
+            console.error('Erro ao enviar mensagem: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao enviar mensagem' })
+        }
+    },
 
 }
 

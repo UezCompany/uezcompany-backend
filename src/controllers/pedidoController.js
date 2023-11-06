@@ -73,6 +73,16 @@ const PedidoController = {
             console.error('Erro ao deletar pedido: ' + error.stack)
             res.status(500).json({ message: 'Erro ao deletar pedido' })
         }
+    },
+    getPedidosByClienteId: async (req, res) => {
+        const { userId } = req.body
+        try {
+            const pedidos = await pedidoModel.getPedidosByClienteId(userId)
+            res.status(200).json(pedidos)
+        } catch (error) {
+            console.error('Erro ao obter pedidos pelo ID do cliente: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao obter pedidos pelo ID do cliente' })
+        }
     }
 }
 
