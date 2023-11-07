@@ -57,6 +57,16 @@ router.post('/clientes/profilephoto', upload.single('profilephoto'), validateJWT
     try {
         const imageUrl = await uploadImageToS3(filePath, fileName, bucketName);
         req.body.photoUrl = imageUrl;
+
+        // Excluir o arquivo local após o upload no S3
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error('Erro ao excluir o arquivo local:', err);
+            } else {
+                console.log('Arquivo local excluído com sucesso.');
+            }
+        });
+
         next()
     } catch (error) {
         console.error('Erro ao fazer upload da imagem no S3:', error);
