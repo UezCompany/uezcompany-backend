@@ -53,7 +53,6 @@ const ServicoController = {
         }
     },
     createServico: async (req, res) => {
-        console.log(req.body)
         const { nome } = req.body
         try {
             // Verifica se o servico já existe com base no nome

@@ -27,7 +27,7 @@ const uzerSchema = new Schema({
     },
     situacao: {
         type: String,
-        default: "Pendente..."
+        default: "Ativo"
     },
     motivoBloqueio: {
         type: String,

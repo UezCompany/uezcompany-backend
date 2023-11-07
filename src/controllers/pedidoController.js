@@ -20,7 +20,6 @@ const PedidoController = {
         }
     },
     getRespectivePedidos: async (req, res) => {
-        console.log(req.body.nomeServico)
         try {
             const pedidos = await pedidoModel.getRespectivePedidos(req.body.nomeServico)
             res.status(200).json(pedidos)
@@ -41,7 +40,6 @@ const PedidoController = {
             dataCriacao: dataCriacao,
             titulo: tituloPedido
         }
-        console.log("CREATEPEDIDOCONTROLLER", pedidoData)
         try {
             const pedido = await pedidoModel.createPedido(pedidoData)
             if (pedido.errors) {
@@ -72,6 +70,16 @@ const PedidoController = {
         } catch (error) {
             console.error('Erro ao deletar pedido: ' + error.stack)
             res.status(500).json({ message: 'Erro ao deletar pedido' })
+        }
+    },
+    getPedidosByClienteId: async (req, res) => {
+        const { userId } = req.body
+        try {
+            const pedidos = await pedidoModel.getPedidosByClienteId(userId)
+            res.status(200).json(pedidos)
+        } catch (error) {
+            console.error('Erro ao obter pedidos pelo ID do cliente: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao obter pedidos pelo ID do cliente' })
         }
     }
 }

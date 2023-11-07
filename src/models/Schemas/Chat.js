@@ -32,7 +32,11 @@ const chatSchema = new Schema({
         },
         content: {
             type: String,
-        }
+        },
+        type: {
+            type: String,
+            default: 'text'
+        },
     }],
     photo: {
         type: String,

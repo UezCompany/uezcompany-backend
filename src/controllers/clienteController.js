@@ -71,6 +71,17 @@ const ClienteController = {
             res.status(500).json({ message: 'Erro ao atualizar cliente' })
         }
     },
+    updateClientePhoto: async (req, res) => {
+        const { photoUrl } = req.body
+
+        try {
+            const cliente = await ClienteModel.updateCliente(req.body.userId, req.body)
+            res.status(200).json({ message: 'Imagem de perfil atualizada com sucesso', cliente, photoUrl })
+        } catch (error) {
+            console.error('Erro ao atualizar cliente: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao atualizar cliente' })
+        }
+    },
     deleteCliente: async (req, res) => {
         const { id } = req.params
         try {

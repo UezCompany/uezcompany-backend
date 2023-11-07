@@ -9,7 +9,6 @@ const validateJWT = async (req, res, next) => {
     try {
         const { id } = jwt.verify(token, process.env.SECRET)
         req.body.userId = id
-        console.log("JWT Válido")
         return next()
     } catch (error) {
         console.error('Erro ao validar token: ' + error.stack)

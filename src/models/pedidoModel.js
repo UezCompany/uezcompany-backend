@@ -25,6 +25,10 @@ const PedidoModel = {
     deletePedido: async (id) => {
         const deletePedido = Pedido.updateOne({ _id: id }, { disponivel: false, status: 'Deletado' }).catch(err => console.error(err))
         return deletePedido
+    },
+    getPedidosByClienteId: async (id) => {
+        const pedidos = await Pedido.find({ _id_cliente: id }).catch(err => console.error(err))
+        return pedidos
     }
 }
 
