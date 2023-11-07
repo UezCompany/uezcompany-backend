@@ -70,6 +70,17 @@ const UzerController = {
             res.status(500).json({ message: 'Erro ao atualizar uzer' })
         }
     },
+    updateUzerPhoto: async (req, res) => {
+        const { photoUrl } = req.body
+
+        try {
+            const uzer = await UzerModel.updateUzer(req.body.userId, req.body)
+            res.status(200).json({ message: 'Imagem de perfil atualizada com sucesso', uzer, photoUrl })
+        } catch (error) {
+            console.error('Erro ao atualizar o uzer: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao atualizar o uzer' })
+        }
+    },
     deleteUzer: async (req, res) => {
         const { id } = req.params
         try {
