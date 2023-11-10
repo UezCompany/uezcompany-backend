@@ -12,7 +12,7 @@ const ChatModel = {
         return chat
     },
     // creatorId é quem está solicitando a criação do chat, requestedContactId é o id do usuário que ele quer contatar
-    createChat: async (creatorId, requestedContactId, userType, uzerName, clienteName, uzerService) => {
+    createChat: async (creatorId, requestedContactId, userType, uzerName, clienteName, uzerService, photo) => {
         // Verifique se já existe um chat entre os dois usuários
         const existingChat = await Chat.findOne({
             $or: [
@@ -30,13 +30,13 @@ const ChatModel = {
         let newChat;
 
         if (userType === 'uzer') {
-            newChat = await Chat.create({ uzerId: creatorId, clienteId: requestedContactId, uzerName, clienteName, uzerService });
+            newChat = await Chat.create({ uzerId: creatorId, clienteId: requestedContactId, uzerName, clienteName, uzerService, photo });
             await Uzer.updateOne({ _id: creatorId }, { $push: { chats: newChat._id } });
             await Cliente.updateOne({ _id: requestedContactId }, { $push: { chats: newChat._id } });
         }
 
         if (userType === 'cliente') {
-            newChat = await Chat.create({ clienteId: creatorId, uzerId: requestedContactId, uzerName, clienteName, uzerService });
+            newChat = await Chat.create({ clienteId: creatorId, uzerId: requestedContactId, uzerName, clienteName, uzerService, photo });
             await Cliente.updateOne({ _id: creatorId }, { $push: { chats: newChat._id } });
             await Uzer.updateOne({ _id: requestedContactId }, { $push: { chats: newChat._id } });
         }
@@ -57,6 +57,8 @@ const ChatModel = {
     },
     deleteChat: async (chatId) => {
         const deletedChat = await Chat.deleteOne({ _id: chatId })
+        await Uzer.updateOne({ chats: chatId }, { $pull: { chats: chatId } })
+        await Cliente.updateOne({ chats: chatId }, { $pull: { chats: chatId } })
         return deletedChat
     }
 }

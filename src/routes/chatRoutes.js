@@ -9,6 +9,7 @@ router.post('/chat/create/:requestedContactId', validateJWT, ChatController.crea
 router.post('/chat/message', validateJWT, ChatController.sendMessage)
 router.post('/chat/message/budget', validateJWT, ChatController.sendBudgetMessage)
 router.post('/chat/message/image', validateJWT, ChatController.sendMessage)
+router.delete('/chat/delete/:chatId', validateJWT, ChatController.deleteChat)
 
 
 

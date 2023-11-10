@@ -53,10 +53,11 @@ const PedidoController = {
     },
     assignUzerToPedido: async (req, res) => {
         const { id: idPedido } = req.params
-        const { idUzer } = req.body
+        const { userId } = req.body
 
         try {
-            const pedido = await pedidoModel.updatePedido(idPedido, { _id_uzer: idUzer, status: 'Esperando finalização', disponivel: false })
+            const pedido = await pedidoModel.updatePedido(idPedido, { _id_uzer: userId, status: 'Em andamento...', disponivel: false })
+            res.status(200).json(pedido)
         } catch (error) {
             console.error('Erro ao atribuir uzer ao pedido: ' + error.stack)
             res.status(500).json({ message: 'Erro ao atribuir uzer ao pedido' })
@@ -80,6 +81,17 @@ const PedidoController = {
         } catch (error) {
             console.error('Erro ao obter pedidos pelo ID do cliente: ' + error.stack)
             res.status(500).json({ message: 'Erro ao obter pedidos pelo ID do cliente' })
+        }
+    },
+    getPedidoById: async (req, res) => {
+        const { id } = req.params
+        try {
+            const pedido = await pedidoModel.getPedidoById(id)
+            console.log(pedido)
+            res.status(200).json(pedido)
+        } catch (error) {
+            console.error('Erro ao obter pedido pelo ID: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao obter pedido pelo ID' })
         }
     }
 }

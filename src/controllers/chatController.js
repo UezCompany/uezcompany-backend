@@ -24,7 +24,7 @@ const ChatController = {
         const clienteData = currentData.userType === 'cliente' ? currentData : otherSideData
 
         try {
-            const chat = await chatModel.createChat(userId, requestedContactId, currentData.userType, uzerData.nome, clienteData.nome, uzerData.servicosPrestados[0].nomeServico)
+            const chat = await chatModel.createChat(userId, requestedContactId, currentData.userType, uzerData.nome, clienteData.nome, uzerData.servicosPrestados[0].nomeServico, uzerData.photoUrl)
             res.status(200).json(chat)
         } catch (error) {
             console.error('Erro ao criar chat: ' + error.stack)
@@ -44,7 +44,7 @@ const ChatController = {
     },
     sendBudgetMessage: async (req, res) => {
         //nesse caso, o message vai ser o valor do orçamento
-        const { userId: senderId, chatId, message, sendDate, sendHour } = req.body
+        const { userId: senderId, chatId, message, sendDate, sendHour, idPedido } = req.body
 
         try {
             const chatWithNewMessage = await chatModel.sendBudgetMessage(chatId, message, senderId, sendDate, sendHour)
@@ -79,6 +79,16 @@ const ChatController = {
             res.status(500).json({ message: 'Erro ao enviar mensagem' })
         }
     },
+    deleteChat: async (req, res) => {
+        const { chatId } = req.params
+        try {
+            const chat = await chatModel.deleteChat(chatId)
+            res.status(200).json(chat)
+        } catch (error) {
+            console.error('Erro ao deletar chat: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao deletar chat' })
+        }
+    }
 
 }
 

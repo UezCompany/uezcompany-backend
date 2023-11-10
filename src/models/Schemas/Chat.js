@@ -37,6 +37,10 @@ const chatSchema = new Schema({
             type: String,
             default: 'text'
         },
+        _idPedido: {
+            type: String,
+            default: null
+        }
     }],
     photo: {
         type: String,
