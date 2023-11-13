@@ -47,7 +47,7 @@ const ChatController = {
         const { userId: senderId, chatId, message, sendDate, sendHour, idPedido } = req.body
 
         try {
-            const chatWithNewMessage = await chatModel.sendBudgetMessage(chatId, message, senderId, sendDate, sendHour)
+            const chatWithNewMessage = await chatModel.sendBudgetMessage(chatId, message, senderId, sendDate, sendHour, idPedido)
             res.status(200).json(chatWithNewMessage.messages[chatWithNewMessage.messages.length - 1])
         } catch (error) {
             console.error('Erro ao enviar mensagem: ' + error.stack)

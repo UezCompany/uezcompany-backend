@@ -53,10 +53,11 @@ const PedidoController = {
     },
     assignUzerToPedido: async (req, res) => {
         const { id: idPedido } = req.params
-        const { userId } = req.body
+        const { idUzer } = req.body
+        console.log(idUzer)
 
         try {
-            const pedido = await pedidoModel.updatePedido(idPedido, { _id_uzer: userId, status: 'Em andamento...', disponivel: false })
+            const pedido = await pedidoModel.updatePedido(idPedido, { _id_uzer: idUzer, status: 'Em andamento...', disponivel: false })
             res.status(200).json(pedido)
         } catch (error) {
             console.error('Erro ao atribuir uzer ao pedido: ' + error.stack)

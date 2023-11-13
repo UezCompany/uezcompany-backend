@@ -22,8 +22,13 @@ router.get('/pedidos', validateJWT, async (req, res, next) => {
     }
 }, getRespectivePedidos)
 router.get('/pedidosAtivos', getActivePedidos)
-router.get('/pedidos/cliente', validateJWT, getPedidosByClienteId)
 router.get('/pedido/:id', getPedidoById)
+router.get('/pedidos/cliente', validateJWT, getPedidosByClienteId)
+router.get('/pedidos/cliente/:id', validateJWT, (req, res, next) => {
+    const { id } = req.params
+    req.body.userId = id
+    next()
+} , getPedidosByClienteId)
 
 
 router.post('/create/pedido', validateJWT, validateCreatePedidoBody, createPedido)

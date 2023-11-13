@@ -47,8 +47,8 @@ const ChatModel = {
         const chatWithNewMessage = await Chat.findOneAndUpdate({ _id: chatId }, { $push: { messages: { content: message, sendDate, sendHour, senderId } } }, { new: true })
         return chatWithNewMessage
     },
-    sendBudgetMessage: async (chatId, message, senderId, sendDate, sendHour) => {
-        const chatWithNewMessage = await Chat.findOneAndUpdate({ _id: chatId }, { $push: { messages: { content: message, sendDate, sendHour, senderId, type: 'budget' } } }, { new: true })
+    sendBudgetMessage: async (chatId, message, senderId, sendDate, sendHour, idPedido   ) => {
+        const chatWithNewMessage = await Chat.findOneAndUpdate({ _id: chatId }, { $push: { messages: { content: message, sendDate, sendHour, senderId, type: 'budget', _idPedido: idPedido } } }, { new: true })
         return chatWithNewMessage
     },
     sendImageMessage: async (chatId, message, senderId, sendDate, sendHour) => {
