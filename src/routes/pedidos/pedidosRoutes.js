@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const validateJWT = require('../../middleware/authMiddleware')
-const { getActivePedidos, createPedido, assignUzerToPedido, getRespectivePedidos, getPedidosByClienteId, getPedidoById } = require('../../controllers/pedidoController')
+const { getActivePedidos, createPedido, assignUzerToPedido, getRespectivePedidos, getPedidosByClienteId, getPedidoById, getPedidosByUzerId } = require('../../controllers/pedidoController')
 const { validateCreatePedidoBody } = require('../../middleware/validateMiddlewares')
 const UzerModel = require('../../models/uzerModel')
 
@@ -29,6 +29,10 @@ router.get('/pedidos/cliente/:id', validateJWT, (req, res, next) => {
     req.body.userId = id
     next()
 } , getPedidosByClienteId)
+
+router.get('/pedidos/uzer', validateJWT, getPedidosByUzerId)
+
+
 
 
 router.post('/create/pedido', validateJWT, validateCreatePedidoBody, createPedido)

@@ -30,6 +30,10 @@ const PedidoModel = {
         const pedidos = await Pedido.find({ _id_cliente: id }).catch(err => console.error(err))
         return pedidos
     },
+    getPedidosByUzerId: async (id) => {
+        const pedidos = await Pedido.find({ _id_uzer: id }).catch(err => console.error(err))
+        return pedidos
+    },
     getPedidoById: async (id) => {
         const pedido = await Pedido.findById(id).catch(err => console.error(err))
         return pedido

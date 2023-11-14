@@ -84,6 +84,16 @@ const PedidoController = {
             res.status(500).json({ message: 'Erro ao obter pedidos pelo ID do cliente' })
         }
     },
+    getPedidosByUzerId: async (req, res) => {
+        const { userId } = req.body
+        try {
+            const pedidos = await pedidoModel.getPedidosByUzerId(userId)
+            res.status(200).json(pedidos)
+        } catch (error) {
+            console.error('Erro ao obter pedidos pelo ID do uzer: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao obter pedidos pelo ID do uzer' })
+        }
+    },
     getPedidoById: async (req, res) => {
         const { id } = req.params
         try {
