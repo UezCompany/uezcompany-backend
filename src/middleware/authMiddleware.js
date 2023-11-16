@@ -6,7 +6,6 @@ const validateJWT = async (req, res, next) => {
         return res.status(401).json({ message: 'Token não informado' })
     }
     const [, token] = authorization.split(' ') // Extrai o token da string com "Bearer"
-    console.log(token)
     try {
         const { id } = jwt.verify(token, process.env.SECRET)
         req.body.userId = id

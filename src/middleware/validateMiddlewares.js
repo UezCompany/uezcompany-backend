@@ -46,7 +46,6 @@ const validateMiddlewares = {
 
         if (req.body.rg) {
             validateField(req.body.rg, 'O RG do cliente é inválido', res, validateRG)
-            console.log(req.body.rg)
         }
 
         validateField(nome, 'O nome do cliente é inválido', res)
@@ -102,7 +101,6 @@ const validateMiddlewares = {
 
         if (req.body.rg) {
             validateField(req.body.rg, 'O RG do cliente é inválido', res, validateRG)
-            console.log("Tem rg")
         }
 
         validateField(nome, 'O nome do uzer é inválido', res)
@@ -193,7 +191,6 @@ const validateMiddlewares = {
         validateField(userId, 'O id do cliente é inválido', res)
 
         const categoriaServico = await getCategoryByServico(nomeServico)
-        console.log("category", categoriaServico)
 
         req.body = {
             tipo: tipoPedido,
@@ -205,7 +202,6 @@ const validateMiddlewares = {
             valor: valor,
             dataCriacao: new Date().toISOString(),
         }
-        console.log("Req.body", req.body)
         next()
 
     }
