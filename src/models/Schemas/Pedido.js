@@ -24,7 +24,7 @@ const pedidoSchema = new Schema(
         },
         status: {
             type: String,
-            default: 'A Realizar...',
+            default: 'A realizar',
         },
         disponivel: {
             type: Boolean,
@@ -49,6 +49,18 @@ const pedidoSchema = new Schema(
         valor: {
             type: Number,
             default: 0
+        },
+        images: {
+            type: Array,
+            default: []
+        },
+        avaliacao: {
+            type: Number,
+            default: 0
+        },
+        avaliado: {
+            type: Boolean,
+            default: false
         }
     },
     {
