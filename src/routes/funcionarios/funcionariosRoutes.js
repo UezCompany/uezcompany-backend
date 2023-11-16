@@ -15,7 +15,6 @@ const CHECKAuthLocaLiNSTANCE = async (req, res, next) => {
     if (token === process.env.LOCAL_INSTANCE_KEY) {
         return next()
     } else {
-        console.log('Token inválido')
         return res.status(401).json({ message: 'Token inválido' })
     }
 }

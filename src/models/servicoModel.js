@@ -15,7 +15,6 @@ const ServicoModel = {
         return servico
     },
     getCategoryByServico: async (servico) => {
-        console.log("model", servico)
         const category = await Servico.find({ nome: servico }).catch(err => console.error(err))
         return category[0].categoria
     },

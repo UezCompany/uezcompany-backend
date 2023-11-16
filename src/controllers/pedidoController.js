@@ -54,7 +54,6 @@ const PedidoController = {
     assignUzerToPedido: async (req, res) => {
         const { id: idPedido } = req.params
         const { idUzer } = req.body
-        console.log(idUzer)
 
         try {
             const pedido = await pedidoModel.updatePedido(idPedido, { _id_uzer: idUzer, status: 'Em andamento...', disponivel: false })
@@ -98,7 +97,6 @@ const PedidoController = {
         const { id } = req.params
         try {
             const pedido = await pedidoModel.getPedidoById(id)
-            console.log(pedido)
             res.status(200).json(pedido)
         } catch (error) {
             console.error('Erro ao obter pedido pelo ID: ' + error.stack)

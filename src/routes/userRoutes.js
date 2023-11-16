@@ -57,7 +57,6 @@ router.post('/validate-username', (req, res) => {
 router.post('/validate-jwt', (req, res, next) => {
     const token = req.body.token
     req.headers.authorization = `Bearer ${token}`
-    console.log(req.headers.authorization)
     next()
 }, validateJWT, (req, res) => {
     return res.status(200).json({
