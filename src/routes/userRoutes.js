@@ -48,14 +48,22 @@ router.get('/users/me', validateJWT, getUserDataByDbMiddleware, async (req, res)
 
 })
 
-router.post('validate-email', (req, res) => {
+router.post('/validate-email', (req, res) => {
     res.status(200).json({ message: `O e-mail ${req.body.email} é valido` })
 })
-router.post('validate-username', (req, res) => {
+router.post('/validate-username', (req, res) => {
     res.status(200).json({ message: `O username ${req.body.username} é valido` })
 })
-router.post('validate-jwt', (req, res) => {
-    res.status(200).json({ message: `O Token JWT: ${req.body.token} é valido`, token: req.body.token })
+router.post('/validate-jwt', (req, res, next) => {
+    const token = req.body.token
+    req.headers.authorization = `Bearer ${token}`
+    console.log(req.headers.authorization)
+    next()
+}, validateJWT, (req, res) => {
+    return res.status(200).json({
+        message: `O Token JWT: ${req.body.token} é valido`,
+        token: req.body.token
+    })
 })
 
 module.exports = router
