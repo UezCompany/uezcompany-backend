@@ -56,7 +56,7 @@ const PedidoController = {
         const { idUzer } = req.body
 
         try {
-            const pedido = await pedidoModel.updatePedido(idPedido, { _id_uzer: idUzer, status: 'Em andamento...', disponivel: false })
+            const pedido = await pedidoModel.updatePedido(idPedido, { _id_uzer: idUzer, status: 'Em andamento', disponivel: false })
             res.status(200).json(pedido)
         } catch (error) {
             console.error('Erro ao atribuir uzer ao pedido: ' + error.stack)
@@ -101,6 +101,28 @@ const PedidoController = {
         } catch (error) {
             console.error('Erro ao obter pedido pelo ID: ' + error.stack)
             res.status(500).json({ message: 'Erro ao obter pedido pelo ID' })
+        }
+    },
+    finishPedidoById: async (req, res) => {
+        const { userId } = req.body
+        const { id } = req.params
+        try {
+            const pedido = await pedidoModel.finishPedidoById(userId, id)
+            res.status(200).json(pedido)
+        } catch (error) {
+            console.error('Erro ao finalizar pedido pelo ID: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao finalizar pedido pelo ID' })
+        }
+    },
+    avaliarPedidoById: async (req, res) => {
+        const { avaliacao } = req.body
+        const { id } = req.params
+        try {
+            const pedido = await pedidoModel.avaliarPedidoById(id, avaliacao)
+            res.status(200).json(pedido)
+        } catch (error) {
+            console.error('Erro ao avaliar pedido pelo ID: ' + error.stack)
+            res.status(500).json({ message: 'Erro ao avaliar pedido pelo ID' })
         }
     }
 }
