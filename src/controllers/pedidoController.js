@@ -1,4 +1,5 @@
 const pedidoModel = require('../models/pedidoModel')
+const UzerModel = require('../models/uzerModel')
 
 const PedidoController = {
     getAllPedidos: async (req, res) => {
@@ -53,10 +54,10 @@ const PedidoController = {
     },
     assignUzerToPedido: async (req, res) => {
         const { id: idPedido } = req.params
-        const { idUzer } = req.body
+        const { idUzer, preco } = req.body
 
         try {
-            const pedido = await pedidoModel.updatePedido(idPedido, { _id_uzer: idUzer, status: 'Em andamento', disponivel: false })
+            const pedido = await pedidoModel.updatePedido(idPedido, { _id_uzer: idUzer, status: 'Em andamento', disponivel: false, valor: preco })
             res.status(200).json(pedido)
         } catch (error) {
             console.error('Erro ao atribuir uzer ao pedido: ' + error.stack)
@@ -119,6 +120,10 @@ const PedidoController = {
         const { id } = req.params
         try {
             const pedido = await pedidoModel.avaliarPedidoById(id, avaliacao)
+            if (pedido === null) {
+                return res.status(404).json({ message: 'O pedido não foi encontrado, ou já foi avaliado' })
+            }
+            await UzerModel.avaliarUzer(pedido._id_uzer, avaliacao)
             res.status(200).json(pedido)
         } catch (error) {
             console.error('Erro ao avaliar pedido pelo ID: ' + error.stack)

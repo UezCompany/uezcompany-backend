@@ -40,6 +40,7 @@ router.post('/create/pedido', validateJWT, validateCreatePedidoBody, createPedid
 router.put('/pedido/assignUzer/:id', validateJWT, assignUzerToPedido)
 
 router.put('/pedido/finish/:id', validateJWT, finishPedidoById)
+
 router.put('/pedido/avaliar/:id', validateJWT, avaliarPedidoById)
 
 module.exports = router
