@@ -14,9 +14,10 @@ const notificationsModel = {
         return push
 
     },
-    markAsRead: async (idNotifications) => {
+    markAsRead: async (idNotification) => {
+        console.log(idNotification)
 
-        const push = await Notifications.findByIdAndUpdate(idNotifications, { readed: true })
+        const push = await Notifications.updateOne({_id: idNotification}, { readed: true })
         return push
     },
     deleteNotification: async (idNotifications) => {
