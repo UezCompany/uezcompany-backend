@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth/authRoutes')
 const userRoutes = require('./routes/userRoutes')
 const pedidosRoutes = require('./routes/pedidos/pedidosRoutes')
 const chatRoutes = require('./routes/chatRoutes')
+const notificationsRoutes = require('./routes/notificationsRoutes')
 
 app.use(express.json())
 
@@ -31,5 +32,6 @@ app.use(pedidosRoutes)
 app.use(authRoutes)
 app.use(userRoutes)
 app.use(chatRoutes)
+app.use(notificationsRoutes)
 
 module.exports = app

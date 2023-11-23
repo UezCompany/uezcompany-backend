@@ -68,6 +68,10 @@ const uzerSchema = new Schema({
         type: Number,
         default: 0
     },
+    avaliacoes: {
+        type: Array,
+        default: []
+    },
     aprovacao: {
         type: Boolean,
         default: false

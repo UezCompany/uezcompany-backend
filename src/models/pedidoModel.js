@@ -44,8 +44,9 @@ const PedidoModel = {
     },
     avaliarPedidoById: async (id, avaliacao) => {
         const estaAvaliado = await Pedido.findOne({ _id: id, avaliado: true })
-        if (estaAvaliado) return
-        const pedido = await Pedido.updateOne({ _id: id }, { avaliado: true, avaliacao: avaliacao }).catch(err => console.error(err))
+        if (estaAvaliado) return null
+        await Pedido.updateOne({ _id: id }, { avaliado: true, avaliacao: avaliacao, status: 'Concluido' }).catch(err => console.error(err))
+        const pedido = await Pedido.findOne({ _id: id})
         return pedido
     }
 }

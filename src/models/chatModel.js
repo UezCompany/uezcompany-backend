@@ -56,9 +56,10 @@ const ChatModel = {
         return chatWithNewMessage
     },
     deleteChat: async (chatId) => {
-        const deletedChat = await Chat.deleteOne({ _id: chatId })
-        await Uzer.updateOne({ chats: chatId }, { $pull: { chats: chatId } })
-        await Cliente.updateOne({ chats: chatId }, { $pull: { chats: chatId } })
+        const deletedChat = await Chat.deleteOne({ "_id": chatId })
+        console.log(deletedChat)
+        await Uzer.updateOne({ chats: {_idChat: chatId} }, { $pull: { chats: {_idChat: chatId} } })
+        await Cliente.updateOne({ chats: {_idChat: chatId} }, { $pull: { chats: {_idChat: chatId} } })
         return deletedChat
     }
 }

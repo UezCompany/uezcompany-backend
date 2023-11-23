@@ -54,7 +54,8 @@ const chatSchema = new Schema({
         type: String,
         default: "null"
     }
-}, {
+}, 
+{
     versionKey: '__versionOfSchema__'
 })
 
