@@ -58,6 +58,7 @@ const PedidoController = {
 
         try {
             const pedido = await pedidoModel.updatePedido(idPedido, { _id_uzer: idUzer, status: 'Em andamento', disponivel: false, valor: preco })
+
             res.status(200).json(pedido)
         } catch (error) {
             console.error('Erro ao atribuir uzer ao pedido: ' + error.stack)
