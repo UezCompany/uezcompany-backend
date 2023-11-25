@@ -13,8 +13,7 @@ const categorias = [
     { nomeCategoria: 'Saúde e Bem-estar' },
     { nomeCategoria: 'Manutenção e Reparos' },
     { nomeCategoria: 'Serviços Domésticos' },
-    { nomeCategoria: 'Eventos' },
-    { nomeCategoria: 'Outros' },
+    { nomeCategoria: 'Eventos' }
 ]
 
 router.get('/servicos', getAllServicos)
