@@ -1,7 +1,7 @@
 import { Router } from "express"
 
-// import clientesRoutes from "./clientesRoutes"
-// import uzersRoutes from "./uzersRoutes"
+import clientesRoutes from "./Clientes"
+import uzersRoutes from "./Uzers"
 // import funcionariosRoutes from "./funcionariosRoutes"
 // import servicosRoutes from "./servicosRoutes"
 // import authRoutes from "./authRoutes"
@@ -12,8 +12,8 @@ import { Router } from "express"
 
 const router = Router()
 
-// router.use(clientesRoutes)
-// router.use(uzersRoutes)
+router.use(clientesRoutes)
+router.use(uzersRoutes)
 // router.use(funcionariosRoutes)
 // router.use(servicosRoutes)
 // router.use(authRoutes)
