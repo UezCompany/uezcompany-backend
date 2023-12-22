@@ -12,6 +12,8 @@ app.use(
   cors({
     origin: FRONTEND_DOMAIN,
     optionsSuccessStatus: 200,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   }),
 )
 

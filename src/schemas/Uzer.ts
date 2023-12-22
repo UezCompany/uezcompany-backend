@@ -1,7 +1,7 @@
 import { Document, Schema, Model, model } from "mongoose"
-import ICliente from "../@types/Cliente"
+import IUzer from "../@types/Uzer"
 
-const clienteSchema = new Schema<ICliente & Document>(
+const uzerSchema: Schema = new Schema<IUzer & Document>(
   {
     nome: {
       type: String,
@@ -50,6 +50,10 @@ const clienteSchema = new Schema<ICliente & Document>(
         estado: null,
       },
     },
+    historicoCriminal: {
+      type: String,
+      default: null,
+    },
     dataNascimento: {
       type: Date,
       default: "",
@@ -58,29 +62,47 @@ const clienteSchema = new Schema<ICliente & Document>(
       type: Date,
       default: new Date(),
     },
-    telefone: {
+    numeroTelefone: {
       type: String,
       default: null,
-    },
-    userType: {
-      type: String,
-      default: "cliente",
-    },
-    aprovacao: {
-      type: Boolean,
-      default: false,
     },
     avaliacao: {
       type: Number,
       default: 0,
     },
+    // @ts-expect-error FIXME: type error
+    avaliacoes: {
+      type: Array,
+      default: [],
+    },
+    aprovacao: {
+      type: Boolean,
+      default: false,
+    },
     reprovacao: {
       type: Boolean,
       default: false,
     },
-    quantidadePedidos: {
+    quantidadePedidosRealizados: {
       type: Number,
       default: 0,
+    },
+    // @ts-expect-error FIXME: type error
+    servicosPrestados: {
+      type: Array,
+      default: [
+        {
+          idServico: null,
+          nomeServico: null,
+          tipoServico: null,
+          categoriaServico: null,
+          areaAtuacao: null,
+        },
+      ],
+    },
+    userType: {
+      type: String,
+      default: "uzer",
     },
     photoUrl: {
       type: String,
@@ -101,9 +123,9 @@ const clienteSchema = new Schema<ICliente & Document>(
   },
 )
 
-const Cliente: Model<ICliente & Document> = model<ICliente & Document>(
-  "Cliente",
-  clienteSchema,
+const Uzer: Model<IUzer & Document> = model<IUzer & Document>(
+  "Uzer",
+  uzerSchema,
 )
 
-export default Cliente
+export default Uzer
