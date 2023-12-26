@@ -4,16 +4,17 @@
   "description": "Backend da empresa UEZ Company",
   "main": "src/server.ts",
   "scripts": {
+    "build": "npx tsc",
     "start": "node dist/server.js",
     "start:dev": "tsx ./src/server.ts",
     "dev": "tsx --watch ./src/server.ts",
-    "build": "npx tsc",
     "husky:prepare": "husky install"
   },
   "keywords": [],
   "author": "UEZ COMPANY",
   "type": "module",
   "license": "ISC",
+  "private": true,
   "dependencies": {
     "aws-sdk": "^2.1521.0",
     "bcrypt": "^5.1.1",
