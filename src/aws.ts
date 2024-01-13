@@ -1,11 +1,51 @@
-import AWS from "aws-sdk"
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
+const region = process.env.AWS_REGION
+const bucketName = "uezcompanys3"
+const accessKeyId = process.env.AWS_ACCESS_KEY_ID || "your-access-key-id"
+const secretAccessKey =
+  process.env.AWS_SECRET_ACCESS_KEY || "your-secret-access-key"
+const sessionToken = process.env.AWS_SESSION_TOKEN || "your-session-token" // Opcional
+
+const s3Client = new S3Client({
+  region,
+  credentials: {
+    accessKeyId,
+    secretAccessKey,
+    sessionToken,
+  },
 })
 
-const s3 = new AWS.S3()
+export async function uploadImageToS3(file: File | undefined): Promise<string> {
+  if (file === undefined) {
+    throw new Error("File is undefined")
+  }
+  const key = `${Date.now()}-${file.name}`
+  const params = {
+    Bucket: bucketName,
+    Key: key,
+    Body: file,
+  }
 
-export default s3
+  const command = new PutObjectCommand(params)
+  await s3Client.send(command)
+
+  return `https://${bucketName}.s3.amazonaws.com/${key}`
+}
+
+export async function getSignedUrlForImage(key: string): Promise<string> {
+  const params = {
+    Bucket: bucketName,
+    Key: key,
+  }
+
+  const command = new GetObjectCommand(params)
+  const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 })
+
+  return url
+}

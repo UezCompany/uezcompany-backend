@@ -1,71 +1,28 @@
 import express from "express"
-import multer from "multer"
 import clienteController from "../controllers/Cliente"
-import S3 from "../aws"
+import { uploadImageToS3 } from "../aws"
 import fs from "fs"
-import crypto from "crypto"
-import { Request } from "express"
+import uploadMiddleware from "@/middlewares/multerUpload"
 
 const router = express.Router()
 
-import validateJWT from "../middlewares/validateJWT"
-
-const storage = multer.diskStorage({
-  destination: function (req: Request, file: any, cb: any) {
-    cb(null, "uploads/")
-  },
-  filename: function (req: Request, file: any, cb: any) {
-    // Extração da extensão do arquivo original:
-    const extensaoArquivo =
-      file.originalname.split(".")[file.originalname.split(".").length - 1]
-
-    // Cria um código randômico que será o nome do arquivo
-    const novoNomeArquivo = crypto.randomBytes(16).toString("hex")
-
-    // Indica o novo nome do arquivo:
-    cb(null, `${novoNomeArquivo}.${extensaoArquivo}`)
-  },
-})
-
-const upload = multer({ storage })
-
-const uploadImageToS3 = async (
-  filePath: any,
-  fileName: any,
-  bucketName: any,
-) => {
-  const imageBuffer = fs.readFileSync(filePath)
-  const params = {
-    Bucket: bucketName,
-    Key: fileName,
-    Body: imageBuffer,
-    ACL: "public-read", // Define as permissões para a imagem
-  }
-
-  try {
-    const data = await S3.upload(params).promise()
-    return data.Location // A URL pública da imagem no S3
-  } catch (error) {
-    console.error("Erro ao fazer upload da imagem no S3:", error)
-    throw error
-  }
-}
-
-router.get("/clientes", validateJWT, clienteController.getAllClientes)
+router.get("/clientes", clienteController.getAllClientes)
 router.get("/clientes/:id", clienteController.getClienteById)
-
-router.put("/clientes/:id", validateJWT, clienteController.updateCliente)
+router.put("/clientes/:id", clienteController.updateCliente)
 router.post(
   "/clientes/profilephoto",
-  upload.single("profilephoto"),
-  validateJWT,
+  uploadMiddleware.single("profilephoto"),
   async (req, res, next) => {
-    const filePath = req?.file?.path
-    const fileName = req?.file?.originalname
-    const bucketName = "uezcompanys3"
+    if (!req.file) {
+      return res.status(400).json({ error: "Arquivo obrigatório" })
+    }
+    const filePath = req.file.path
 
+    const file = new File([req.file.buffer], req.file.originalname)
     try {
-      const imageUrl = await uploadImageToS3(filePath, fileName, bucketName)
+      // Passe o arquivo (req.file) para a função uploadImageToS3
+      const imageUrl = await uploadImageToS3(file)
+
       req.body.photoUrl = imageUrl
 
       // Excluir o arquivo local após o upload no S3
