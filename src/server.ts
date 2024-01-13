@@ -1,5 +1,13 @@
-import app from "./app"
+import express from "express"
+import cors from "cors"
+import "dotenv/config"
+import AllRoutes from "./routes"
 import mongoose from "mongoose"
+
+const app = express()
+app.use(express.json())
+
+const FRONTEND_DOMAIN = process.env.FRONTEND_DOMAIN || "*"
 
 mongoose
   .connect(
@@ -9,15 +17,30 @@ mongoose
     },
   )
   .then(() => {
-    console.log("Conexão com o banco de dados realizada com sucesso!")
+    if (process.env.NODE_ENV !== "test") {
+      console.log("Conexão com o banco de dados realizada com sucesso!")
+    }
   })
   .catch((err) => {
     console.log(err)
   })
 
-const port = process.env.PORT || 3333
-const host = process.env.HOST || "127.0.0.1"
+app.use(
+  cors({
+    origin: FRONTEND_DOMAIN,
+    optionsSuccessStatus: 200,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  }),
+)
 
-app.listen(Number(port), host, () => {
-  console.log(`%cServidor iniciado em http://${host}:${port}`, "color: green;")
+app.get("/", (req, res) => {
+  res.status(200).json("Server is running")
 })
+app.use(AllRoutes)
+
+if (process.env.NODE_ENV !== "test") {
+  console.log("CORS Habilitado. URL do domínio: " + FRONTEND_DOMAIN)
+}
+
+export default app

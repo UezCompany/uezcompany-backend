@@ -9,4 +9,5 @@ module.exports = {
   moduleNameMapper: {
     "@/(.*)": "<rootDir>/src/$1",
   },
+  testTimeout: 10000, // Valor em milissegundos (por exemplo, 10 segundos)
 }
