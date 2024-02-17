@@ -42,7 +42,7 @@ const validateMiddlewares = {
     next()
   },
 
-  validateClienteRegisterBody: (
+  validateClienteRegisterBody: async (
     req: Request,
     res: Response,
     next: NextFunction,
