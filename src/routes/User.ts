@@ -52,7 +52,6 @@ router.get(
     }
   },
 )
-
 router.post("/validate-email", (req, res) => {
   res.status(200).json({ message: `O e-mail ${req.body.email} é valido` })
 })

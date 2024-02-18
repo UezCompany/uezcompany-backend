@@ -3,7 +3,7 @@ import authController from "@/controllers/authController"
 import ClienteController from "@/controllers/Cliente"
 import UzerController from "@/controllers/Uzer"
 import UserMiddleware from "@/middlewares/userMiddleware"
-const { getUserDataByDbMiddleware, userTypeMiddleware } = UserMiddleware
+const { userTypeMiddleware } = UserMiddleware
 const router = express.Router()
 
 router.post("/register", userTypeMiddleware, (req, res) => {
@@ -18,6 +18,6 @@ router.post("/register", userTypeMiddleware, (req, res) => {
   }
 })
 
-router.post("/login", getUserDataByDbMiddleware, authController.login)
+router.post("/login", authController.login)
 
 export default router

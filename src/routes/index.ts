@@ -11,13 +11,13 @@ import authRoutes from "./Auth"
 
 const router = Router()
 
+router.use(authRoutes)
 router.use(clientesRoutes)
 router.use(uzersRoutes)
 router.use(servicosRoutes)
 router.use(pedidosRoutes)
+router.use(notificationsRoutes)
 router.use(chatRoutes)
 router.use(userRoutes)
-router.use(notificationsRoutes)
-router.use(authRoutes)
 
 export default router

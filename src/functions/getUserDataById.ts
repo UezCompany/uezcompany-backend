@@ -11,6 +11,8 @@ async function getUserDataById(id: string) {
   if (uzer) {
     return uzer
   }
+
+  return null
 }
 
 export default getUserDataById
