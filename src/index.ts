@@ -1,17 +1,9 @@
-import { createServer } from "node:http"
-import app from "./server"
-import initializeWebSocket from "./websocket"
+import { env } from "../env"
+import server from "./server"
 
-const port = process.env.PORT || 3333
-const host = process.env.HOST || "127.0.0.1"
+const port = Number(env.PORT) || 3333
+const host = env.HOST
 
-const server = createServer(app)
-const io = initializeWebSocket(server)
-
-if (io) {
-  console.log("WebSockets iniciado")
-}
-
-server.listen(Number(port), host, () => {
+server.listen({ port, host }).then(() => {
   console.log(`Servidor iniciado em http://${host}:${port}`)
 })

@@ -52,8 +52,8 @@ const ClienteController = {
 
       const cliente = await ClienteModel.createCliente(req.body)
 
-      if (cliente.errors) {
-        return res.status(400).json(cliente.errors)
+      if (!cliente) {
+        return res.status(400).json({ message: "Erro ao criar cliente" })
       }
 
       res.status(201).json({ message: "Cliente criado com sucesso", cliente })

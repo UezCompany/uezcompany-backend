@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Clientes {
+  id                String      @id @default(uuid())
+  username          String      @unique
+  nome              String
+  email             String      @unique
+  cpf               String      @unique
+  senha             String
+  situacao          Situacao
+  motivoBloqueio    String?
+  cep               String
+  logradouro        String
+  numero            Int
+  complemento       String?
+  bairro            String
+  cidade            String
+  estado            String
+  dataNascimento    String
+  dataCadastro      DateTime    @default(now())
+  telefone          String
+  tipoUsuario       TipoUsuario
+  quantidadePedidos Int? //mudar depois
+  photoUrl          String      @default("https://cdn-icons-png.flaticon.com/512/74/74472.png")
+  lastOnline        DateTime?   @default(now())
+  lastLogin         DateTime?
+}
+
+model Uzers {
+  id                          String      @id @default(uuid())
+  username                    String      @unique
+  nome                        String
+  email                       String      @unique
+  cpf                         String      @unique
+  senha                       String
+  situacao                    Situacao
+  motivoBloqueio              String?
+  cep                         String
+  logradouro                  String
+  numero                      Int
+  complemento                 String?
+  bairro                      String
+  cidade                      String
+  estado                      String
+  dataNascimento              String
+  dataCadastro                DateTime    @default(now())
+  telefone                    String
+  tipoUsuario                 TipoUsuario
+  quantidadePedidos           Int? //mudar depois
+  photoUrl                    String      @default("https://cdn-icons-png.flaticon.com/512/74/74472.png")
+  quantidadePedidosRealizados Int?
+  servicosPrestados           Servicos[] //mudar depois
+  pedidos                     Pedidos[]
+  avaliacao                   Float       @default(0.0)
+  avaliacoes                  Float[]     @default([])
+  lastOnline                  DateTime?   @default(now())
+  lastLogin                   DateTime?
+}
+
+model Servicos {
+  id               String      @id @default(uuid())
+  nome             String      @unique
+  tipo             TipoServico
+  categoria        String
+  descricao        String      @default("Serviço oferecido pela UezCompany")
+  quantidadeFeitos Int         @default(0)
+  taxaPadrao       Float       @default(5.0)
+  Uzers            Uzers?      @relation(fields: [uzersId], references: [id])
+  uzersId          String?
+  Pedidos          Pedidos[]
+}
+
+model Pedidos {
+  id              String    @id @default(uuid())
+  tipo            String
+  servico         Servicos  @relation(fields: [servicoId], references: [id])
+  titulo          String
+  descricao       String    @default("Pedido criado na UezCompany, somente um Uzer pode finaliza-lo.")
+  status          String    @default("A REALIZAR")
+  uzer            Uzers?    @relation(fields: [uzerId], references: [id])
+  servicoId       String
+  uzerId          String?
+  clienteId       String
+  disponivel      Boolean   @default(true)
+  dataCriacao     DateTime  @default(now())
+  dataFinalizacao DateTime?
+  valor           Float     @default(0.0)
+  images          String[]
+  avaliacao       Float     @default(0.0)
+  avaliado        Boolean   @default(false)
+}
+
+model Notificacoes {
+  id         String   @id @default(uuid())
+  type       String
+  content    String
+  createdAt  DateTime @default(now())
+  readed     Boolean  @default(false)
+  receiverId String
+}
+
+model Chats {
+  id         String     @id @default(uuid())
+  creatorId  String
+  receiverId String
+  Messages   Messages[]
+  createdAt  DateTime   @default(now())
+}
+
+model Messages {
+  id         String       @id @default(uuid())
+  type       TipoMensagem @default(TEXT)
+  content    String
+  createdAt  DateTime     @default(now())
+  readed     Boolean      @default(false)
+  senderId   String
+  receiverId String
+  Chat       Chats        @relation(fields: [chatId], references: [id])
+  chatId     String
+}
+
+enum TipoServico {
+  ONLINE
+  PRESENCIAL
+  AMBOS
+}
+
+enum Situacao {
+  ATIVO
+  INATIVO
+  BLOQUEADO
+}
+
+enum TipoUsuario {
+  UZER
+  CLIENTE
+}
+
+enum TipoMensagem {
+  TEXT
+  BUDGET
+  IMAGE
+  FILE
+}

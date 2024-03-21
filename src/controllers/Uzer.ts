@@ -55,8 +55,8 @@ const UzerController = {
 
       const uzer = await UzerModel.createUzer(req.body)
 
-      if (uzer.errors) {
-        return res.status(400).json(uzer.errors)
+      if (!uzer) {
+        return res.status(400).json({ message: "Erro ao criar uzer" })
       }
 
       res.status(201).json({ message: "Uzer criado com sucesso", uzer })

@@ -4,13 +4,13 @@ import {
   GetObjectCommand,
 } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
+import { env } from "../env"
 
-const region = process.env.AWS_REGION
+const region = env.AWS_REGION
 const bucketName = "uezcompanys3"
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID || "your-access-key-id"
-const secretAccessKey =
-  process.env.AWS_SECRET_ACCESS_KEY || "your-secret-access-key"
-const sessionToken = process.env.AWS_SESSION_TOKEN || "your-session-token" // Opcional
+const accessKeyId = env.AWS_ACCESS_KEY_ID || "your-access-key-id"
+const secretAccessKey = env.AWS_SECRET_ACCESS_KEY || "your-secret-access-key"
+const sessionToken = env.AWS_SESSION_TOKEN || "your-session-token" // Opcional
 
 const s3Client = new S3Client({
   region,
