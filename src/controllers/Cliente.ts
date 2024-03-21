@@ -12,6 +12,7 @@ const ClienteController = {
       res.status(500).json({ message: "Erro ao obter clientes" })
     }
   },
+
   getClienteById: async (req: Request, res: Response) => {
     const { id } = req.params
     try {
@@ -26,6 +27,7 @@ const ClienteController = {
       res.status(500).json({ message: "Erro ao obter cliente por ID" })
     }
   },
+
   createCliente: async (req: Request, res: Response) => {
     const { email, senha, CPF } = req.body
     try {
@@ -73,6 +75,7 @@ const ClienteController = {
       res.status(500).json({ message: "Erro ao atualizar cliente" })
     }
   },
+
   updateClientePhoto: async (req: Request, res: Response) => {
     const { photoUrl } = req.body
 
@@ -91,6 +94,7 @@ const ClienteController = {
       res.status(500).json({ message: "Erro ao atualizar cliente" })
     }
   },
+  
   deleteCliente: async (req: Request, res: Response) => {
     const { id } = req.params
     try {

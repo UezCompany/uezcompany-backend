@@ -25,7 +25,9 @@ export async function uploadImageToS3(file: File | undefined): Promise<string> {
   if (file === undefined) {
     throw new Error("File is undefined")
   }
+
   const key = `${Date.now()}-${file.name}`
+
   const params = {
     Bucket: bucketName,
     Key: key,

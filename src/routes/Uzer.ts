@@ -8,11 +8,13 @@ const router = express.Router()
 
 router.get("/uzers", uzerController.getAllUzers)
 router.get("/uzers/:id", uzerController.getUzerById)
-
 router.put("/uzers/:id", uzerController.updateUzer)
+
 router.post(
   "/uzers/profilephoto",
   uploadMiddleware.single("profilephoto"),
+  uzerController.updateUzerPhoto,
+
   async (req, res, next) => {
     if (!req.file) {
       return res.status(400).json({ error: "Arquivo obrigatório" })
@@ -41,7 +43,6 @@ router.post(
       res.status(500).json({ error: "Erro ao fazer upload da imagem no S3" })
     }
   },
-  uzerController.updateUzerPhoto,
 )
 router.delete("/uzers/:id", uzerController.deleteUzer)
 

@@ -10,10 +10,12 @@ const ChatModel = {
         : await Chat.find({ clienteId: id })
     return chats
   },
+
   getChatById: async (id: string) => {
     const chat = await Chat.findOne({ _id: id })
     return chat
   },
+
   // creatorId é quem está solicitando a criação do chat, requestedContactId é o id do usuário que ele quer contatar
   createChat: async (
     creatorId: string,
@@ -49,10 +51,12 @@ const ChatModel = {
         uzerService,
         photo,
       })
+
       await Uzer.updateOne(
         { _id: creatorId },
         { $push: { chats: newChat._id } },
       )
+
       await Cliente.updateOne(
         { _id: requestedContactId },
         { $push: { chats: newChat._id } },
@@ -68,10 +72,12 @@ const ChatModel = {
         uzerService,
         photo,
       })
+
       await Cliente.updateOne(
         { _id: creatorId },
         { $push: { chats: newChat._id } },
       )
+
       await Uzer.updateOne(
         { _id: requestedContactId },
         { $push: { chats: newChat._id } },
@@ -80,6 +86,7 @@ const ChatModel = {
 
     return newChat
   },
+
   sendMessage: async (
     chatId: string,
     message: string,
@@ -94,8 +101,10 @@ const ChatModel = {
       },
       { new: true },
     )
+
     return chatWithNewMessage
   },
+
   sendBudgetMessage: async (
     chatId: string,
     message: string,
@@ -120,8 +129,10 @@ const ChatModel = {
       },
       { new: true },
     )
+
     return chatWithNewMessage
   },
+
   sendImageMessage: async (
     chatId: string,
     message: string,
@@ -146,6 +157,7 @@ const ChatModel = {
     )
     return chatWithNewMessage
   },
+  
   deleteChat: async (chatId: string) => {
     const deletedChat = await Chat.deleteOne({ _id: chatId })
     console.log(deletedChat)

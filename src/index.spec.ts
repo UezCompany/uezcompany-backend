@@ -7,6 +7,7 @@ describe("Testes para o servidor", () => {
 
   it('Deve retornar "Server is running" ao acessar a rota raiz', async () => {
     const response = await server.get("/")
+    
     expect(response.status).toBe(200)
     expect(response.body).toBe("Server is running")
   })

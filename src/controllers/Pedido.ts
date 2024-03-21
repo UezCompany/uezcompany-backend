@@ -13,6 +13,7 @@ const PedidoController = {
       res.status(500).json({ message: "Erro ao obter os pedidos" })
     }
   },
+
   getActivePedidos: async (req: Request, res: Response) => {
     try {
       const pedidos = await pedidoModel.getActivePedidos()
@@ -22,6 +23,7 @@ const PedidoController = {
       res.status(500).json({ message: "Erro ao obter os pedidos disponiveis" })
     }
   },
+
   getRespectivePedidos: async (req: Request, res: Response) => {
     try {
       const pedidos = await pedidoModel.getRespectivePedidos(
@@ -33,6 +35,7 @@ const PedidoController = {
       res.status(500).json({ message: "Erro ao obter os pedidos disponiveis" })
     }
   },
+
   createPedido: async (req: Request, res: Response) => {
     const {
       tipo,
@@ -65,6 +68,7 @@ const PedidoController = {
       res.status(500).json({ message: "Erro ao criar pedido" })
     }
   },
+  
   assignUzerToPedido: async (req: Request, res: Response) => {
     const { id: idPedido } = req.params
     const { idUzer, preco } = req.body
@@ -83,6 +87,7 @@ const PedidoController = {
       res.status(500).json({ message: "Erro ao atribuir uzer ao pedido" })
     }
   },
+
   deletePedido: async (req: Request, res: Response) => {
     const { id } = req.params
     try {
@@ -93,6 +98,7 @@ const PedidoController = {
       res.status(500).json({ message: "Erro ao deletar pedido" })
     }
   },
+
   getPedidosByClienteId: async (req: Request, res: Response) => {
     const { userId } = req.body
     try {
@@ -105,6 +111,7 @@ const PedidoController = {
         .json({ message: "Erro ao obter pedidos pelo ID do cliente" })
     }
   },
+
   getPedidosByUzerId: async (req: Request, res: Response) => {
     const { userId } = req.body
     try {
@@ -115,6 +122,7 @@ const PedidoController = {
       res.status(500).json({ message: "Erro ao obter pedidos pelo ID do uzer" })
     }
   },
+
   getPedidoById: async (req: Request, res: Response) => {
     const { id } = req.params
     try {
@@ -125,6 +133,7 @@ const PedidoController = {
       res.status(500).json({ message: "Erro ao obter pedido pelo ID" })
     }
   },
+
   finishPedidoById: async (req: Request, res: Response) => {
     const { userId } = req.body
     const { id } = req.params
@@ -136,6 +145,7 @@ const PedidoController = {
       res.status(500).json({ message: "Erro ao finalizar pedido pelo ID" })
     }
   },
+  
   avaliarPedidoById: async (req: Request, res: Response) => {
     const { avaliacao } = req.body
     const { id } = req.params

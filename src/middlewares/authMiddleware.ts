@@ -8,10 +8,13 @@ const authMiddleware = async (
   next: NextFunction,
 ) => {
   const { authorization } = req.headers
+
   if (!authorization) {
     return res.status(401).json({ message: "Token não informado" })
   }
+
   const [, token] = authorization.split(" ") // Extrai o token da string com "Bearer"
+
   try {
     const { id } = jwt.verify(token, process.env.SECRET ?? "") as {
       id: string
@@ -30,6 +33,7 @@ const authMiddleware = async (
     req.body.userId = id
 
     return next()
+  
   } catch (error) {
     return res.status(401).json({ message: "Token inválido ou expirado." })
   }
