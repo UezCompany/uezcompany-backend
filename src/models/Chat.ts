@@ -1,17 +1,15 @@
-import Chat from "@/schemas/Chat"
-import Uzer from "@/schemas/Uzer"
-import Cliente from "@/schemas/Cliente"
+import { prisma } from "@/lib/prisma"
 
 const ChatModel = {
   getChats: async (id: string, userType: string) => {
     const chats =
       userType === "uzer"
-        ? await Chat.find({ uzerId: id })
-        : await Chat.find({ clienteId: id })
+        ? await prisma.chats.findFirst({ where: { uzerId: id } })
+        : await prisma.chats.findFirst({ where: { clienteId: id } })
     return chats
   },
   getChatById: async (id: string) => {
-    const chat = await Chat.findOne({ _id: id })
+    const chat = await prisma.chats.findFirst({ where: { id } })
     return chat
   },
   // creatorId é quem está solicitando a criação do chat, requestedContactId é o id do usuário que ele quer contatar
@@ -19,63 +17,78 @@ const ChatModel = {
     creatorId: string,
     requestedContactId: string,
     userType: string,
-    uzerName: string,
-    clienteName: string,
-    uzerService: string,
-    photo: string,
   ) => {
-    // Verifique se já existe um chat entre os dois usuários
-    const existingChat = await Chat.findOne({
-      $or: [
-        { uzerId: creatorId, clienteId: requestedContactId },
-        { uzerId: requestedContactId, clienteId: creatorId },
-      ],
+    const existingChat = await prisma.chats.findFirst({
+      where: {
+        OR: [
+          { uzerId: creatorId, clienteId: requestedContactId },
+          { uzerId: requestedContactId, clienteId: creatorId },
+        ],
+      },
     })
 
     if (existingChat) {
-      // Já existe um chat entre os usuários, retorne o chat existente
       return existingChat
     }
 
-    // Se não existe um chat entre os usuários, crie um novo chat
     let newChat
 
     if (userType === "uzer") {
-      newChat = await Chat.create({
-        uzerId: creatorId,
-        clienteId: requestedContactId,
-        uzerName,
-        clienteName,
-        uzerService,
-        photo,
+      newChat = await prisma.chats.create({
+        data: {
+          uzerId: creatorId,
+          clienteId: requestedContactId,
+        },
       })
-      await Uzer.updateOne(
-        { _id: creatorId },
-        { $push: { chats: newChat._id } },
-      )
-      await Cliente.updateOne(
-        { _id: requestedContactId },
-        { $push: { chats: newChat._id } },
-      )
+      await prisma.uzers.update({
+        data: {
+          chats: {
+            push: newChat.id,
+          },
+        },
+        where: {
+          id: creatorId,
+        },
+      })
+      await prisma.clientes.update({
+        data: {
+          chats: {
+            push: newChat.id,
+          },
+        },
+        where: {
+          id: requestedContactId,
+        },
+      })
     }
 
     if (userType === "cliente") {
-      newChat = await Chat.create({
-        clienteId: creatorId,
-        uzerId: requestedContactId,
-        uzerName,
-        clienteName,
-        uzerService,
-        photo,
+      newChat = await prisma.chats.create({
+        data: {
+          clienteId: creatorId,
+          uzerId: requestedContactId,
+        },
       })
-      await Cliente.updateOne(
-        { _id: creatorId },
-        { $push: { chats: newChat._id } },
-      )
-      await Uzer.updateOne(
-        { _id: requestedContactId },
-        { $push: { chats: newChat._id } },
-      )
+      await prisma.uzers.update({
+        data: {
+          chats: {
+            push: newChat.id,
+          },
+        },
+        where: {
+          id: creatorId,
+        },
+      })
+      await prisma.clientes.update({
+        data: {
+          chats: {
+            push: newChat.id,
+          },
+        },
+        where: {
+          id: requestedContactId,
+        },
+      })
     }
 
     return newChat
@@ -85,15 +98,22 @@ const ChatModel = {
     message: string,
     senderId: string,
     sendDate: Date,
-    sendHour: Date,
   ) => {
-    const chatWithNewMessage = await Chat.findOneAndUpdate(
-      { _id: chatId },
-      {
-        $push: { messages: { content: message, sendDate, sendHour, senderId } },
+    const chatWithNewMessage = await prisma.chats.update({
+      where: {
+        id: chatId,
       },
-      { new: true },
-    )
+      data: {
+        messages: {
+          push: {
+            content: message,
+            sendDate,
+            senderId,
+            type: "message",
+          },
+        },
+      },
+    })
     return chatWithNewMessage
   },
   sendBudgetMessage: async (
@@ -104,60 +124,23 @@ const ChatModel = {
     sendHour: Date,
     idPedido: string,
   ) => {
-    const chatWithNewMessage = await Chat.findOneAndUpdate(
-      { _id: chatId },
-      {
-        $push: {
-          messages: {
+    const chatWithNewMessage = await prisma.chats.update({
+      where: {
+        id: chatId,
+      },
+      data: {
+        messages: {
+          push: {
             content: message,
             sendDate,
-            sendHour,
             senderId,
             type: "budget",
-            _idPedido: idPedido,
+            idPedido: idPedido,
           },
         },
       },
-      { new: true },
-    )
+    })
     return chatWithNewMessage
-  },
-  sendImageMessage: async (
-    chatId: string,
-    message: string,
-    senderId: string,
-    sendDate: Date,
-    sendHour: Date,
-  ) => {
-    const chatWithNewMessage = await Chat.findOneAndUpdate(
-      { _id: chatId },
-      {
-        $push: {
-          messages: {
-            content: message,
-            sendDate,
-            sendHour,
-            senderId,
-            type: "image",
-          },
-        },
-      },
-      { new: true },
-    )
-    return chatWithNewMessage
-  },
-  deleteChat: async (chatId: string) => {
-    const deletedChat = await Chat.deleteOne({ _id: chatId })
-    console.log(deletedChat)
-    await Uzer.updateOne(
-      { chats: { _idChat: chatId } },
-      { $pull: { chats: { _idChat: chatId } } },
-    )
-    await Cliente.updateOne(
-      { chats: { _idChat: chatId } },
-      { $pull: { chats: { _idChat: chatId } } },
-    )
-    return deletedChat
   },
 }
 

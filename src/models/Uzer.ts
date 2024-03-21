@@ -1,54 +1,48 @@
-import Uzer from "../schemas/Uzer"
-import IUzer from "../@types/Uzer"
+import { prisma } from "@/lib/prisma"
 
 const UzerModel = {
   getAllUzers: async () => {
-    const uzers = await Uzer.find({}, "-CPF -RG -senha")
+    const uzers = await prisma.uzers.findMany()
     return uzers
   },
   getUzerById: async (id: string) => {
-    const uzer = await Uzer.findById(id, "-CPF -RG -senha").catch((err) =>
-      console.error(err),
-    )
+    const uzer = await prisma.uzers.findUnique({ where: { id } })
     return uzer
   },
   getUzerByEmail: async (email: string) => {
-    const uzer = await Uzer.findOne({ email: email }).catch((err) =>
-      console.error(err),
-    )
+    const uzer = await prisma.uzers.findFirst({ where: { email } })
     return uzer
   },
   getUzerByCpf: async (cpf: string) => {
-    const uzer = await Uzer.findOne({ CPF: cpf }).catch((err) =>
-      console.error(err),
-    )
+    const uzer = await prisma.uzers.findFirst({ where: { cpf } })
     return uzer
   },
-  createUzer: async (uzer: IUzer) => {
-    const newUzer = await Uzer.create(uzer).catch((err) => err)
+  createUzer: async (uzer: any) => {
+    const newUzer = await prisma.uzers.create({ data: uzer })
     return newUzer
   },
-  updateUzer: async (id: string, updateData: IUzer) => {
-    const updateUzer = await Uzer.updateOne({ _id: id }, updateData).catch(
-      (err) => console.error(err),
-    )
+  updateUzer: async (id: string, updateData: any) => {
+    const updateUzer = await prisma.uzers.update({
+      where: { id },
+      data: updateData,
+    })
     return updateUzer
   },
   deleteUzer: async (id: string) => {
-    const deleteUzer = Uzer.deleteOne({ _id: id }).catch((err) =>
-      console.error(err),
-    )
+    const deleteUzer = await prisma.uzers.delete({ where: { id } })
     return deleteUzer
   },
-  avaliarUzer: async (idUzer: string, avaliacao: number | string) => {
-    const prevUzerData = await Uzer.findOne({ _id: idUzer })
+  avaliarUzer: async (idUzer: string, avaliacao: number) => {
+    const prevUzerData = await prisma.uzers.findUnique({
+      where: { id: idUzer },
+    })
     if (!prevUzerData) {
       return
     }
-    await Uzer.updateOne(
-      { _id: idUzer },
-      { avaliado: true, $push: { avaliacoes: avaliacao } },
-    ).catch((err) => console.error(err))
+    await prisma.uzers.update({
+      where: { id: idUzer },
+      data: { avaliacoes: { push: avaliacao } },
+    })
     const newAvaliacao =
       prevUzerData.avaliacoes.length === 0
         ? avaliacao
@@ -58,10 +52,10 @@ const UzerModel = {
           ) +
             Number(avaliacao)) /
           (prevUzerData.avaliacoes.length + 1)
-    const uzer = await Uzer.updateOne(
-      { _id: idUzer },
-      { avaliado: true, avaliacao: newAvaliacao },
-    ).catch((err) => console.error(err))
+    const uzer = await prisma.uzers.update({
+      where: { id: idUzer },
+      data: { avaliacao: newAvaliacao },
+    })
     return uzer
   },
 }

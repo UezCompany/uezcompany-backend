@@ -56,8 +56,8 @@ const PedidoController = {
     }
     try {
       const pedido = await pedidoModel.createPedido(pedidoData)
-      if (pedido?.errors) {
-        return res.status(400).json(pedido.errors)
+      if (!pedido) {
+        return res.status(400).json({ message: "Erro ao criar pedido" })
       }
       res.status(201).json({ message: "Pedido criado com sucesso", pedido })
     } catch (error: any) {
@@ -141,12 +141,12 @@ const PedidoController = {
     const { id } = req.params
     try {
       const pedido = await pedidoModel.avaliarPedidoById(id, avaliacao)
-      if (!pedido || !pedido._id_uzer) {
+      if (!pedido || !pedido.uzerId) {
         return res
           .status(404)
           .json({ message: "O pedido não foi encontrado, ou já foi avaliado" })
       }
-      await UzerModel.avaliarUzer(pedido._id_uzer, avaliacao)
+      await UzerModel.avaliarUzer(pedido.uzerId, avaliacao)
       res.status(200).json(pedido)
     } catch (error: any) {
       console.error("Erro ao avaliar pedido pelo ID: " + error.stack)

@@ -31,10 +31,7 @@ const NotificationController = {
     const { id } = req.params
     try {
       const notifications = await NotificationModel.markAsRead(id)
-      if (
-        notifications.modifiedCount === null ||
-        notifications.modifiedCount === 0
-      ) {
+      if (!notifications) {
         return res.status(500).json({ message: "Nenhuma notificação foi lida" })
       }
       return res

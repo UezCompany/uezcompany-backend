@@ -20,7 +20,7 @@ const AuthController = {
           return res.status(401).json({ message: "Usuário não encontrado" })
         }
 
-        const { userType, senha: senhaCorrespondente } = user
+        const { tipoUsuario, senha: senhaCorrespondente } = user
 
         bcrypt.compare(senha, senhaCorrespondente, (err, bcryptResult) => {
           if (err) {
@@ -29,10 +29,10 @@ const AuthController = {
           } else if (bcryptResult) {
             const secret = process.env.SECRET || "default-secret"
 
-            const token = jwt.sign({ id: user._id, tipo: userType }, secret, {
+            const token = jwt.sign({ id: user.id, tipo: tipoUsuario }, secret, {
               expiresIn: "24h",
             })
-            return res.status(200).json({ token, userType })
+            return res.status(200).json({ token, tipoUsuario })
           } else {
             // A senha está incorreta
             return res.status(401).json({ message: "Credenciais inválidas" })

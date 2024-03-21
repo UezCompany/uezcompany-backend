@@ -28,7 +28,9 @@ const ServicoController = {
   getServicoByCategoryName: async (req: Request, res: Response) => {
     const { categoria } = req.query
     try {
-      const servico = await servicoModel.getServicoByCategory(String(categoria))
+      const servico = await servicoModel.getServicosByCategory(
+        String(categoria),
+      )
       if (servico && servico.length > 0) {
         return res.status(200).json(servico)
       } else {
@@ -72,8 +74,8 @@ const ServicoController = {
       }
 
       const servico = await servicoModel.createServico(req.body)
-      if (servico.errors) {
-        return res.status(400).json(servico.errors)
+      if (!servico) {
+        return res.status(400).json({ message: "Erro ao criar o servico" })
       }
       console.log(servico)
       res.status(200).json({ message: "Servico criado com sucesso", servico })

@@ -1,5 +1,5 @@
 import multer from "multer"
-import { Request } from "express"
+import { RequestBodyDefault as Request } from "fastify"
 import crypto from "crypto"
 
 const storage = multer.diskStorage({

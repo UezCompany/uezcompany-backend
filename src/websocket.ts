@@ -10,11 +10,13 @@ const initializeWebSocket = (server: any) => {
   let connectedUsers: string[] = []
 
   io.on("connection", (socket) => {
+    socket.emit("connected", connectedUsers)
+    socket.emit("message", "Faça login")
     connectedUsers.push(socket.id)
     console.log(`Um novo usuário se conectou: ${socket.id}`)
 
-    socket.on("message", (data) => {
-      socket.emit("message", data)
+    socket.on("message", () => {
+      socket.emit("message", "Mensagem recebida!")
     })
 
     socket.on("disconnect", () => {
