@@ -12,6 +12,7 @@ const NotificationController = {
       res.status(500).json({ message: "Erro ao obter as notificações" })
     }
   },
+
   sendNotification: async (req: Request, res: Response) => {
     const { id } = req.params
     const { content, type } = req.body
@@ -27,6 +28,7 @@ const NotificationController = {
       res.status(500).json({ message: "Erro ao enviar a notificação" })
     }
   },
+  
   markAsRead: async (req: Request, res: Response) => {
     const { id } = req.params
     try {

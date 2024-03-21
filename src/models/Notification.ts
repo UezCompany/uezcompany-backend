@@ -8,6 +8,7 @@ const NotificationModel = {
     })
     return notifications
   },
+
   pushNotifications: async (idUser: string, content: string, type: string) => {
     const push = await Notification.create({
       type: type,
@@ -16,6 +17,7 @@ const NotificationModel = {
     })
     return push
   },
+
   markAsRead: async (idNotification: string) => {
     const push = await Notification.updateOne(
       { _id: idNotification },
@@ -23,6 +25,7 @@ const NotificationModel = {
     )
     return push
   },
+  
   deleteNotification: async (idNotification: string) => {
     const deletedNotification = await Notification.deleteOne({
       _id: idNotification,

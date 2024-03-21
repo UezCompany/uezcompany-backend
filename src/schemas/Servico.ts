@@ -7,29 +7,35 @@ const servicoSchema: Schema = new Schema<IServico & Document>(
       type: String,
       required: true,
     },
+
     // @ts-expect-error FIXME: type error
     tipo: {
       type: Array,
       required: true,
       default: ["ONLINE"],
     },
+
     categoria: {
       type: String,
       required: true,
     },
+
     descricao: {
       type: String,
       default: "Serviço oferecido pela UezCompany",
     },
+
     quantidadeFeitos: {
       type: Number,
       default: 0,
     },
+
     taxaPadrao: {
       type: Number,
       default: 6,
     },
   },
+
   {
     versionKey: "__versionOfSchema__",
   },

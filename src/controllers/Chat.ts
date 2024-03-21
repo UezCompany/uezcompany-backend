@@ -41,12 +41,14 @@ const ChatController = {
         uzerData.servicosPrestados[0].nomeServico,
         uzerData.photoUrl,
       )
+
       res.status(200).json(chat)
     } catch (error: any) {
       console.error("Erro ao criar chat: " + error.stack)
       res.status(500).json({ message: "Erro ao criar chat" })
     }
   },
+
   sendMessage: async (req: Request, res: Response) => {
     const { userId: senderId, chatId, message, sendDate, sendHour } = req.body
 
@@ -68,6 +70,7 @@ const ChatController = {
       res.status(500).json({ message: "Erro ao enviar mensagem" })
     }
   },
+
   sendBudgetMessage: async (req: Request, res: Response) => {
     //nesse caso, o message vai ser o valor do orçamento
     const {
@@ -98,6 +101,7 @@ const ChatController = {
       res.status(500).json({ message: "Erro ao enviar mensagem" })
     }
   },
+
   sendImageMessage: async (req: Request, res: Response) => {
     const { userId: senderId, chatId, message, sendDate, sendHour } = req.body
 
@@ -133,6 +137,7 @@ const ChatController = {
       res.status(500).json({ message: "Erro ao enviar mensagem" })
     }
   },
+  
   deleteChat: async (req: Request, res: Response) => {
     const { chatId } = req.params
     try {

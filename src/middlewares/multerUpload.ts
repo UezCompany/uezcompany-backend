@@ -6,6 +6,7 @@ const storage = multer.diskStorage({
   destination: function (req: Request, file: any, cb: any) {
     cb(null, "uploads/")
   },
+  
   filename: function (req: Request, file: any, cb: any) {
     // Extração da extensão do arquivo original:
     const extensaoArquivo =

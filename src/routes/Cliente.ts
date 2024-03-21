@@ -13,12 +13,15 @@ router.post(
   "/clientes/profilephoto",
   uploadMiddleware.single("profilephoto"),
   async (req, res, next) => {
+
     if (!req.file) {
       return res.status(400).json({ error: "Arquivo obrigatório" })
     }
+
     const filePath = req.file.path
 
     const file = new File([req.file.buffer], req.file.originalname)
+    
     try {
       // Passe o arquivo (req.file) para a função uploadImageToS3
       const imageUrl = await uploadImageToS3(file)

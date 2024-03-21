@@ -4,8 +4,11 @@ const router = express.Router()
 import validateJWT from "@/middlewares/authMiddleware"
 import ControllerPedido from "@/controllers/Pedido"
 import validate from "@/middlewares/validate"
+import UzerModel from "@/models/Uzer"
+
 
 const { validateCreatePedidoBody } = validate
+
 const {
   getActivePedidos,
   createPedido,
@@ -17,15 +20,19 @@ const {
   finishPedidoById,
   avaliarPedidoById,
 } = ControllerPedido
-import UzerModel from "@/models/Uzer"
+
 
 router.get(
   "/pedidos",
   validateJWT,
+  getRespectivePedidos,
+
   async (req, res, next) => {
     const { userId: id } = req.body
+
     try {
       const uzer = await UzerModel.getUzerById(id)
+
       if (uzer) {
         req.body.nomeServico = uzer.servicosPrestados[0].nomeServico
         next()
@@ -37,20 +44,22 @@ router.get(
       return res.status(500).json({ message: "Erro ao obter uzer por ID" })
     }
   },
-  getRespectivePedidos,
 )
+
 router.get("/pedidosAtivos", getActivePedidos)
 router.get("/pedido/:id", getPedidoById)
 router.get("/pedidos/cliente", validateJWT, getPedidosByClienteId)
+
 router.get(
   "/pedidos/cliente/:id",
   validateJWT,
+  getPedidosByClienteId,
+  
   (req, res, next) => {
     const { id } = req.params
     req.body.userId = id
     next()
   },
-  getPedidosByClienteId,
 )
 
 router.get("/pedidos/uzer", validateJWT, getPedidosByUzerId)

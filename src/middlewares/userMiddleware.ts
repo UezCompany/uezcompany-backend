@@ -17,6 +17,7 @@ const getUserDataByDbMiddleware = async (
   const cliente = !userId
     ? await ClienteModel.getClienteByEmail(email)
     : await ClienteModel.getClienteById(userId)
+  
   if (cliente) {
     req.body.userType = "cliente"
     req.body.clienteName = cliente.nome
@@ -27,6 +28,7 @@ const getUserDataByDbMiddleware = async (
   const uzer = !userId
     ? await UzerModel.getUzerByEmail(email)
     : await UzerModel.getUzerById(userId)
+    
   if (uzer) {
     req.body.userType = "uzer"
     req.body.uzerName = uzer.nome

@@ -1,7 +1,9 @@
 import ServicoModel from "../models/Servico"
 import { Request, Response, NextFunction } from "express"
 
+
 const { getCategoryByServico } = ServicoModel
+
 const validateField = (
   field: any,
   message: string,
@@ -23,9 +25,12 @@ const validateField = (
 
 const validateCPF = (cpf: string) =>
   /^[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}$/.test(cpf)
+
 const validateRG = (rg: string) =>
   /^[0-9]{2}.[0-9]{3}.[0-9]{3}-[0-9]{1}$/.test(rg)
-const validateCEP = (cep: string) => /^[0-9]{5}-[0-9]{3}$/.test(cep)
+  
+const validateCEP = (cep: string) => 
+  /^[0-9]{5}-[0-9]{3}$/.test(cep)
 
 const validateMiddlewares = {
   validateBody: (req: Request, res: Response, next: NextFunction) => {

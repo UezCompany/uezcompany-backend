@@ -11,6 +11,7 @@ const AuthController = {
         email: z.string().email(),
         senha: z.string(),
       })
+
       const { email, senha } = loginBody.parse(req.body)
 
       try {
@@ -38,10 +39,12 @@ const AuthController = {
             return res.status(401).json({ message: "Credenciais inválidas" })
           }
         })
+
       } catch (error: any) {
         console.error("Erro ao fazer login: " + error.stack)
         res.status(500).json({ message: "Erro interno do servidor" })
       }
+      
     } catch (err) {
       res.status(400).json({ message: "Corpo da requisição inválido" })
     }

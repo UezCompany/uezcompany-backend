@@ -11,6 +11,7 @@ const ServicoController = {
       res.status(500).json({ message: "Erro ao obter servicos" })
     }
   },
+
   getServicoById: async (req: Request, res: Response) => {
     const { id } = req.params
     try {
@@ -25,6 +26,7 @@ const ServicoController = {
       res.status(500).json({ message: "Erro ao obter servico por ID" })
     }
   },
+
   getServicoByCategoryName: async (req: Request, res: Response) => {
     const { categoria } = req.query
     try {
@@ -42,6 +44,7 @@ const ServicoController = {
       res.status(500).json({ message: "Erro ao obter servico por categoria" })
     }
   },
+
   getCategoryByServicoName: async (req: Request, res: Response) => {
     const { servico } = req.query
     try {
@@ -59,6 +62,7 @@ const ServicoController = {
       res.status(500).json({ message: "Erro ao obter a categoria por servico" })
     }
   },
+
   createServico: async (req: Request, res: Response) => {
     const { nome } = req.body
     try {
@@ -82,6 +86,7 @@ const ServicoController = {
       res.status(500).json({ message: "Erro ao criar servico" })
     }
   },
+  
   deleteServico: async (req: Request, res: Response) => {
     const { id } = req.params
     try {

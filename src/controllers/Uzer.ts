@@ -12,6 +12,7 @@ const UzerController = {
       res.status(500).json({ message: "Erro ao obter uzers" })
     }
   },
+
   getUzerById: async (req: Request, res: Response) => {
     const { id } = req.params
     try {
@@ -26,6 +27,7 @@ const UzerController = {
       res.status(500).json({ message: "Erro ao obter uzer por ID" })
     }
   },
+
   createUzer: async (req: Request, res: Response) => {
     const { email, senha, CPF } = req.body
     try {
@@ -65,6 +67,7 @@ const UzerController = {
       res.status(500).json({ message: "Erro ao criar uzer" })
     }
   },
+
   updateUzer: async (req: Request, res: Response) => {
     const { id } = req.params
     try {
@@ -75,6 +78,7 @@ const UzerController = {
       res.status(500).json({ message: "Erro ao atualizar uzer" })
     }
   },
+
   updateUzerPhoto: async (req: Request, res: Response) => {
     const { photoUrl } = req.body
 
@@ -90,6 +94,7 @@ const UzerController = {
       res.status(500).json({ message: "Erro ao atualizar o uzer" })
     }
   },
+  
   deleteUzer: async (req: Request, res: Response) => {
     const { id } = req.params
     try {

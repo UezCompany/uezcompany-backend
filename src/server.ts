@@ -37,6 +37,7 @@ app.use(
 app.get("/", (req, res) => {
   res.status(200).json("Server is running")
 })
+
 app.use(AllRoutes)
 
 if (process.env.NODE_ENV !== "test") {

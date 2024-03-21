@@ -13,6 +13,7 @@ router.get(
   "/users/me",
   authMiddleware,
   getUserDataByDbMiddleware,
+
   async (req, res) => {
     const { userId, userType } = req.body
     if (userType === "both") {
@@ -52,12 +53,15 @@ router.get(
     }
   },
 )
+
 router.post("/validate-email", (req, res) => {
   res.status(200).json({ message: `O e-mail ${req.body.email} é valido` })
 })
+
 router.post("/validate-username", (req, res) => {
   res.status(200).json({ message: `O username ${req.body.username} é valido` })
 })
+
 router.post(
   "/validate-jwt",
   (req, res, next) => {

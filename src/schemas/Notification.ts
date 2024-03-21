@@ -7,26 +7,32 @@ const notificationsSchema = new Schema<INotification & Document>(
       type: String,
       required: true,
     },
+
     content: {
       type: String,
       required: true,
     },
+
     meta: {
       type: Date,
       default: Date.now(),
     },
+
     _idUser: {
       type: String,
       required: true,
     },
+
     readed: {
       type: Boolean,
       default: false,
     },
   },
+
   {
     versionKey: "__versionOfSchema__",
   },
+
 )
 
 const Notifications: Model<INotification & Document> = model<
