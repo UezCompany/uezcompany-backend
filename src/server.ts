@@ -2,11 +2,9 @@ import fastify from "fastify"
 import fastifyJwt from "@fastify/jwt"
 import fastifyCors from "@fastify/cors"
 import fastifyCookie from "@fastify/cookie"
-import fastifyWebsocket from "fastify-socket.io"
+import fastifyWebSocket from "fastify-socket.io"
 import GetClientes from "./routes/Cliente/get-clientes"
-import GetClientesById from "./routes/Cliente/get-cliente-by-id"
 import GetUzers from "./routes/Uzer/get-uzers"
-import GetUzerById from "./routes/Uzer/get-uzer-by-id"
 import GetServicos from "./routes/Servico/get-servicos"
 import GetServicoById from "./routes/Servico/get-servico-by-id"
 import GetServicoByCategoria from "./routes/Servico/get-servicos-by-categoria"
@@ -30,6 +28,13 @@ import { env } from "../env"
 import CreateChat from "./routes/Chat/create-chat"
 import GetChats from "./routes/Chat/get-chats"
 import ConfirmPayment from "./routes/billing/confirm-payment"
+import SendMessage from "./routes/Chat/send-message"
+import validateNewSocketUser from "./routes/Chat/ws/validate"
+import { Server } from "socket.io"
+import sendMessageForSocket from "./routes/Chat/ws/send-message"
+import GetUzerBySlug from "./routes/Uzer/get-uzer-by-slug"
+import GetClienteBySlug from "./routes/Cliente/get-cliente-by-slug"
+import GetPortfolios from "./routes/Uzer/Portfolio/get-portfolios"
 
 const app = fastify()
 
@@ -39,15 +44,15 @@ app.register(fastifyCors, {
 })
 
 app.register(fastifyJwt, {
-  secret: process.env.SECRET || "SECRET CABULOSO",
+  secret: env.SECRET || "SECRET CABULOSO",
 })
 
 app.register(fastifyCookie, {
-  secret: process.env.SECRET || "SECRET CABULOSO",
+  secret: env.SECRET || "SECRET CABULOSO",
   hook: "onRequest",
 })
 
-app.register(fastifyWebsocket)
+app.register(fastifyWebSocket)
 
 app.get("/", (req, reply) => {
   reply.status(200).send({ message: "Server is running" })
@@ -59,10 +64,11 @@ app.register(Login)
 app.register(Logout)
 // Cliente
 app.register(GetClientes)
-app.register(GetClientesById)
+app.register(GetClienteBySlug)
 // Uzer
 app.register(GetUzers)
-app.register(GetUzerById)
+app.register(GetUzerBySlug)
+app.register(GetPortfolios)
 // Servico
 app.register(GetServicos)
 app.register(GetServicoById)
@@ -84,6 +90,7 @@ app.register(ReadAllNotificacoes)
 // Chat
 app.register(CreateChat)
 app.register(GetChats)
+app.register(SendMessage)
 
 //Billing
 app.register(ConfirmPayment)
@@ -92,4 +99,26 @@ if (process.env.NODE_ENV !== "test") {
   console.log("CORS Habilitado. URL do domínio: " + env.FRONTEND_DOMAIN || "*")
 }
 
+app.ready(() => {
+  app.io = new Server(app.server, {
+    cors: {
+      origin: env.FRONTEND_DOMAIN || "*",
+    },
+  })
+  app.io.on("connection", (socket) => {
+    console.log("Socket conectado: ", socket.id)
+    validateNewSocketUser(socket)
+    sendMessageForSocket(socket)
+    socket.on("disconnect", () => {
+      console.log("Socket desconectado: ", socket.id)
+    })
+  })
+})
+
 export default app
+
+declare module "fastify" {
+  interface FastifyInstance {
+    io: Server
+  }
+}

@@ -27,18 +27,18 @@ export default async function CreateChat(app: FastifyInstance) {
         where: {
           OR: [
             {
-              creatorId: {
+              idCliente: {
                 equals: requestedContactId,
               },
-              receiverId: {
+              idUzer: {
                 equals: decryptedToken.id,
               },
             },
             {
-              creatorId: {
+              idCliente: {
                 equals: decryptedToken.id,
               },
-              receiverId: {
+              idUzer: {
                 equals: requestedContactId,
               },
             },
@@ -75,8 +75,14 @@ export default async function CreateChat(app: FastifyInstance) {
 
     const chat = await prisma.chats.create({
       data: {
-        creatorId: decryptedToken.id,
-        receiverId: requestedContactId,
+        idCliente:
+          meContact.tipoUsuario === "CLIENTE"
+            ? meContact.id
+            : requestedContact.id,
+        idUzer:
+          meContact.tipoUsuario === "CLIENTE"
+            ? requestedContact.id
+            : meContact.id,
       },
     })
 
@@ -84,6 +90,6 @@ export default async function CreateChat(app: FastifyInstance) {
       return reply.status(400).send({ message: "Erro ao criar o chat." })
     }
 
-    return reply.status(200).send({ message: "Chat criado com sucesso.", chat })
+    return reply.status(201).send({ message: "Chat criado com sucesso.", chat })
   })
 }

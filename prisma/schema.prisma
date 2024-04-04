@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -31,6 +35,9 @@ model Clientes {
   photoUrl          String      @default("https://cdn-icons-png.flaticon.com/512/74/74472.png")
   lastOnline        DateTime?   @default(now())
   lastLogin         DateTime?
+  pedidos           Pedidos[]
+  chats             Chats[]
+  favoriteUzers     Uzers[]
 }
 
 model Uzers {
@@ -53,48 +60,68 @@ model Uzers {
   dataCadastro                DateTime    @default(now())
   telefone                    String
   tipoUsuario                 TipoUsuario
-  quantidadePedidos           Int? //mudar depois
+  quantidadePedidos           Int?
   photoUrl                    String      @default("https://cdn-icons-png.flaticon.com/512/74/74472.png")
   quantidadePedidosRealizados Int?
-  servicosPrestados           Servicos[] //mudar depois
-  pedidos                     Pedidos[]
+  servico                     Servicos    @relation(fields: [idServico], references: [id])
+  idServico                   String
   avaliacao                   Float       @default(0.0)
   avaliacoes                  Float[]     @default([])
   lastOnline                  DateTime?   @default(now())
   lastLogin                   DateTime?
+  Pedidos                     Pedidos[]
+  bannerUrl                   String?     @default("https://uezcompanys3.s3.us-east-2.amazonaws.com/defaultbanner.jpg")
+  bio                         String?     @default("Uzer criado na UezCompany, somente um Uzer pode edita-lo.")
+  chats                       Chats[]
+  cliente                     Clientes?   @relation(fields: [idCliente], references: [id])
+  idCliente                   String?
 }
 
 model Servicos {
   id               String      @id @default(uuid())
   nome             String      @unique
   tipo             TipoServico
-  categoria        String
+  categoria        Categorias  @relation(fields: [idCategoria], references: [id])
   descricao        String      @default("Serviço oferecido pela UezCompany")
   quantidadeFeitos Int         @default(0)
   taxaPadrao       Float       @default(5.0)
-  Uzers            Uzers?      @relation(fields: [uzersId], references: [id])
-  uzersId          String?
   Pedidos          Pedidos[]
+  Uzers            Uzers[]
+  idCategoria      String
+}
+
+model Categorias {
+  id       String     @id @default(uuid())
+  nome     String     @unique
+  Servicos Servicos[]
 }
 
 model Pedidos {
-  id              String    @id @default(uuid())
-  tipo            String
-  servico         Servicos  @relation(fields: [servicoId], references: [id])
+  id              String      @id @default(uuid())
+  tipo            TipoServico
+  servico         Servicos    @relation(fields: [idServico], references: [id])
   titulo          String
-  descricao       String    @default("Pedido criado na UezCompany, somente um Uzer pode finaliza-lo.")
-  status          String    @default("A REALIZAR")
-  uzer            Uzers?    @relation(fields: [uzerId], references: [id])
-  servicoId       String
-  uzerId          String?
-  clienteId       String
-  disponivel      Boolean   @default(true)
-  dataCriacao     DateTime  @default(now())
+  descricao       String      @default("Pedido criado na UezCompany, somente um Uzer pode finaliza-lo.")
+  status          String      @default("A REALIZAR")
+  uzer            Uzers?      @relation(fields: [idUzer], references: [id])
+  idServico       String
+  idUzer          String?
+  disponivel      Boolean     @default(true)
+  dataCriacao     DateTime    @default(now())
   dataFinalizacao DateTime?
-  valor           Float     @default(0.0)
+  valor           Float       @default(0.0)
   images          String[]
-  avaliacao       Float     @default(0.0)
-  avaliado        Boolean   @default(false)
+  avaliacao       Float       @default(0.0)
+  avaliado        Boolean     @default(false)
+  cliente         Clientes?   @relation(fields: [idCliente], references: [id])
+  idCliente       String?
+  Portfolio       Portfolio[]
+}
+
+model Portfolio {
+  id       String  @id @default(uuid())
+  pedido   Pedidos @relation(fields: [idPedido], references: [id])
+  idPedido String
 }
 
 model Notificacoes {
@@ -107,11 +134,13 @@ model Notificacoes {
 }
 
 model Chats {
-  id         String     @id @default(uuid())
-  creatorId  String
-  receiverId String
-  Messages   Messages[]
-  createdAt  DateTime   @default(now())
+  id        String     @id @default(uuid())
+  cliente   Clientes   @relation(fields: [idCliente], references: [id])
+  uzer      Uzers      @relation(fields: [idUzer], references: [id])
+  idCliente String
+  idUzer    String
+  messages  Messages[]
+  createdAt DateTime   @default(now())
 }
 
 model Messages {
@@ -122,8 +151,8 @@ model Messages {
   readed     Boolean      @default(false)
   senderId   String
   receiverId String
-  Chat       Chats        @relation(fields: [chatId], references: [id])
-  chatId     String
+  Chat       Chats        @relation(fields: [idChat], references: [id])
+  idChat     String
 }
 
 enum TipoServico {

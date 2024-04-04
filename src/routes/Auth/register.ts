@@ -43,21 +43,17 @@ export default async function Register(app: FastifyInstance) {
 
     switch (usertype) {
       case "UZER": {
-        const prevUzerByEmail = await prisma.uzers.findUnique({
-          where: { email },
-        })
-
-        const prevUzerByCpf = await prisma.uzers.findUnique({
-          where: { cpf },
-        })
-
-        const prevUzerByTelefone = await prisma.uzers.findFirst({
-          where: { telefone },
-        })
-
-        const prevUzerByUsername = await prisma.uzers.findFirst({
-          where: { username },
-        })
+        const [
+          prevUzerByEmail,
+          prevUzerByCpf,
+          prevUzerByTelefone,
+          prevUzerByUsername,
+        ] = await Promise.all([
+          prisma.uzers.findUnique({ where: { email } }),
+          prisma.uzers.findUnique({ where: { cpf } }),
+          prisma.uzers.findFirst({ where: { telefone } }),
+          prisma.uzers.findFirst({ where: { username } }),
+        ])
 
         // Se algum dos campos já existe, retornar uma resposta adequada
         if (
@@ -100,8 +96,10 @@ export default async function Register(app: FastifyInstance) {
             telefone,
             complemento,
             username,
-            servicosPrestados: {
-              create: servico,
+            servico: {
+              connect: {
+                id: idServico,
+              },
             },
           },
         })
@@ -121,21 +119,17 @@ export default async function Register(app: FastifyInstance) {
           .send({ message: "Usuário criado com sucesso!" })
       }
       case "CLIENTE": {
-        const prevClienteByEmail = await prisma.clientes.findUnique({
-          where: { email },
-        })
-
-        const prevClienteByCpf = await prisma.clientes.findUnique({
-          where: { cpf },
-        })
-
-        const prevClienteByTelefone = await prisma.clientes.findFirst({
-          where: { telefone },
-        })
-
-        const prevClienteByUsername = await prisma.clientes.findUnique({
-          where: { username },
-        })
+        const [
+          prevClienteByEmail,
+          prevClienteByCpf,
+          prevClienteByTelefone,
+          prevClienteByUsername,
+        ] = await Promise.all([
+          prisma.clientes.findUnique({ where: { email } }),
+          prisma.clientes.findUnique({ where: { cpf } }),
+          prisma.clientes.findFirst({ where: { telefone } }),
+          prisma.clientes.findFirst({ where: { username } }),
+        ])
 
         // Se algum dos campos já existe, retornar uma resposta adequada
         if (

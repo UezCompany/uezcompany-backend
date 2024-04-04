@@ -14,9 +14,21 @@ export default async function GetChats(app: FastifyInstance) {
 
     const chats = await prisma.chats.findMany({
       where: {
-        creatorId: {
-          equals: decryptedToken.id,
-        },
+        OR: [
+          {
+            idCliente: {
+              equals: decryptedToken.id,
+            },
+          },
+          {
+            idUzer: {
+              equals: decryptedToken.id,
+            },
+          },
+        ],
+      },
+      include: {
+        messages: true,
       },
     })
 
@@ -24,6 +36,6 @@ export default async function GetChats(app: FastifyInstance) {
       return reply.status(400).send({ message: "Você não tem chats" })
     }
 
-    return reply.status(200).send({ chats })
+    return reply.status(200).send(chats)
   })
 }
