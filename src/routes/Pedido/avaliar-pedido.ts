@@ -51,7 +51,7 @@ export default async function AvaliarPedido(app: FastifyInstance) {
 
     const uzer = await prisma.uzers.update({
       where: {
-        id: pedido.uzerId || "",
+        id: pedido.idUzer || "",
       },
       data: {
         avaliacoes: {

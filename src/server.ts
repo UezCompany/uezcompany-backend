@@ -29,12 +29,12 @@ import CreateChat from "./routes/Chat/create-chat"
 import GetChats from "./routes/Chat/get-chats"
 import ConfirmPayment from "./routes/billing/confirm-payment"
 import SendMessage from "./routes/Chat/send-message"
-import validateNewSocketUser from "./routes/Chat/ws/validate"
 import { Server } from "socket.io"
-import sendMessageForSocket from "./routes/Chat/ws/send-message"
 import GetUzerBySlug from "./routes/Uzer/get-uzer-by-slug"
 import GetClienteBySlug from "./routes/Cliente/get-cliente-by-slug"
 import GetPortfolios from "./routes/Uzer/Portfolio/get-portfolios"
+import Join from "./routes/Chat/ws/join"
+import MessageForSocket from "./routes/Chat/ws/send-message"
 
 const app = fastify()
 
@@ -106,10 +106,21 @@ app.ready(() => {
     },
   })
   app.io.on("connection", (socket) => {
+    const token = socket.handshake.auth?.token
+    if (!token) {
+      return
+    }
+    const decryptedToken: { id: string } = app.jwt.verify(token)
+    if (!decryptedToken) {
+      return
+    }
+    // console.log("Token > id: ", decryptedToken.id)
     console.log("Socket conectado: ", socket.id)
-    validateNewSocketUser(socket)
-    sendMessageForSocket(socket)
+    socket.data.userId = decryptedToken.id
+    Join(socket)
+    MessageForSocket(socket)
     socket.on("disconnect", () => {
+      socket.disconnect()
       console.log("Socket desconectado: ", socket.id)
     })
   })

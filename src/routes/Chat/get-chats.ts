@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify"
 import { prisma } from "@/lib/prisma"
+import { GetUsertypeById } from "@/utils/getUsertypeById"
 
 export default async function GetChats(app: FastifyInstance) {
   app.get("/chats", async (request, reply) => {
@@ -12,30 +13,51 @@ export default async function GetChats(app: FastifyInstance) {
       return reply.status(401).send({ message: "Token inválido ou expirado." })
     }
 
-    const chats = await prisma.chats.findMany({
-      where: {
-        OR: [
-          {
-            idCliente: {
-              equals: decryptedToken.id,
-            },
-          },
-          {
-            idUzer: {
-              equals: decryptedToken.id,
-            },
-          },
-        ],
-      },
-      include: {
-        messages: true,
-      },
-    })
-
-    if (!chats) {
-      return reply.status(400).send({ message: "Você não tem chats" })
+    const myUsertype = await GetUsertypeById(decryptedToken.id)
+    if (!myUsertype) {
+      return reply.status(401).send({ message: "Usuário inválido." })
     }
 
-    return reply.status(200).send(chats)
+    if (myUsertype === "CLIENTE") {
+      const chats = await prisma.chats.findMany({
+        where: {
+          idCliente: decryptedToken.id,
+        },
+        include: {
+          messages: true,
+          uzer: {
+            select: {
+              id: true,
+              nome: true,
+              servico: true,
+              photoUrl: true,
+              username: true,
+            },
+          },
+        },
+      })
+
+      if (!chats) {
+        return reply.status(400).send({ message: "Você não tem chats" })
+      }
+
+      return reply.status(200).send(chats)
+    } else {
+      const chats = await prisma.chats.findMany({
+        where: {
+          idUzer: decryptedToken.id,
+        },
+        include: {
+          messages: true,
+          cliente: true,
+        },
+      })
+
+      if (!chats) {
+        return reply.status(400).send({ message: "Você não tem chats" })
+      }
+
+      return reply.status(200).send(chats)
+    }
   })
 }
