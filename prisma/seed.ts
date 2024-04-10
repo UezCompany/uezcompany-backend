@@ -183,7 +183,7 @@ async function main() {
         tipo: "ONLINE",
         categoria: {
           connect: {
-            nome: servico.nome,
+            nome: servico.servico,
           },
         },
       },
