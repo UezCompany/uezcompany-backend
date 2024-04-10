@@ -10,7 +10,7 @@ const envSchema = z.object({
   AWS_REGION: z.string(),
   DATABASE_URL: z.string().url(),
   STRIPE_API_KEY: z.string().min(1),
-  AWS_SESSION_TOKEN: z.string().optional(),
+  AWS_SESSION_TOKEN: z.optional(z.string()),
 })
 
 export const env = envSchema.parse(process.env)
