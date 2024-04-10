@@ -32,6 +32,11 @@ export default async function CreatePedido(app: FastifyInstance) {
         tipo: "ONLINE",
         valor,
         titulo,
+        cliente: {
+          connect: {
+            id: decryptedToken.id,
+          },
+        },
         servico: {
           connect: {
             id: servicoId,

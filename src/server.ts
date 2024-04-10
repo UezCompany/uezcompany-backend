@@ -27,7 +27,6 @@ import Logout from "./routes/Auth/logout"
 import { env } from "../env"
 import CreateChat from "./routes/Chat/create-chat"
 import GetChats from "./routes/Chat/get-chats"
-import SendMessage from "./routes/Chat/send-message"
 import { Server } from "socket.io"
 import GetUzerBySlug from "./routes/Uzer/get-uzer-by-slug"
 import GetClienteBySlug from "./routes/Cliente/get-cliente-by-slug"
@@ -92,7 +91,6 @@ app.register(ReadAllNotificacoes)
 // Chat
 app.register(CreateChat)
 app.register(GetChats)
-app.register(SendMessage)
 //Billing
 
 if (process.env.NODE_ENV !== "test") {
