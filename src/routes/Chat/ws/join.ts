@@ -1,6 +1,6 @@
 import { Socket } from "socket.io"
 
-export default function Join(socket: Socket) {
+export default function JoinSocket(socket: Socket) {
   socket.on("join", () => {
     if (!socket.data.userId) {
       return

@@ -24,21 +24,30 @@ export default async function AssignPedido(app: FastifyInstance) {
 
     const assignUzerBody = z.object({
       valor: z.optional(z.number()),
+      idUzer: z.string(),
     })
 
-    const { valor } = assignUzerBody.parse(request.body)
+    const { valor, idUzer } = assignUzerBody.parse(request.body)
 
-    const pedido = await prisma.pedidos.update({
-      where: {
-        id,
-      },
-      data: {
-        uzerId: decryptedToken.id,
-        status: "EM ANDAMENTO",
-        disponivel: false,
-        valor,
-      },
-    })
+    const pedido = await prisma.pedidos
+      .update({
+        where: {
+          id,
+        },
+        data: {
+          status: "EM ANDAMENTO",
+          disponivel: false,
+          valor,
+          uzer: {
+            connect: {
+              id: idUzer,
+            },
+          },
+        },
+      })
+      .catch((err) => {
+        console.log(err)
+      })
     if (!pedido) {
       return reply.status(400).send({ message: "Erro ao atribuir o pedido." })
     }

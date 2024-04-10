@@ -113,9 +113,10 @@ model Pedidos {
   images          String[]
   avaliacao       Float       @default(0.0)
   avaliado        Boolean     @default(false)
-  cliente         Clientes?   @relation(fields: [idCliente], references: [id])
-  idCliente       String?
+  cliente         Clientes    @relation(fields: [idCliente], references: [id])
+  idCliente       String
   Portfolio       Portfolio[]
+  Messages        Messages[]
 }
 
 model Portfolio {
@@ -153,6 +154,8 @@ model Messages {
   receiverId String
   Chat       Chats        @relation(fields: [idChat], references: [id])
   idChat     String
+  pedido     Pedidos?     @relation(fields: [idPedido], references: [id])
+  idPedido   String?
 }
 
 enum TipoServico {

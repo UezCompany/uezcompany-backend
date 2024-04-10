@@ -18,24 +18,25 @@ export default async function CreatePedido(app: FastifyInstance) {
     }
 
     const createPedidoBody = z.object({
-      tipo: z.string(),
       categoria: z.string(),
       servicoId: z.string(),
       valor: z.optional(z.number()),
       titulo: z.string(),
     })
 
-    const { servicoId, tipo, titulo, valor } = createPedidoBody.parse(
-      request.body,
-    )
+    const { servicoId, titulo, valor } = createPedidoBody.parse(request.body)
 
     const pedido = await prisma.pedidos.create({
       data: {
-        clienteId: decryptedToken.id,
-        tipo,
-        servicoId,
+        idCliente: decryptedToken.id,
+        tipo: "ONLINE",
         valor,
         titulo,
+        servico: {
+          connect: {
+            id: servicoId,
+          },
+        },
       },
     })
     if (!pedido) {

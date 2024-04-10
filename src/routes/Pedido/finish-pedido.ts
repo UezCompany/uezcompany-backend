@@ -29,7 +29,7 @@ export default async function FinishPedido(app: FastifyInstance) {
       data: {
         status: "A AVALIAR",
         disponivel: false,
-        uzerId: decryptedToken.id,
+        idUzer: decryptedToken.id,
       },
     })
     if (!pedido) {

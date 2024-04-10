@@ -9,15 +9,6 @@ export default async function GetServicoByCategoria(app: FastifyInstance) {
     })
     const { categoria } = params.parse(request.params)
 
-    // const { token } = request.cookies
-    // if (!token) {
-    //   return reply.status(401).send({ message: "Token não informado" })
-    // }
-    // const decryptedToken = app.jwt.verify(token)
-    // if (!decryptedToken) {
-    //   return reply.status(401).send({ message: "Token inválido ou expirado." })
-    // }
-
     const servico = await prisma.servicos.findMany({
       where: {
         categoria: {

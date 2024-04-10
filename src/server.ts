@@ -27,14 +27,15 @@ import Logout from "./routes/Auth/logout"
 import { env } from "../env"
 import CreateChat from "./routes/Chat/create-chat"
 import GetChats from "./routes/Chat/get-chats"
-import ConfirmPayment from "./routes/billing/confirm-payment"
 import SendMessage from "./routes/Chat/send-message"
 import { Server } from "socket.io"
 import GetUzerBySlug from "./routes/Uzer/get-uzer-by-slug"
 import GetClienteBySlug from "./routes/Cliente/get-cliente-by-slug"
 import GetPortfolios from "./routes/Uzer/Portfolio/get-portfolios"
-import Join from "./routes/Chat/ws/join"
 import MessageForSocket from "./routes/Chat/ws/send-message"
+import JoinSocket from "./routes/Chat/ws/join"
+import BudgetForSocket from "./routes/Chat/ws/send-budget"
+import GetPedidosById from "./routes/Pedido/get-pedidos-by-id"
 
 const app = fastify()
 
@@ -76,6 +77,7 @@ app.register(GetServicoByCategoria)
 app.register(GetCategorias)
 // Pedido
 app.register(GetPedidos)
+app.register(GetPedidosById)
 app.register(GetPedidosByCliente)
 app.register(GetPedidosByUzer)
 app.register(GetActivePedidos)
@@ -91,9 +93,7 @@ app.register(ReadAllNotificacoes)
 app.register(CreateChat)
 app.register(GetChats)
 app.register(SendMessage)
-
 //Billing
-app.register(ConfirmPayment)
 
 if (process.env.NODE_ENV !== "test") {
   console.log("CORS Habilitado. URL do domínio: " + env.FRONTEND_DOMAIN || "*")
@@ -117,7 +117,8 @@ app.ready(() => {
     // console.log("Token > id: ", decryptedToken.id)
     console.log("Socket conectado: ", socket.id)
     socket.data.userId = decryptedToken.id
-    Join(socket)
+    BudgetForSocket(socket)
+    JoinSocket(socket)
     MessageForSocket(socket)
     socket.on("disconnect", () => {
       socket.disconnect()

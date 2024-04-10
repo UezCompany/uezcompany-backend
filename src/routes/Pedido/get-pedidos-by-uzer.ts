@@ -17,7 +17,7 @@ export default async function GetPedidosByUzer(app: FastifyInstance) {
 
     const pedidos = await prisma.pedidos.findMany({
       where: {
-        uzerId: decryptedToken?.id,
+        idUzer: decryptedToken?.id,
       },
     })
     return reply.status(200).send(pedidos)

@@ -1,8 +1,9 @@
 import { FastifyInstance } from "fastify"
 import { prisma } from "@/lib/prisma"
+import { z } from "zod"
 
 export default async function GetPedidosByCliente(app: FastifyInstance) {
-  app.get("/pedidos/cliente", async (request, reply) => {
+  app.get("/pedidos/cliente/:id", async (request, reply) => {
     const { token } = request.cookies
 
     if (!token) {
@@ -15,9 +16,15 @@ export default async function GetPedidosByCliente(app: FastifyInstance) {
       return reply.status(401).send({ message: "Token inválido ou expirado." })
     }
 
+    const params = z.object({
+      id: z.string(),
+    })
+
+    const { id } = params.parse(request.params)
+
     const pedidos = await prisma.pedidos.findMany({
       where: {
-        clienteId: decryptedToken?.id,
+        idCliente: id,
       },
     })
     return reply.status(200).send(pedidos)

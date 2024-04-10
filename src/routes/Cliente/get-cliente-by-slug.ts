@@ -24,6 +24,30 @@ export default async function GetClienteBySlug(app: FastifyInstance) {
     if (!success) {
       const cliente = await prisma.clientes.findUnique({
         where: { username: slug },
+        select: {
+          id: true,
+          username: true,
+          nome: true,
+          email: true,
+          situacao: true,
+          motivoBloqueio: true,
+          cep: true,
+          logradouro: true,
+          numero: true,
+          complemento: true,
+          bairro: true,
+          cidade: true,
+          estado: true,
+          dataNascimento: true,
+          dataCadastro: true,
+          telefone: true,
+          tipoUsuario: true,
+          quantidadePedidos: true,
+          photoUrl: true,
+          lastOnline: true,
+          lastLogin: true,
+          favoriteUzers: true,
+        },
       })
       if (!cliente) {
         return reply.status(404).send({ message: "Usuário não encontrado" })
