@@ -1,4 +1,4 @@
-import { prisma } from "../src/lib/prisma"
+import { prisma } from "../src/infra/connection/prisma"
 async function main() {
   const arrayOfCategorias = [
     "Programação",

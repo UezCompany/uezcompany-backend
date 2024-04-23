@@ -1,5 +1,5 @@
 import request from "supertest"
-import app from "./server"
+import app from "./application/server"
 
 beforeAll(async () => {
   await app.ready()

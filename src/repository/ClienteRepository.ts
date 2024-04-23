@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma"
+import { prisma } from "../infra/connection/prisma"
 
 interface IClienteRepository {
   getClientes(page: number, pageSize: number): Promise<any>
@@ -12,6 +12,30 @@ class ClienteRepository implements IClienteRepository {
     return await prisma.clientes.findMany({
       skip: offset,
       take: pageSize,
+      select: {
+        id: true,
+        username: true,
+        nome: true,
+        email: true,
+        situacao: true,
+        motivoBloqueio: true,
+        cep: true,
+        logradouro: true,
+        numero: true,
+        complemento: true,
+        bairro: true,
+        cidade: true,
+        estado: true,
+        dataNascimento: true,
+        dataCadastro: true,
+        telefone: true,
+        tipoUsuario: true,
+        quantidadePedidos: true,
+        photoUrl: true,
+        lastOnline: true,
+        lastLogin: true,
+        favoriteUzers: true,
+      },
     })
   }
 

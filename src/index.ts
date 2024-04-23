@@ -1,5 +1,5 @@
 import { env } from "../env"
-import server from "./server"
+import server from "./application/server"
 
 const port = Number(env.PORT) || 3333
 const host = env.HOST
