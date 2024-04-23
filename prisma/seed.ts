@@ -12,7 +12,7 @@ async function main() {
     skipDuplicates: true,
   })
 
-  const teste = [
+  const servicesData = [
     {
       nome: "Fullstack",
       tipo: "ONLINE",
@@ -176,7 +176,7 @@ async function main() {
     },
   ]
 
-  teste.forEach(async (servico) => {
+  servicesData.forEach(async (servico) => {
     await prisma.servicos.create({
       data: {
         nome: servico.nome,
