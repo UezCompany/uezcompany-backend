@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify"
-import { prisma } from "@/lib/prisma"
 import { z } from "zod"
+import { clienteRepository } from "@/repository/ClienteRepository"
 
 export default async function GetClienteBySlug(app: FastifyInstance) {
   app.get("/clientes/:slug", async (request, reply) => {
@@ -22,39 +22,13 @@ export default async function GetClienteBySlug(app: FastifyInstance) {
     const { success } = uuidSchema.safeParse(slug)
 
     if (!success) {
-      const cliente = await prisma.clientes.findUnique({
-        where: { username: slug },
-        select: {
-          id: true,
-          username: true,
-          nome: true,
-          email: true,
-          situacao: true,
-          motivoBloqueio: true,
-          cep: true,
-          logradouro: true,
-          numero: true,
-          complemento: true,
-          bairro: true,
-          cidade: true,
-          estado: true,
-          dataNascimento: true,
-          dataCadastro: true,
-          telefone: true,
-          tipoUsuario: true,
-          quantidadePedidos: true,
-          photoUrl: true,
-          lastOnline: true,
-          lastLogin: true,
-          favoriteUzers: true,
-        },
-      })
+      const cliente = await clienteRepository.getClienteByUsername(slug)
       if (!cliente) {
         return reply.status(404).send({ message: "Usuário não encontrado" })
       }
       return reply.status(200).send(cliente)
     } else {
-      const cliente = await prisma.clientes.findUnique({ where: { id: slug } })
+      const cliente = await clienteRepository.getClienteById(slug)
       if (!cliente) {
         return reply.status(404).send({ message: "Usuário não encontrado" })
       }

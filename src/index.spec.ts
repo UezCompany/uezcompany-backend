@@ -1,12 +1,12 @@
 import request from "supertest"
 import app from "./server"
 
-afterAll(async () => {
-  await app.close()
-})
-
 beforeAll(async () => {
   await app.ready()
+})
+
+afterAll(async () => {
+  await app.close()
 })
 
 // Testes
@@ -25,7 +25,7 @@ describe("Testes para o servidor", () => {
       senha: "senha_incorreta",
     })
 
-    expect(response.status).toBe(404) // Código 401 indica falha na autenticação
+    expect(response.status).toBe(404)
     expect(response.body).toEqual({
       message: "Usuário não encontrado",
     })
@@ -37,7 +37,7 @@ describe("Testes para o servidor", () => {
       senha: "senha_incorreta",
     })
 
-    expect(response.status).toBe(401) // Código 401 indica falha na autenticação
+    expect(response.status).toBe(401)
     expect(response.body).toEqual({
       message: "Credenciais inválidas",
       code: "UNAUTHORIZED",
@@ -50,9 +50,7 @@ describe("Testes para o servidor", () => {
       senha: "cliente123",
     })
 
-    expect(response.status).toBe(200) // Código 200 indica sucesso na autenticação
-    expect(response.body).toHaveProperty("token") // Verifique se a resposta contém um token de autenticação
+    expect(response.status).toBe(200)
+    expect(response.body).toHaveProperty("token")
   })
-
-  // Adicione mais testes conforme necessário
 })

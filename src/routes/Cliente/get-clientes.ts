@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify"
-import { prisma } from "@/lib/prisma"
 import { z } from "zod"
+import { clienteRepository } from "@/repository/ClienteRepository"
 
 export default async function GetClientes(app: FastifyInstance) {
   app.get("/clientes", async (request, reply) => {
@@ -28,12 +28,7 @@ export default async function GetClientes(app: FastifyInstance) {
 
     const { page, pageSize } = queryParamsSchema.parse(request.query)
 
-    const offset = (page <= 1 ? 0 : page - 1) * pageSize
-
-    const clientes = await prisma.clientes.findMany({
-      skip: offset,
-      take: pageSize,
-    })
+    const clientes = await clienteRepository.getClientes(page, pageSize)
     return reply.status(200).send(clientes)
   })
 }
