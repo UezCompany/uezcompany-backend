@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify"
-import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
+import { uzerRepository } from "@/repository/UzerRepository"
 
 export default async function GetUzers(app: FastifyInstance) {
   app.get("/uzers", async (request, reply) => {
@@ -30,38 +30,7 @@ export default async function GetUzers(app: FastifyInstance) {
 
     const offset = (page <= 1 ? 0 : page - 1) * pageSize
 
-    const uzers = await prisma.uzers.findMany({
-      skip: offset,
-      take: pageSize,
-      select: {
-        id: true,
-        username: true,
-        nome: true,
-        email: true,
-        situacao: true,
-        motivoBloqueio: true,
-        cep: true,
-        logradouro: true,
-        numero: true,
-        complemento: true,
-        bairro: true,
-        cidade: true,
-        estado: true,
-        dataNascimento: true,
-        dataCadastro: true,
-        telefone: true,
-        tipoUsuario: true,
-        quantidadePedidos: true,
-        photoUrl: true,
-        quantidadePedidosRealizados: true,
-        idServico: true,
-        avaliacao: true,
-        lastOnline: true,
-        lastLogin: true,
-        bannerUrl: true,
-        bio: true,
-      },
-    })
+    const uzers = await uzerRepository.getUzers(offset, pageSize)
     return reply.status(200).send(uzers)
   })
 }

@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify"
-import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
+import { uzerRepository } from "@/repository/UzerRepository"
 
 export default async function GetUzerBySlug(app: FastifyInstance) {
   app.get("/uzers/:slug", async (request, reply) => {
@@ -22,73 +22,13 @@ export default async function GetUzerBySlug(app: FastifyInstance) {
     const { success } = uuidSchema.safeParse(slug)
 
     if (!success) {
-      const uzer = await prisma.uzers.findUnique({
-        where: { username: slug },
-        select: {
-          id: true,
-          username: true,
-          nome: true,
-          email: true,
-          situacao: true,
-          motivoBloqueio: true,
-          cep: true,
-          logradouro: true,
-          numero: true,
-          complemento: true,
-          bairro: true,
-          cidade: true,
-          estado: true,
-          dataNascimento: true,
-          dataCadastro: true,
-          telefone: true,
-          tipoUsuario: true,
-          quantidadePedidos: true,
-          photoUrl: true,
-          quantidadePedidosRealizados: true,
-          idServico: true,
-          avaliacao: true,
-          lastOnline: true,
-          lastLogin: true,
-          bannerUrl: true,
-          bio: true,
-        },
-      })
+      const uzer = await uzerRepository.getUzerByUsername(slug)
       if (!uzer) {
         return reply.status(404).send({ message: "Usuário não encontrado" })
       }
       return reply.status(200).send(uzer)
     } else {
-      const uzer = await prisma.uzers.findUnique({
-        where: { id: slug },
-        select: {
-          id: true,
-          username: true,
-          nome: true,
-          email: true,
-          situacao: true,
-          motivoBloqueio: true,
-          cep: true,
-          logradouro: true,
-          numero: true,
-          complemento: true,
-          bairro: true,
-          cidade: true,
-          estado: true,
-          dataNascimento: true,
-          dataCadastro: true,
-          telefone: true,
-          tipoUsuario: true,
-          quantidadePedidos: true,
-          photoUrl: true,
-          quantidadePedidosRealizados: true,
-          idServico: true,
-          avaliacao: true,
-          lastOnline: true,
-          lastLogin: true,
-          bannerUrl: true,
-          bio: true,
-        },
-      })
+      const uzer = uzerRepository.getUzerById(slug)
       if (!uzer) {
         return reply.status(404).send({ message: "Usuário não encontrado" })
       }
