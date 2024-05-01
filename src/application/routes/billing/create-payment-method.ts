@@ -1,4 +1,4 @@
-import { stripe } from "@/infra/libs/stripe"
+import { stripe } from "@/infra/lib/stripe"
 import { FastifyInstance } from "fastify"
 import { z } from "zod"
 
