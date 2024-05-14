@@ -3,6 +3,6 @@
     "pnpm eslint 'src/**' --fix",
     "pnpm prettier --write 'src/**'",
     "pnpm prettier --check 'src/**'",
-    "pnpm test:staged"
+    "pnpm test"
   ]
 }
