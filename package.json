@@ -12,8 +12,8 @@
     "husky:prepare": "husky install",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
-    "test:ui": "vitest --ui --covarege",
-    "test:covarege": "vitest --run --covarege"
+    "test:ui": "vitest --ui --coverage",
+    "test:coverage": "vitest --run --coverage"
   },
   "keywords": [],
   "author": "UEZ COMPANY",
