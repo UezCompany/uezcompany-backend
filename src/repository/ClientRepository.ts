@@ -1,13 +1,13 @@
 import { prisma } from "../infra/connection/prisma"
 
-interface IClienteRepository {
-  getClientes(page: number, pageSize: number): Promise<any>
-  getClienteByUsername(username: string): Promise<any>
-  getClienteById(id: string): Promise<any>
+interface IClientRepository {
+  getClients(page: number, pageSize: number): Promise<any>
+  getClientByUsername(username: string): Promise<any>
+  getClientById(id: string): Promise<any>
 }
 
-class ClienteRepository implements IClienteRepository {
-  async getClientes(page: number, pageSize: number) {
+class ClientRepository implements IClientRepository {
+  async getClients(page: number, pageSize: number) {
     const offset = (page <= 1 ? 0 : page - 1) * pageSize
     return await prisma.clientes.findMany({
       skip: offset,
@@ -39,7 +39,7 @@ class ClienteRepository implements IClienteRepository {
     })
   }
 
-  async getClienteByUsername(username: string) {
+  async getClientByUsername(username: string) {
     return await prisma.clientes.findUnique({
       where: { username },
       select: {
@@ -69,7 +69,7 @@ class ClienteRepository implements IClienteRepository {
     })
   }
 
-  async getClienteById(id: string) {
+  async getClientById(id: string) {
     return await prisma.clientes.findUnique({
       where: { id },
       select: {
@@ -100,4 +100,4 @@ class ClienteRepository implements IClienteRepository {
   }
 }
 
-export const clienteRepository = new ClienteRepository()
+export const clientRepository = new ClientRepository()

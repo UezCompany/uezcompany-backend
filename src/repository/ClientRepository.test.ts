@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest"
-import { clienteRepository } from "./ClienteRepository"
+import { clientRepository } from "./ClientRepository"
 
 describe("Client repository", () => {
   let TestClientRepository: any
@@ -7,7 +7,7 @@ describe("Client repository", () => {
   test("Listar todos os clientes do repositorio", async () => {
     const page = 1
     const pageSize = 10
-    const clients = await clienteRepository.getClientes(page, pageSize)
+    const clients = await clientRepository.getClients(page, pageSize)
     TestClientRepository = clients[0]
     clients.forEach((client) => {
       expect(client).toHaveProperty("id")
@@ -17,14 +17,14 @@ describe("Client repository", () => {
 
   test("Lista um cliente a partir do seu username", async () => {
     const username = TestClientRepository.username
-    const client = await clienteRepository.getClienteByUsername(username)
+    const client = await clientRepository.getClientByUsername(username)
     expect(client).toHaveProperty("id")
     expect(client).toHaveProperty("username")
   })
 
   test("Lista um cliente a partir do seu ID", async () => {
     const id = TestClientRepository.id
-    const client = await clienteRepository.getClienteById(id)
+    const client = await clientRepository.getClientById(id)
     expect(client).toHaveProperty("id")
     expect(client).toHaveProperty("username")
   })

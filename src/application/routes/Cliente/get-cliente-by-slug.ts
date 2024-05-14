@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify"
 import { z } from "zod"
-import { clienteRepository } from "@/repository/ClienteRepository"
+import { clientRepository } from "@/repository/ClientRepository"
 
 export default async function GetClienteBySlug(app: FastifyInstance) {
   app.get("/clientes/:slug", async (request, reply) => {
@@ -22,13 +22,13 @@ export default async function GetClienteBySlug(app: FastifyInstance) {
     const { success } = uuidSchema.safeParse(slug)
 
     if (!success) {
-      const cliente = await clienteRepository.getClienteByUsername(slug)
+      const cliente = await clientRepository.getClientByUsername(slug)
       if (!cliente) {
         return reply.status(404).send({ message: "Usuário não encontrado" })
       }
       return reply.status(200).send(cliente)
     } else {
-      const cliente = await clienteRepository.getClienteById(slug)
+      const cliente = await clientRepository.getClientById(slug)
       if (!cliente) {
         return reply.status(404).send({ message: "Usuário não encontrado" })
       }

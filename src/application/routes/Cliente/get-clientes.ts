@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify"
 import { z } from "zod"
-import { clienteRepository } from "@/repository/ClienteRepository"
+import { clienteRepository } from "@/repository/ClientRepository"
 
 export default async function GetClientes(app: FastifyInstance) {
   app.get("/clientes", async (request, reply) => {
