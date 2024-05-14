@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify"
-import { prisma } from "@/infra/connection/prisma"
+import { serviceRepository } from "@/repository/ServiceRepository"
 import { z } from "zod"
 
 export default async function GetServicoByCategoria(app: FastifyInstance) {
@@ -9,13 +9,7 @@ export default async function GetServicoByCategoria(app: FastifyInstance) {
     })
     const { categoria } = params.parse(request.params)
 
-    const servico = await prisma.servicos.findMany({
-      where: {
-        categoria: {
-          nome: categoria,
-        },
-      },
-    })
+    const servico = await serviceRepository.getServicesByCategory(categoria)
     return reply.status(200).send(servico)
   })
 }

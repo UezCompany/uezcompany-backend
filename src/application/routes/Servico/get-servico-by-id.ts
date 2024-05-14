@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify"
-import { prisma } from "@/infra/connection/prisma"
+import { serviceRepository } from "@/repository/ServiceRepository"
 import { z } from "zod"
 
 export default async function GetServicoById(app: FastifyInstance) {
@@ -9,12 +9,7 @@ export default async function GetServicoById(app: FastifyInstance) {
     })
     const { id } = params.parse(request.params)
 
-    const servico = await prisma.servicos.findUnique({
-      where: { id },
-      include: {
-        categoria: true,
-      },
-    })
+    const servico = await serviceRepository.getServicesById(id)
     return reply.status(200).send(servico || null)
   })
 }
