@@ -1,4 +1,4 @@
-import { prisma } from "@/infra/connection/prisma"
+import { prisma } from "../infra/connection/prisma"
 
 interface IUzerRepository {
   getUzers(page: number, pageSize: number): Promise<any>
