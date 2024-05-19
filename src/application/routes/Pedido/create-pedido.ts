@@ -54,6 +54,6 @@ export default async function CreatePedido(app: FastifyInstance) {
       "pedLance",
     )
 
-    return reply.status(200).send(pedido)
+    return reply.status(201).send(pedido)
   })
 }
