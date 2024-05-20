@@ -1,5 +1,5 @@
 import { assert, describe, expect, test } from "vitest"
-import { serviceRepository } from "./ServiceRepository"
+import { serviceRepository } from "@/repository/ServiceRepository"
 import { Servicos } from "@prisma/client"
 
 describe("Service repository", () => {

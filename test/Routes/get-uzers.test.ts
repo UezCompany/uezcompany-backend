@@ -1,4 +1,4 @@
-import app from "../../server"
+import app from "@/application/server"
 import { expect, test } from "vitest"
 
 test("GET /uzers", async () => {

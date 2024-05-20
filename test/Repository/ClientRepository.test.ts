@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest"
-import { clientRepository } from "./ClientRepository"
+import { clientRepository } from "@/repository/ClientRepository"
 
 describe("Client repository", () => {
   let TestClientRepository: any
