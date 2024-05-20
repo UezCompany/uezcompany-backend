@@ -28,7 +28,6 @@ export default async function CreatePedido(app: FastifyInstance) {
 
     const pedido = await prisma.pedidos.create({
       data: {
-        idCliente: decryptedToken.id,
         tipo: "ONLINE",
         valor,
         titulo,

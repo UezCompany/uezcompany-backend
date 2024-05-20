@@ -1,35 +1,38 @@
-import app from "@/application/server";
-import { describe, expect, test } from "vitest";
+import app from "@/application/server"
+import { Servicos } from "@prisma/client"
+import { describe, expect, test } from "vitest"
 
+describe("Serviço Routes", () => {
+  let TestServiceRoutes: Servicos
 
-describe('Serviço Routes', () => {
-     const publicURL = '' // a url padrão para requisição
-     test('GET /servicos', async () => {
-          const servico = await app.inject({
-               method: 'GET',
-               url: `${publicURL}/servicos`
-          })
+  test("GET /servicos", async () => {
+    const { statusCode, body } = await app.inject({
+      method: "GET",
+      url: `/servicos`,
+    })
 
-          expect(servico.statusCode).toBe(200)
-     })
+    TestServiceRoutes = JSON.parse(body)[0]
+    expect(statusCode).toBe(200)
+  })
 
-     test('GET /servicos/:id', async () => { 
-          const id ='' // ID de um serviço 
-          const servico = await app.inject({
-               method: 'GET',
-               url: `${publicURL}/servicos/${id}`
-          })
+  test("GET /servicos/:id", async () => {
+    const id = TestServiceRoutes.id // ID de um serviço
+    console.log(id)
+    const servico = await app.inject({
+      method: "GET",
+      url: `/servicos/${id}`,
+    })
 
-          expect(servico.statusCode).toBe(200)
-     })
+    expect(servico.statusCode).toBe(200)
+  })
 
-     test('GET /servicos/categoria/:categoria', async () => { 
-          const categoria ='' // qualquer categoria
-          const servico = await app.inject({
-               method: 'GET',
-               url: `${publicURL}/servicos/categoria/${categoria}`
-          })
+  test("GET /servicos/categoria/:categoria", async () => {
+    const categoria = "Programacão" // qualquer categoria
+    const servico = await app.inject({
+      method: "GET",
+      url: `/servicos/categoria/${categoria}`,
+    })
 
-          expect(servico.statusCode).toBe(200)
-     })
+    expect(servico.statusCode).toBe(200)
+  })
 })

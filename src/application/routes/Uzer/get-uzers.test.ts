@@ -1,29 +1,28 @@
-import app from "@/application/server";
-import { expect, test } from "vitest";
+import app from "../../server"
+import { expect, test } from "vitest"
 
+test("GET /uzers", async () => {
+  const userLoginResponse = await app.inject({
+    method: "POST",
+    url: `/login`,
+    payload: {
+      email: "cliente@gmail.com",
+      senha: "cliente123",
+    },
+  })
 
+  expect(userLoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
+  expect(userLoginResponse.headers["set-cookie"]).toBeDefined()
 
-test('GET /uzers', async () => {
-     const publicURL = '' // A url padrao para requisição
-     
-     const responseCookie = await app.inject({
-          method: 'POST',
-          url: `${publicURL}/login`,
-          payload: {
-               email: '',
-               senha: ''
-          }
-     })
+  const cookieWithAuthorization = userLoginResponse.headers["set-cookie"]
 
+  const response = await app.inject({
+    method: "GET",
+    headers: {
+      cookie: cookieWithAuthorization,
+    },
+    url: `/uzers`,
+  })
 
-     const response = await app.inject({
-          method: 'GET',
-          headers: {
-               "set-cookie": responseCookie.headers.cookie // talvez seja necessario mudar o 'cookie' para setCookie
-          },
-          url: `${publicURL}/uzers`
-     })
-
-     expect(response.statusCode).toBe(200)
-     // Fazer testes do retorno payload 
+  expect(response.statusCode).toBe(200)
 })

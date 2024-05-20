@@ -16,7 +16,7 @@ interface IServiceRepository {
 class ServiceRepository implements IServiceRepository {
   getServices = async () => await prisma.servicos.findMany()
 
-  async getServicesByCategory(category: string) {
+  async getServicesByCategory(category: "Programação" | any) {
     return await prisma.servicos.findMany({
       where: {
         categoria: {

@@ -2,7 +2,7 @@
   "*.ts": [
     "pnpm eslint 'src/**' --fix",
     "pnpm prettier --write 'src/**'",
-    "pnpm prettier --check 'src/**'"
-  ],
-  "*.test.ts": ["pnpm test"]
+    "pnpm prettier --check 'src/**'",
+    "pnpm test"
+  ]
 }

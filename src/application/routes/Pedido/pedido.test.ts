@@ -1,153 +1,173 @@
-import app from "@/application/server";
-import { describe, expect, test } from "vitest";
+import app from "@/application/server"
+import { serviceRepository } from "@/repository/ServiceRepository"
+import { Pedidos } from "@prisma/client"
+import { describe, expect, test } from "vitest"
 
+describe("Pedido routes", async () => {
+  const clientLoginResponse = await app.inject({
+    method: "POST",
+    url: `/login`,
+    payload: {
+      email: "cliente@gmail.com",
+      senha: "cliente123",
+    },
+  })
 
-describe('Pedido routes', async () => {
-     const publicURL = '' // A url padrao para requisição
+  expect(clientLoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
+  expect(clientLoginResponse.headers["set-cookie"]).toBeDefined()
 
-     const responseCookie = await app.inject({
-          method: 'POST',
-          url: `${publicURL}/login`,
-          payload: {
-               email: '',
-               senha: ''
-          }
-     })
+  const uzerLoginResponse = await app.inject({
+    method: "POST",
+    url: `/login`,
+    payload: {
+      email: "uzer@gmail.com",
+      senha: "uzer123",
+    },
+  })
 
-     test('GET /pedidos', async () => {
-          const response = await app.inject({
-               method: 'GET',
-               headers: {
-                    "set-cookie": responseCookie.headers.cookie // talvez seja necessario mudar o 'cookie' para setCookie
-               },
-               url: `${publicURL}/pedidos`
-          })
+  expect(uzerLoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
+  expect(uzerLoginResponse.headers["set-cookie"]).toBeDefined()
 
-          expect(response.statusCode).toBe(200)
-          // fazer testes mais especificos usando o payload
-     })
+  const cookieWithAuthorizationClient =
+    clientLoginResponse.headers["set-cookie"]
+  const cookieWithAuthorizationUzer = uzerLoginResponse.headers["set-cookie"]
 
-     test('GET /pedidos/:id', async () => {
-          const id = '' // ID do pedido 
+  test("GET /pedidos", async () => {
+    const response = await app.inject({
+      method: "GET",
+      headers: {
+        cookie: cookieWithAuthorizationClient,
+      },
+      url: `/pedidos`,
+    })
 
-          const response = await app.inject({
-               method: 'GET',
-               headers: {
-                    "set-cookie": responseCookie.headers.cookie
-               },
-               url: `${publicURL}/pedidos/${id}`
-          })
+    expect(response.statusCode).toBe(200)
+  })
 
-          expect(response.statusCode).toBe(200)
-           // fazer testes mais especificos usando o payload
-     })
+  test("GET /pedidos/:id", async () => {
+    const id = ""
 
-     test('GET /pedidos/uzer', async () => {
-          const response = await app.inject({
-               method: 'GET',
-               headers: {
-                    "set-cookie": responseCookie.headers.cookie
-               },
-               url: `${publicURL}/pedidos/uzer`
-          })
+    const response = await app.inject({
+      method: "GET",
+      headers: {
+        cookie: cookieWithAuthorizationClient,
+      },
+      url: `/pedidos/${id}`,
+    })
 
-          expect(response.statusCode).toBe(200)
-           // fazer testes mais especificos usando o payload
-     })
+    expect(response.statusCode).toBe(200)
+  })
 
-     test('GET /pedidos/cliente/:id', async () => {
-          const id = '' // ID do pedido 
+  test("GET /pedidos/uzer", async () => {
+    const response = await app.inject({
+      method: "GET",
+      headers: {
+        cookie: cookieWithAuthorizationClient,
+      },
+      url: `/pedidos/uzer`,
+    })
 
-          const response = await app.inject({
-               method: 'GET',
-               headers: {
-                    "set-cookie": responseCookie.headers.cookie
-               },
-               url: `${publicURL}/pedidos/cliente/${id}`
-          })
+    expect(response.statusCode).toBe(200)
+  })
 
-          expect(response.statusCode).toBe(200)
-           // fazer testes mais especificos usando o payload
-     })
+  test("GET /pedidos/cliente/:id", async () => {
+    const id = JSON.parse(clientLoginResponse.body).user.id
 
-     test('GET /pedidosAtivos', async () => {
-          const response = await app.inject({
-               method: 'GET',
-               headers: {
-                    "set-cookie": responseCookie.headers.cookie
-               },
-               url: `${publicURL}/pedidosAtivos`
-          })
+    const response = await app.inject({
+      method: "GET",
+      headers: {
+        cookie: cookieWithAuthorizationClient,
+      },
+      url: `/pedidos/cliente/${id}`,
+    })
 
-          expect(response.statusCode).toBe(200)
-           // fazer testes mais especificos usando o payload
-     })
+    expect(response.statusCode).toBe(200)
+  })
 
-     test('PUT /pedidos/finish/:id', async () => {
-          const id = '' // ID do pedido
-          const response = await app.inject({
-               method: 'PUT',
-               headers: {
-                    "set-cookie": responseCookie.headers.cookie
-               },
-               url: `${publicURL}/pedidos/finish/${id}`
-          })
+  test("GET /pedidosAtivos", async () => {
+    const response = await app.inject({
+      method: "GET",
+      headers: {
+        cookie: cookieWithAuthorizationClient,
+      },
+      url: `/pedidosAtivos`,
+    })
 
-          expect(response.statusCode).toBe(200)
-           // fazer testes mais especificos usando o payload
-     })
+    expect(response.statusCode).toBe(200)
+  })
 
-     test('POST /create/pedido', async () => {
-          const response = await app.inject({
-               method: 'POST',
-               headers: {
-                    "set-cookie": responseCookie.headers.cookie
-               },
-               body: {
-                    categoria: "",
-                    servicoId: "",
-                    valor: "",
-                    titulo: "",
-               },
-               url: `${publicURL}/create/pedido`
-          })
+  let pedido: Pedidos
 
-          expect(response.statusCode).toBe(201)
-           // fazer testes mais especificos usando o payload
-     })
+  test("POST /create/pedido", async () => {
+    const category = "Programação"
+    const arrayOfServices =
+      await serviceRepository.getServicesByCategory(category)
+    const service = arrayOfServices[0]
 
-     test('PUT /pedido/avaliar/:id', async () => {
-          const id = '' // ID do pedido
-          const response = await app.inject({
-               method: 'PUT',
-               headers: {
-                    "set-cookie": responseCookie.headers.cookie
-               },
-               body: {
-                    avalicao: 5
-               },
-               url: `${publicURL}/pedido/avaliar/${id}`
-          })
+    const response = await app.inject({
+      method: "POST",
+      headers: {
+        cookie: cookieWithAuthorizationClient,
+      },
+      body: {
+        categoria: category,
+        servicoId: service.id,
+        valor: 123,
+        titulo: "Teste de serviço",
+      },
+      url: `/create/pedido`,
+    })
 
-          expect(response.statusCode).toBe(200)
-           // fazer testes mais especificos usando o payload
-     })
+    expect(JSON.parse(response.body)).toHaveProperty("id")
+    expect(response.statusCode).toBe(201)
 
-     test('PUT /pedido/assignUzer/:id', async () => {
-          const id = '' // ID do pedido
-          const response = await app.inject({
-               method: 'PUT',
-               headers: {
-                    "set-cookie": responseCookie.headers.cookie
-               },
-               body: {
-                    valor: 5,
-                    idUzer: '' // ID do uzer
-               },
-               url: `${publicURL}/pedido/assignUzer/${id}`
-          })
+    pedido = JSON.parse(response.body)
+  })
 
-          expect(response.statusCode).toBe(200)
-           // fazer testes mais especificos usando o payload
-     })
+  test("PUT /pedidos/finish/:id", async () => {
+    const id = pedido.id
+    const response = await app.inject({
+      method: "PUT",
+      headers: {
+        cookie: cookieWithAuthorizationUzer,
+      },
+      url: `/pedidos/finish/${id}`,
+    })
+
+    expect(response.statusCode).toBe(200)
+  })
+
+  test("PUT /pedido/avaliar/:id", async () => {
+    const id = pedido.id
+    const response = await app.inject({
+      method: "PUT",
+      headers: {
+        cookie: cookieWithAuthorizationClient,
+      },
+      body: {
+        avaliacao: 5,
+      },
+      url: `/pedido/avaliar/${id}`,
+    })
+
+    expect(response.statusCode).toBe(200)
+  })
+
+  test("PUT /pedido/assignUzer/:id", async () => {
+    const id = pedido.id
+    const idUzer = JSON.parse(uzerLoginResponse.body).user.id
+    const response = await app.inject({
+      method: "PUT",
+      headers: {
+        cookie: cookieWithAuthorizationClient,
+      },
+      body: {
+        valor: 5,
+        idUzer,
+      },
+      url: `/pedido/assignUzer/${id}`,
+    })
+
+    expect(response.statusCode).toBe(200)
+  })
 })

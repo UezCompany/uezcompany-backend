@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify"
-import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
+import { orderRepository } from "@/repository/OrderRepository"
 
 export default async function GetPedidosByCliente(app: FastifyInstance) {
   app.get("/pedidos/cliente/:id", async (request, reply) => {
@@ -22,11 +22,7 @@ export default async function GetPedidosByCliente(app: FastifyInstance) {
 
     const { id } = params.parse(request.params)
 
-    const pedidos = await prisma.pedidos.findMany({
-      where: {
-        idCliente: id,
-      },
-    })
+    const pedidos = await orderRepository.getOrdersByClient(id)
     return reply.status(200).send(pedidos)
   })
 }

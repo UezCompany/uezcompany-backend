@@ -3,7 +3,7 @@ import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
 
 export default async function FinishPedido(app: FastifyInstance) {
-  app.put("/pedido/finish/:id", async (request, reply) => {
+  app.put("/pedidos/finish/:id", async (request, reply) => {
     const { token } = request.cookies
 
     if (!token) {
@@ -29,7 +29,11 @@ export default async function FinishPedido(app: FastifyInstance) {
       data: {
         status: "A AVALIAR",
         disponivel: false,
-        idUzer: decryptedToken.id,
+        uzer: {
+          connect: {
+            id: decryptedToken.id,
+          },
+        },
       },
     })
     if (!pedido) {

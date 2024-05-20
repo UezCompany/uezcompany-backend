@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify"
-import { prisma } from "@/infra/connection/prisma"
+import { orderRepository } from "@/repository/OrderRepository"
 
 export default async function GetActivePedidos(app: FastifyInstance) {
   app.get("/pedidosAtivos", async (request, reply) => {
@@ -15,11 +15,7 @@ export default async function GetActivePedidos(app: FastifyInstance) {
       return reply.status(401).send({ message: "Token inválido ou expirado." })
     }
 
-    const pedidos = await prisma.pedidos.findMany({
-      where: {
-        disponivel: true,
-      },
-    })
+    const pedidos = await orderRepository.getActiveOrders()
     return reply.status(200).send(pedidos)
   })
 }

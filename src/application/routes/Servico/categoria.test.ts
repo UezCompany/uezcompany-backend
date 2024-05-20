@@ -1,15 +1,11 @@
-import app from "@/application/server";
-import { expect, test } from "vitest";
+import app from "@/application/server"
+import { expect, test } from "vitest"
 
+test("GET /categorias", async () => {
+  const categoria = await app.inject({
+    method: "GET",
+    url: `/categorias`,
+  })
 
-const publicURL = '' // url padrão para requisição
-
-test('GET /categorias', async () => {
-     const categoria = await app.inject({
-          method: 'GET',
-          url: `${publicURL}/categorias`
-     })
-
-     expect(categoria.statusCode).toBe(200)
+  expect(categoria.statusCode).toBe(200)
 })
-
