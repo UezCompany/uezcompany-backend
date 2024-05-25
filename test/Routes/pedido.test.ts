@@ -28,8 +28,7 @@ describe("Pedido routes", async () => {
   expect(uzerLoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
   expect(uzerLoginResponse.headers["set-cookie"]).toBeDefined()
 
-  const cookieWithAuthorizationClient =
-    clientLoginResponse.headers["set-cookie"]
+  const cookieWithAuthorizationClient = clientLoginResponse.headers["set-cookie"]
   const cookieWithAuthorizationUzer = uzerLoginResponse.headers["set-cookie"]
 
   test("GET /pedidos", async () => {
