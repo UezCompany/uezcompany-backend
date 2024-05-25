@@ -6,8 +6,8 @@ describe('Notificação routes', async () => {
           method: "POST",
           url: `/login`,
           payload: {
-               email: "cliente@gmail.com",
-               senha: "cliente123",
+               email: "exemplo@gmail.com",
+               senha: "exemplo123",
           },
      })
 
@@ -31,7 +31,7 @@ describe('Notificação routes', async () => {
 
      test('POST /notifications/readall', async () => {
           const response = await app.inject({
-               method: "GET",
+               method: "POST",
                headers: {
                     cookie: cookieWithAuthorization,
                },
@@ -46,7 +46,7 @@ describe('Notificação routes', async () => {
           const id = '1'
 
           const response = await app.inject({
-               method: "GET",
+               method: "POST",
                headers: {
                     cookie: cookieWithAuthorization,
                },
