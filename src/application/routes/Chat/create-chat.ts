@@ -20,7 +20,7 @@ export default async function CreateChat(app: FastifyInstance) {
 
     const { requestedContactId } = params.parse(request.params)
 
-    const [requestedContact, meContact, chatAlreadyExists] = await Promise.all([
+    const [requestedContact, myContact, chatAlreadyExists] = await Promise.all([
       GetUserdataById(requestedContactId),
       GetUserdataById(decryptedToken.id),
       prisma.chats.findFirst({
@@ -47,7 +47,7 @@ export default async function CreateChat(app: FastifyInstance) {
       }),
     ])
 
-    if (!requestedContact || !meContact) {
+    if (!requestedContact || !myContact) {
       return reply
         .status(400)
         .send({ message: "O usuário que você deseja chamar não existe." })
@@ -60,7 +60,7 @@ export default async function CreateChat(app: FastifyInstance) {
       })
     }
 
-    if (requestedContact.tipoUsuario === meContact.tipoUsuario) {
+    if (requestedContact.tipoUsuario === myContact.tipoUsuario) {
       return reply.status(400).send({
         message: "Os dois usuários devem ser de tipos diferentes.",
       })
@@ -76,13 +76,13 @@ export default async function CreateChat(app: FastifyInstance) {
     const chat = await prisma.chats.create({
       data: {
         idCliente:
-          meContact.tipoUsuario === "CLIENTE"
-            ? meContact.id
+          myContact.tipoUsuario === "CLIENTE"
+            ? myContact.id
             : requestedContact.id,
         idUzer:
-          meContact.tipoUsuario === "CLIENTE"
+          myContact.tipoUsuario === "CLIENTE"
             ? requestedContact.id
-            : meContact.id,
+            : myContact.id,
       },
     })
 
