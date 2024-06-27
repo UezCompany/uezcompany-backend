@@ -1,62 +1,59 @@
+import { clientRepository } from "@/repository/ClientRepository"
 import { orderRepository } from "@/repository/OrderRepository"
+import { uzerRepository } from "@/repository/UzerRepository"
 import { describe, expect, test } from "vitest"
 
-describe('Order repository', () => {
-     let TestOrderRepository: any
-     let TestUzer: any
-     let TestCliente: any
+describe("Order repository", () => {
+  let TestOrderRepository: any
+  let TestUzer: any
+  let TestCliente: any
 
-     test('lista todas as ordens', () => {
-          TestOrderRepository = orderRepository.getOrders()
+  test("lista todas as ordens", async () => {
+    TestOrderRepository = await orderRepository.getOrders()
+    TestUzer = (await uzerRepository.getUzers(1, 1))[0]
+    TestCliente = (await clientRepository.getClients(1, 1))[0]
 
-          TestOrderRepository.forEach((order) => {
-               expect(order).toHaveProperty("id")
-               expect(order).toHaveProperty("tipo")
-               expect(order).toHaveProperty("Titulo")
-          })
+    TestOrderRepository.forEach((order: any) => {
+      expect(order).toHaveProperty("id")
+      expect(order).toHaveProperty("titulo")
+    })
+  })
 
-     })
+  test("lista a ordem pelo uzer", async () => {
+    const id = TestUzer.id
+    const TestOrders = await orderRepository.getOrdersByUzer(id)
 
+    TestOrders.forEach((order: any) => {
+      expect(order).toHaveProperty("id")
+      expect(order).toHaveProperty("titulo")
+    })
+  })
 
-     test('lista a ordem pelo uzer', () => {
-          const id = TestUzer.id
-          const order = orderRepository.getOrdersByUzer(id)
+  test("lista a ordem pelo cliente", async () => {
+    const id = TestCliente.id
+    const TestOrders = await orderRepository.getOrdersByUzer(id)
 
-          expect(order).toHaveProperty("id")
-          expect(order).toHaveProperty("tipo")
-          expect(order).toHaveProperty("Titulo")
-     })
+    TestOrders.forEach((order: any) => {
+      expect(order).toHaveProperty("id")
+      expect(order).toHaveProperty("titulo")
+    })
+  })
 
+  test("lista a ordem pelo id", async () => {
+    TestOrderRepository = await orderRepository.getOrders()
 
-     test('lista a ordem pelo cliente', () => {
-          const id = TestCliente.id
-          const order = orderRepository.getOrdersByUzer(id)
+    const order = await orderRepository.getOrdersById(TestOrderRepository[0].id)
 
-          expect(order).toHaveProperty("id")
-          expect(order).toHaveProperty("tipo")
-          expect(order).toHaveProperty("Titulo")
-     })
-     
-     test('lista a ordem pelo id', () => {
-          TestOrderRepository = orderRepository.getOrders()
+    expect(order).toHaveProperty("id")
+    expect(order).toHaveProperty("titulo")
+  })
 
-          const order = orderRepository.getOrdersById(TestOrderRepository[0].id)
+  test("lista a ordem pela disponibilidade", async () => {
+    TestOrderRepository = await orderRepository.getActiveOrders()
 
-          expect(order).toHaveProperty("id")
-          expect(order).toHaveProperty("tipo")
-          expect(order).toHaveProperty("Titulo")
-     })
-
-
-     test('lista a ordem pela disponibilidade', () => {
-          TestOrderRepository = orderRepository.getActiveOrders()
-
-          TestOrderRepository.forEach((order) => {
-               expect(order).toHaveProperty("id")
-               expect(order).toHaveProperty("tipo")
-               expect(order).toHaveProperty("Titulo")
-          })
-     })
-
-
+    TestOrderRepository.forEach((order: any) => {
+      expect(order).toHaveProperty("id")
+      expect(order).toHaveProperty("titulo")
+    })
+  })
 })

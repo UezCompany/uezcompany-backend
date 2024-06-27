@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify"
 import { z } from "zod"
-import { clienteRepository } from "@/repository/ClientRepository"
+import { clientRepository } from "@/repository/ClientRepository"
 
 export default async function GetClientes(app: FastifyInstance) {
   app.get("/clientes", async (request, reply) => {
@@ -28,7 +28,7 @@ export default async function GetClientes(app: FastifyInstance) {
 
     const { page, pageSize } = queryParamsSchema.parse(request.query)
 
-    const clientes = await clienteRepository.getClientes(page, pageSize)
+    const clientes = await clientRepository.getClients(page, pageSize)
     return reply.status(200).send(clientes)
   })
 }
