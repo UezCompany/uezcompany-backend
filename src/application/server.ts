@@ -90,7 +90,6 @@ app.register(ReadAllNotificacoes)
 // Chat
 app.register(CreateChat)
 app.register(GetChats)
-//Billing
 
 if (process.env.NODE_ENV !== "test") {
   console.log("CORS Habilitado. URL do domínio: " + env.FRONTEND_DOMAIN || "*")
