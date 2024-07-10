@@ -46,9 +46,10 @@ export default async function Login(app: FastifyInstance) {
       reply.setCookie("token", token, {
         httpOnly: false,
         path: "/",
-        secure: true,
-        sameSite: true,
-        maxAge: 60 * 60 * 24 * 14, // 14 dias
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        domain: ".uezcompany.com",
+        maxAge: 60 * 60 * 24 * 14,
       })
 
       console.log("Login do ip: " + request.ip)
