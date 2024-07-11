@@ -34,8 +34,33 @@ import MessageForSocket from "./routes/Chat/ws/send-message"
 import JoinSocket from "./routes/Chat/ws/join"
 import BudgetForSocket from "./routes/Chat/ws/send-budget"
 import GetPedidosById from "./routes/Pedido/get-pedidos-by-id"
+import {
+  jsonSchemaTransform,
+  serializerCompiler,
+  validatorCompiler,
+} from "fastify-type-provider-zod"
+import fastifySwagger from "@fastify/swagger"
+import fastifySwaggerUI from "@fastify/swagger-ui"
 
 const app = fastify()
+
+app.setValidatorCompiler(validatorCompiler)
+app.setSerializerCompiler(serializerCompiler)
+app.register(fastifySwagger, {
+  swagger: {
+    consumes: ["application/json"],
+    produces: ["application/json"],
+    info: {
+      title: "Uez Company Backend",
+      description: "Especificações da API para o backend da UEZ Company",
+      version: "1.1.0",
+    },
+  },
+  transform: jsonSchemaTransform,
+})
+app.register(fastifySwaggerUI, {
+  routePrefix: "/docs",
+})
 
 app.register(fastifyCors, {
   origin: true,
