@@ -28,7 +28,8 @@ describe("Pedido routes", async () => {
   expect(uzerLoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
   expect(uzerLoginResponse.headers["set-cookie"]).toBeDefined()
 
-  const cookieWithAuthorizationClient = clientLoginResponse.headers["set-cookie"]
+  const cookieWithAuthorizationClient =
+    clientLoginResponse.headers["set-cookie"]
   const cookieWithAuthorizationUzer = uzerLoginResponse.headers["set-cookie"]
 
   test("GET /pedidos", async () => {
@@ -83,13 +84,13 @@ describe("Pedido routes", async () => {
     expect(response.statusCode).toBe(200)
   })
 
-  test("GET /pedidosAtivos", async () => {
+  test("GET /pedidosativos", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
         cookie: cookieWithAuthorizationClient,
       },
-      url: `/pedidosAtivos`,
+      url: `/pedidosativos`,
     })
 
     expect(response.statusCode).toBe(200)
