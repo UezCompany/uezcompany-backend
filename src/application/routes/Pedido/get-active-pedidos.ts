@@ -2,7 +2,7 @@ import { FastifyInstance } from "fastify"
 import { orderRepository } from "@/repository/OrderRepository"
 
 export default async function GetActivePedidos(app: FastifyInstance) {
-  app.get("/pedidosAtivos", async (request, reply) => {
+  app.get("/pedidosativos", async (request, reply) => {
     const { token } = request.cookies
 
     if (!token) {
