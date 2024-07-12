@@ -3,7 +3,15 @@ import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
 
 export default async function ReadNotificacao(app: FastifyInstance) {
-  app.post("/notifications/read/:id", async (request, reply) => {
+  app.post("/notifications/read/:id",{
+    schema: {
+      summary: "View the notification by id",
+      tags: ["notificacao"],
+      params: z.object({
+        id: z.string().uuid(),
+      }),
+    }
+  }, async (request, reply) => {
     const { token } = request.cookies
     if (!token) {
       return reply.status(401).send({ message: "Token não informado" })
