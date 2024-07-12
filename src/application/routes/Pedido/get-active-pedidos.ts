@@ -1,21 +1,29 @@
 import { FastifyInstance } from "fastify"
 import { orderRepository } from "@/repository/OrderRepository"
+import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function GetActivePedidos(app: FastifyInstance) {
-  app.get("/pedidosativos", async (request, reply) => {
-    const { token } = request.cookies
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .get("/pedidosativos", {
+      schema: {
+        summary: "Get all active orders",
+        tags: ["Pedido"],
+      }
+    }, async (request, reply) => {
+      const { token } = request.cookies
 
-    if (!token) {
-      return reply.status(401).send({ message: "Token não informado" })
-    }
+      if (!token) {
+        return reply.status(401).send({ message: "Token não informado" })
+      }
 
-    const decryptedToken = app.jwt.verify(token)
+      const decryptedToken = app.jwt.verify(token)
 
-    if (!decryptedToken) {
-      return reply.status(401).send({ message: "Token inválido ou expirado." })
-    }
+      if (!decryptedToken) {
+        return reply.status(401).send({ message: "Token inválido ou expirado." })
+      }
 
-    const pedidos = await orderRepository.getActiveOrders()
-    return reply.status(200).send(pedidos)
-  })
+      const pedidos = await orderRepository.getActiveOrders()
+      return reply.status(200).send(pedidos)
+    })
 }
