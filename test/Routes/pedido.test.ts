@@ -45,7 +45,7 @@ describe("Pedido routes", async () => {
   })
 
   test("GET /pedidos/:id", async () => {
-    const id = ""
+    const id = "05674702-a26d-4c74-b8b5-f9a40e9a82eb" //colocar um id de pedido do banco
 
     const response = await app.inject({
       method: "GET",
