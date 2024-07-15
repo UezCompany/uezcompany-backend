@@ -1,9 +1,17 @@
 import { serviceRepository } from "@/repository/ServiceRepository"
 import { FastifyInstance } from "fastify"
+import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function GetCategorias(app: FastifyInstance) {
-  app.get("/categorias", async (request, reply) => {
-    const categorias = await serviceRepository.getCategories()
-    return reply.status(200).send(categorias)
-  })
+  app
+    .withTypeProvider<ZodTypeProvider>()
+    .get("/categorias", {
+      schema: {
+        summary: "Get all categories",
+        tags: ["Servico"],
+      }
+    }, async (request, reply) => {
+      const categorias = await serviceRepository.getCategories()
+      return reply.status(200).send(categorias)
+    })
 }
