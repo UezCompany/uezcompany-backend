@@ -4,17 +4,18 @@ import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function AssignPedido(app: FastifyInstance) {
-  app
-    .withTypeProvider<ZodTypeProvider>()
-    .put("/pedido/assignUzer/:id", {
+  app.withTypeProvider<ZodTypeProvider>().put(
+    "/pedido/assignUzer/:id",
+    {
       schema: {
         summary: "Assigns an order to a user by Id",
-        tags: ["Pedido"],
+        tags: ["Order"],
         params: z.object({
           id: z.string().uuid(),
         }),
-      }
-    }, async (request, reply) => {
+      },
+    },
+    async (request, reply) => {
       const { token } = request.cookies
 
       if (!token) {
@@ -24,7 +25,9 @@ export default async function AssignPedido(app: FastifyInstance) {
       const decryptedToken: any = app.jwt.verify(token)
 
       if (!decryptedToken) {
-        return reply.status(401).send({ message: "Token inválido ou expirado." })
+        return reply
+          .status(401)
+          .send({ message: "Token inválido ou expirado." })
       }
 
       const params = z.object({
@@ -64,5 +67,6 @@ export default async function AssignPedido(app: FastifyInstance) {
       }
 
       return reply.status(200).send(pedido)
-    })
+    },
+  )
 }

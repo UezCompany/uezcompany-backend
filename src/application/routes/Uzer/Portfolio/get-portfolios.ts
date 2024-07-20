@@ -8,6 +8,8 @@ export default async function GetPortfolios(app: FastifyInstance) {
     "/portfolios/:slug",
     {
       schema: {
+        summary: "Get portfolio by uzerId",
+        tags: ["Uzer", "Portfolio"],
         params: z.object({
           slug: z.string(),
         }),

@@ -4,17 +4,18 @@ import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function GetServicoById(app: FastifyInstance) {
-  app
-    .withTypeProvider<ZodTypeProvider>()
-    .get("/servicos/:id", {
+  app.withTypeProvider<ZodTypeProvider>().get(
+    "/servicos/:id",
+    {
       schema: {
         summary: "Get service by Id",
-        tags: ["Servico"],
+        tags: ["Service"],
         params: z.object({
           id: z.string().uuid(),
         }),
-      }
-    }, async (request, reply) => {
+      },
+    },
+    async (request, reply) => {
       const params = z.object({
         id: z.string().uuid(),
       })
@@ -22,5 +23,6 @@ export default async function GetServicoById(app: FastifyInstance) {
 
       const servico = await serviceRepository.getServicesById(id)
       return reply.status(200).send(servico || null)
-    })
+    },
+  )
 }

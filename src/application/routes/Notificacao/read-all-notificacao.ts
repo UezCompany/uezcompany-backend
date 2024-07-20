@@ -3,21 +3,24 @@ import { prisma } from "@/infra/connection/prisma"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function ReadAllNotificacoes(app: FastifyInstance) {
-  app
-    .withTypeProvider<ZodTypeProvider>()
-    .post("/notifications/readall", {
+  app.withTypeProvider<ZodTypeProvider>().post(
+    "/notifications/readall",
+    {
       schema: {
         summary: "View all existing notifications",
-        tags: ["notificacao"],
-      }
-    }, async (request, reply) => {
+        tags: ["Notification"],
+      },
+    },
+    async (request, reply) => {
       const { token } = request.cookies
       if (!token) {
         return reply.status(401).send({ message: "Token não informado" })
       }
       const decryptedToken: any = app.jwt.verify(token)
       if (!decryptedToken) {
-        return reply.status(401).send({ message: "Token inválido ou expirado." })
+        return reply
+          .status(401)
+          .send({ message: "Token inválido ou expirado." })
       }
 
       const notifications = await prisma.notificacoes.updateMany({
@@ -39,5 +42,6 @@ export default async function ReadAllNotificacoes(app: FastifyInstance) {
         message: "Notificações lidas",
         notifications,
       })
-    })
+    },
+  )
 }

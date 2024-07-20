@@ -5,17 +5,18 @@ import sendNotification from "@/infra/utils/sendNotification"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function AvaliarPedido(app: FastifyInstance) {
-  app
-    .withTypeProvider<ZodTypeProvider>()
-    .put("/pedido/avaliar/:id", {
+  app.withTypeProvider<ZodTypeProvider>().put(
+    "/pedido/avaliar/:id",
+    {
       schema: {
         summary: "Evaluate the order through the Id",
-        tags: ["Pedido"],
+        tags: ["Order"],
         params: z.object({
           id: z.string().uuid(),
         }),
-      }
-    }, async (request, reply) => {
+      },
+    },
+    async (request, reply) => {
       const { token } = request.cookies
 
       if (!token) {
@@ -25,7 +26,9 @@ export default async function AvaliarPedido(app: FastifyInstance) {
       const decryptedToken: any = app.jwt.verify(token)
 
       if (!decryptedToken) {
-        return reply.status(401).send({ message: "Token inválido ou expirado." })
+        return reply
+          .status(401)
+          .send({ message: "Token inválido ou expirado." })
       }
 
       const params = z.object({
@@ -75,12 +78,12 @@ export default async function AvaliarPedido(app: FastifyInstance) {
         uzer.avaliacoes.length === 0
           ? avaliacao
           : (uzer.avaliacoes.reduce(
-            (acc, curr) => Number(acc) + Number(curr),
-            0,
-          ) +
-            Number(avaliacao)) /
-          uzer.avaliacoes.length +
-          1
+              (acc, curr) => Number(acc) + Number(curr),
+              0,
+            ) +
+              Number(avaliacao)) /
+              uzer.avaliacoes.length +
+            1
       const uzerAvaliado = await prisma.uzers.update({
         where: {
           id: uzer.id,
@@ -103,5 +106,6 @@ export default async function AvaliarPedido(app: FastifyInstance) {
       return reply
         .status(200)
         .send({ message: "O pedido foi avaliado com sucesso.", pedido })
-    })
+    },
+  )
 }
