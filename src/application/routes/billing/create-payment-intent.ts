@@ -4,9 +4,9 @@ import { ZodTypeProvider } from "fastify-type-provider-zod"
 import { z } from "zod"
 
 export default async function CreatePaymentIntent(app: FastifyInstance) {
-  app
-    .withTypeProvider<ZodTypeProvider>()
-    .post("/create/paymentIntent", {
+  app.withTypeProvider<ZodTypeProvider>().post(
+    "/create/paymentIntent",
+    {
       schema: {
         summary: "Creates the amounts and fees to be charged upon payment",
         tags: ["Payment"],
@@ -14,9 +14,10 @@ export default async function CreatePaymentIntent(app: FastifyInstance) {
           amount: z.number(),
           currency: z.string().default("brl"),
           serviceId: z.string(),
-        })
+        }),
       },
-    }, async (request, reply) => {
+    },
+    async (request, reply) => {
       const createPaymentBody = z.object({
         amount: z.number(),
         currency: z.string().default("brl"),
@@ -41,5 +42,6 @@ export default async function CreatePaymentIntent(app: FastifyInstance) {
         console.error("Error creating payment:", error)
         return reply.status(500).send({ error: "Internal server error" })
       }
-    })
+    },
+  )
 }

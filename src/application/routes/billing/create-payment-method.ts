@@ -4,18 +4,19 @@ import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function CreatePaymentMethod(app: FastifyInstance) {
-  app
-    .withTypeProvider<ZodTypeProvider>()
-    .post("/create/paymentMethod", {
+  app.withTypeProvider<ZodTypeProvider>().post(
+    "/create/paymentMethod",
+    {
       schema: {
         summary: "Create a new payment method",
         tags: ["Payment"],
         body: z.object({
           paymentMethodId: z.string(),
           customerId: z.string(),
-        })
+        }),
       },
-    }, async (request, reply) => {
+    },
+    async (request, reply) => {
       const createPaymentMethodBody = z.object({
         paymentMethodId: z.string(),
         customerId: z.string(),
@@ -36,5 +37,6 @@ export default async function CreatePaymentMethod(app: FastifyInstance) {
         console.error("Error creating payment method:", error)
         reply.status(500).send({ error: "Internal server error" })
       }
-    })
+    },
+  )
 }

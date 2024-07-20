@@ -6,17 +6,18 @@ import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function CapturePayment(app: FastifyInstance) {
-  app
-    .withTypeProvider<ZodTypeProvider>()
-    .post("/release-payment", {
+  app.withTypeProvider<ZodTypeProvider>().post(
+    "/release-payment",
+    {
       schema: {
         summary: "Capture payment",
         tags: ["Payment"],
         body: z.object({
           paymentIntentId: z.string(),
-        })
+        }),
       },
-    }, async (request, reply) => {
+    },
+    async (request, reply) => {
       const confirmPaymentBody = z.object({
         paymentIntentId: z.string(),
       })
@@ -29,5 +30,6 @@ export default async function CapturePayment(app: FastifyInstance) {
         console.error("Error releasing payment:", error)
         reply.status(500).send({ error: "Internal server error" })
       }
-    })
+    },
+  )
 }

@@ -4,21 +4,24 @@ import { GetUsertypeById } from "@/infra/utils/getUsertypeById"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function GetChats(app: FastifyInstance) {
-  app
-    .withTypeProvider<ZodTypeProvider>()
-    .get("/chats", {
+  app.withTypeProvider<ZodTypeProvider>().get(
+    "/chats",
+    {
       schema: {
         summary: "Get all chats",
         tags: ["Chat"],
-      }
-    }, async (request, reply) => {
+      },
+    },
+    async (request, reply) => {
       const { token } = request.cookies
       if (!token) {
         return reply.status(401).send({ message: "Token não informado" })
       }
       const decryptedToken: { id: string } = app.jwt.verify(token)
       if (!decryptedToken) {
-        return reply.status(401).send({ message: "Token inválido ou expirado." })
+        return reply
+          .status(401)
+          .send({ message: "Token inválido ou expirado." })
       }
 
       const myUsertype = await GetUsertypeById(decryptedToken.id)
@@ -67,5 +70,6 @@ export default async function GetChats(app: FastifyInstance) {
 
         return reply.status(200).send(chats)
       }
-    })
+    },
+  )
 }

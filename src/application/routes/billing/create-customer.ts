@@ -4,21 +4,24 @@ import { FastifyInstance } from "fastify"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function CreateCustomer(app: FastifyInstance) {
-  app
-    .withTypeProvider<ZodTypeProvider>()
-    .post("/create/customer", {
+  app.withTypeProvider<ZodTypeProvider>().post(
+    "/create/customer",
+    {
       schema: {
         summary: "Create a customer",
         tags: ["Payment"],
       },
-    }, async (request, reply) => {
+    },
+    async (request, reply) => {
       const { token } = request.cookies
       if (!token) {
         return reply.status(401).send({ message: "Token não informado" })
       }
       const decryptedToken: { id: string } = app.jwt.verify(token)
       if (!decryptedToken) {
-        return reply.status(401).send({ message: "Token inválido ou expirado." })
+        return reply
+          .status(401)
+          .send({ message: "Token inválido ou expirado." })
       }
 
       // Aqui você pode adicionar a lógica para criar o cliente
@@ -62,5 +65,6 @@ export default async function CreateCustomer(app: FastifyInstance) {
         console.error("Error creating customer:", error)
         reply.status(500).send({ error: "Internal server error" })
       }
-    })
+    },
+  )
 }
