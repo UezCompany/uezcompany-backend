@@ -27,8 +27,6 @@ export default function MessageForSocket(socket: Socket) {
       },
     })
 
-    console.log(socket.rooms.has(receiverId))
-
     return socket.to(receiverId).emit("message", newMessage)
   })
 }

@@ -41,11 +41,13 @@ import {
 } from "fastify-type-provider-zod"
 import fastifySwagger from "@fastify/swagger"
 import fastifySwaggerUI from "@fastify/swagger-ui"
+import { errorHandler } from "./error-handle"
 
 const app = fastify()
 
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
+app.setErrorHandler(errorHandler)
 app.register(fastifySwagger, {
   swagger: {
     consumes: ["application/json"],
@@ -135,15 +137,12 @@ app.ready(() => {
     if (!decryptedToken) {
       return
     }
-    // console.log("Token > id: ", decryptedToken.id)
-    console.log("Socket conectado: ", socket.id)
     socket.data.userId = decryptedToken.id
     BudgetForSocket(socket)
     JoinSocket(socket)
     MessageForSocket(socket)
     socket.on("disconnect", () => {
       socket.disconnect()
-      console.log("Socket desconectado: ", socket.id)
     })
   })
 })

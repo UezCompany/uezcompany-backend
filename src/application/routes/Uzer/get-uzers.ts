@@ -2,6 +2,7 @@ import { FastifyInstance } from "fastify"
 import { z } from "zod"
 import { uzerRepository } from "@/repository/UzerRepository"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
+import { uzerSchema } from "@/infra/lib/ZodSchemas/Response/UzerSchema"
 
 export default async function GetUzers(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
@@ -19,6 +20,12 @@ export default async function GetUzers(app: FastifyInstance) {
             page: data.page ? parseInt(data.page, 10) : 1,
             pageSize: data.pageSize ? parseInt(data.pageSize, 10) : 50,
           })),
+        response: {
+          200: z.array(uzerSchema),
+          401: z.object({
+            message: z.string(),
+          }),
+        },
       },
     },
     async (request, reply) => {

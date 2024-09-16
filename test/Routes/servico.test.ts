@@ -17,7 +17,6 @@ describe("Serviço Routes", () => {
 
   test("GET /servicos/:id", async () => {
     const id = TestServiceRoutes.id // ID de um serviço
-    console.log(id)
     const servico = await app.inject({
       method: "GET",
       url: `/servicos/${id}`,

@@ -24,8 +24,6 @@ describe("Cliente routes", async () => {
       },
       url: `/clientes`,
     })
-    console.log(response)
-
     expect(response.statusCode).toBe(200)
   })
 

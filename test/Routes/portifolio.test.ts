@@ -1,8 +1,7 @@
 import app from "@/application/server"
 import { describe, expect, test } from "vitest"
 
-
-describe('Portifolio Route', async () => {
+describe("Portifolio Route", async () => {
   const userLoginResponse = await app.inject({
     method: "POST",
     url: `/login`,
@@ -28,10 +27,7 @@ describe('Portifolio Route', async () => {
       url: `/portfolios/${slug}`,
     })
 
-    console.log(response)
-
     expect(response.statusCode).toBe(200)
     // Fazer testes do retorno payload
   })
-
 })

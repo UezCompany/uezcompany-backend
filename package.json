@@ -5,15 +5,17 @@
   "main": "src/index.ts",
   "scripts": {
     "migrate": "npx prisma migrate deploy",
-    "seed": "tsx prisma/seed.ts",
     "build": "npx tsup ./src",
     "start": "node --env-file .env ./dist/index.js",
-    "dev": "tsx --env-file .env --watch ./src/index.ts",
+    "dev": "tsx watch --env-file .env ./src/index.ts",
     "husky:prepare": "husky install",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "test:ui": "vitest --ui --coverage",
     "test:coverage": "vitest --run --coverage"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "keywords": [],
   "author": "UEZ COMPANY",
@@ -29,11 +31,9 @@
     "@fastify/swagger-ui": "^4.0.0",
     "@prisma/client": "^5.13.0",
     "bcrypt": "^5.1.1",
-    "dotenv": "^16.3.1",
     "fastify": "^4.26.1",
     "fastify-socket.io": "5.0.0",
     "fastify-type-provider-zod": "^2.0.0",
-    "prisma": "^5.13.0",
     "socket.io": "^4.7.2",
     "stripe": "^14.20.0",
     "zod": "^3.22.4"
@@ -54,6 +54,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
     "prettier": "^3.1.1",
+    "prisma": "^5.13.0",
     "prisma-erd-generator": "^1.11.2",
     "supertest": "^6.3.3",
     "tsc-alias": "^1.8.8",

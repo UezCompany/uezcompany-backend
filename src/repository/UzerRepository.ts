@@ -1,3 +1,4 @@
+import { Uzer } from "@/infra/lib/ZodSchemas/Response/UzerSchema"
 import { prisma } from "../infra/connection/prisma"
 
 interface IUzerRepository {
@@ -9,7 +10,7 @@ interface IUzerRepository {
 class UzerRepository implements IUzerRepository {
   async getUzers(page: number, pageSize: number) {
     const offset = (page <= 1 ? 0 : page - 1) * pageSize
-    return await prisma.uzers.findMany({
+    return (await prisma.uzers.findMany({
       skip: offset,
       take: pageSize,
       select: {
@@ -33,14 +34,24 @@ class UzerRepository implements IUzerRepository {
         quantidadePedidos: true,
         photoUrl: true,
         quantidadePedidosRealizados: true,
-        idServico: true,
         avaliacao: true,
         lastOnline: true,
         lastLogin: true,
         bannerUrl: true,
         bio: true,
+        servico: {
+          select: {
+            categoria: true,
+            nome: true,
+            id: true,
+            quantidadeFeitos: true,
+            tipo: true,
+            taxaPadrao: true,
+            descricao: true,
+          },
+        },
       },
-    })
+    })) as Uzer[]
   }
 
   async getUzerByUsername(username: string) {
@@ -67,12 +78,22 @@ class UzerRepository implements IUzerRepository {
         quantidadePedidos: true,
         photoUrl: true,
         quantidadePedidosRealizados: true,
-        idServico: true,
         avaliacao: true,
         lastOnline: true,
         lastLogin: true,
         bannerUrl: true,
         bio: true,
+        servico: {
+          select: {
+            categoria: true,
+            nome: true,
+            id: true,
+            quantidadeFeitos: true,
+            tipo: true,
+            taxaPadrao: true,
+            descricao: true,
+          },
+        },
       },
     })
   }
@@ -101,12 +122,22 @@ class UzerRepository implements IUzerRepository {
         quantidadePedidos: true,
         photoUrl: true,
         quantidadePedidosRealizados: true,
-        idServico: true,
         avaliacao: true,
         lastOnline: true,
         lastLogin: true,
         bannerUrl: true,
         bio: true,
+        servico: {
+          select: {
+            categoria: true,
+            nome: true,
+            id: true,
+            quantidadeFeitos: true,
+            tipo: true,
+            taxaPadrao: true,
+            descricao: true,
+          },
+        },
       },
     })
   }

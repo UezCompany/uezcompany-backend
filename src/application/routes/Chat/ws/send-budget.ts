@@ -34,8 +34,6 @@ export default function BudgetForSocket(socket: Socket) {
       },
     })
 
-    console.log(socket.rooms.has(receiverId))
-
     socket.to(myId).emit("message", newMessage)
     return socket.to(receiverId).emit("message", newMessage)
   })
