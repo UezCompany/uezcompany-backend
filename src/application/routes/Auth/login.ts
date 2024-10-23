@@ -3,6 +3,7 @@ import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
 import bcrypt from "bcrypt"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
+import { defaultAuthTokenConfig } from "@/infra/utils/cookies/defaultAuthTokenConfig"
 
 export default async function Login(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -51,14 +52,7 @@ export default async function Login(app: FastifyInstance) {
 
         const token = app.jwt.sign({ id: user.id })
 
-        reply.setCookie("token", token, {
-          httpOnly: false,
-          path: "/",
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
-          domain: ".uezcompany.com",
-          maxAge: 60 * 60 * 24 * 14,
-        })
+        reply.setCookie("token", token, defaultAuthTokenConfig)
 
         console.log("Login do ip: " + request.ip)
 

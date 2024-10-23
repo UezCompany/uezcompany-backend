@@ -1,6 +1,6 @@
 # uez-api
 
-A uez api é uma aplicação de **networkring**.
+A uez api é uma aplicação de **networking**.
 
 A ferramenta permite que um usuário se cadastre seja como o prestador de serviços(Uzer), ou alguém que necessita de um serviço(Cliente).
 
@@ -30,15 +30,15 @@ O sistema gerenciará todo o fluxo, permitindo com que o Cliente possa acompanha
 
 ### Requisitos não-funcionais
 
-- [x] O cadastro do pode ser feito via Google;
+- [x] O cadastro pode ser feito via Google;
 
 ## Documentação da API (Swagger)
 
-Para documentação da API, acesse o link: [https://api.uezcompany.com/docs](https://api.uezcompany.com/docs)
+Para acessar a documentação da API, acesse o link: [https://api.uezcompany.com/docs](https://api.uezcompany.com/docs)
 
 ## Banco de dados
 
-Nessa aplicação vamos utilizar banco de dados relacional (SQL). Para ambiente de desenvolvimento seguiremos com o PostgreSQL pela facilidade do ambiente.
+Nessa aplicação utilizamos o PostgreSQL como banco de dados. Para ambiente de desenvolvimento seguiremos com o PostgreSQL pela facilidade de configuração via docker.
 
 ### Diagrama ERD
 

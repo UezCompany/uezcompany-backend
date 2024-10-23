@@ -29,6 +29,7 @@ export default async function Register(app: FastifyInstance) {
           idServico: z.optional(z.string()),
           usertype: z.enum(["UZER", "CLIENTE"]),
           username: z.string(),
+          photoUrl: z.optional(z.string().url()),
         }),
       },
     },
@@ -50,6 +51,7 @@ export default async function Register(app: FastifyInstance) {
         idServico,
         usertype,
         username,
+        photoUrl,
       } = request.body
 
       switch (usertype) {
@@ -112,6 +114,7 @@ export default async function Register(app: FastifyInstance) {
                   id: idServico,
                 },
               },
+              photoUrl: photoUrl,
             },
           })
 
@@ -131,10 +134,10 @@ export default async function Register(app: FastifyInstance) {
         }
         case "CLIENTE": {
           const [
-            prevClienteByEmail,
-            prevClienteByCpf,
-            prevClienteByTelefone,
-            prevClienteByUsername,
+            prevClientByEmail,
+            prevClientByCpf,
+            prevClientByTelefone,
+            prevClientByUsername,
           ] = await Promise.all([
             prisma.clientes.findUnique({ where: { email } }),
             prisma.clientes.findUnique({ where: { cpf } }),
@@ -144,10 +147,10 @@ export default async function Register(app: FastifyInstance) {
 
           // Se algum dos campos já existe, retornar uma resposta adequada
           if (
-            prevClienteByEmail ||
-            prevClienteByCpf ||
-            prevClienteByTelefone ||
-            prevClienteByUsername
+            prevClientByEmail ||
+            prevClientByCpf ||
+            prevClientByTelefone ||
+            prevClientByUsername
           ) {
             return reply.status(400).send({
               message:
@@ -155,7 +158,7 @@ export default async function Register(app: FastifyInstance) {
             })
           }
 
-          const newCliente = await prisma.clientes.create({
+          const newClient = await prisma.clientes.create({
             data: {
               nome,
               email,
@@ -173,10 +176,11 @@ export default async function Register(app: FastifyInstance) {
               telefone,
               complemento,
               username,
+              photoUrl: photoUrl,
             },
           })
 
-          if (!newCliente) {
+          if (!newClient) {
             return reply.status(400).send({ message: "Erro ao cadastrar." })
           }
 

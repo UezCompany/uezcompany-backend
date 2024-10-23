@@ -42,6 +42,7 @@ import {
 import fastifySwagger from "@fastify/swagger"
 import fastifySwaggerUI from "@fastify/swagger-ui"
 import { errorHandler } from "./error-handle"
+import LoginWithGoogle from "./routes/Auth/login-google"
 
 const app = fastify()
 
@@ -88,6 +89,7 @@ app.get("/", (req, reply) => {
 app.register(Register)
 app.register(Login)
 app.register(Logout)
+app.register(LoginWithGoogle)
 // Cliente
 app.register(GetClientes)
 app.register(GetClienteBySlug)
