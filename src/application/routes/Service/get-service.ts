@@ -21,8 +21,8 @@ export default async function GetService(app: FastifyInstance) {
       })
       const { id } = params.parse(request.params)
 
-      const servico = await serviceRepository.getServicesById(id)
-      return reply.status(200).send(servico || null)
+      const service = await serviceRepository.getServicesById(id)
+      return reply.status(200).send(service || null)
     },
   )
 }

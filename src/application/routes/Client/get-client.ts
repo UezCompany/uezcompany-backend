@@ -3,7 +3,7 @@ import { z } from "zod"
 import { clientRepository } from "@/repository/ClientRepository"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function GetClienteBySlug(app: FastifyInstance) {
+export default async function GetClientBySlug(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
     "/clients/:slug",
     {
@@ -36,17 +36,17 @@ export default async function GetClienteBySlug(app: FastifyInstance) {
       const { success } = uuidSchema.safeParse(slug)
 
       if (!success) {
-        const cliente = await clientRepository.getClientByUsername(slug)
-        if (!cliente) {
+        const client = await clientRepository.getClientByUsername(slug)
+        if (!client) {
           return reply.status(404).send({ message: "Usuário não encontrado" })
         }
-        return reply.status(200).send(cliente)
+        return reply.status(200).send(client)
       } else {
-        const cliente = await clientRepository.getClientById(slug)
-        if (!cliente) {
+        const client = await clientRepository.getClientById(slug)
+        if (!client) {
           return reply.status(404).send({ message: "Usuário não encontrado" })
         }
-        return reply.status(200).send(cliente)
+        return reply.status(200).send(client)
       }
     },
   )

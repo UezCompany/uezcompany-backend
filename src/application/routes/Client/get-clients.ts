@@ -3,7 +3,7 @@ import { z } from "zod"
 import { clientRepository } from "@/repository/ClientRepository"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function GetClientes(app: FastifyInstance) {
+export default async function GetClients(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
     "/clients",
     {
@@ -38,8 +38,8 @@ export default async function GetClientes(app: FastifyInstance) {
 
       const { page, pageSize } = request.query
 
-      const clientes = await clientRepository.getClients(page, pageSize)
-      return reply.status(200).send(clientes)
+      const clients = await clientRepository.getClients(page, pageSize)
+      return reply.status(200).send(clients)
     },
   )
 }

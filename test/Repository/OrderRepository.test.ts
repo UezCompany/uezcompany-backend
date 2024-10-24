@@ -8,12 +8,12 @@ const fields = ["id", "title", "description", "status"]
 describe("Order repository", () => {
   let TestOrderRepository: any
   let TestUzer: any
-  let TestCliente: any
+  let TestClient: any
 
   test("lista todas as ordens", async () => {
     TestOrderRepository = await orderRepository.getOrders()
     TestUzer = (await uzerRepository.getUzers(1, 1))[0]
-    TestCliente = (await clientRepository.getClients(1, 1))[0]
+    TestClient = (await clientRepository.getClients(1, 1))[0]
 
     TestOrderRepository.forEach((order: any) => {
       fields.forEach((field) => {
@@ -34,7 +34,7 @@ describe("Order repository", () => {
   })
 
   test("List orders created by user", async () => {
-    const id = TestCliente.id
+    const id = TestClient.id
     const TestOrders = await orderRepository.getCreatedOrdersByUser(id)
 
     TestOrders.forEach((order: any) => {

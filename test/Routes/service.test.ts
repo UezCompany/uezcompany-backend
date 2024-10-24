@@ -17,21 +17,21 @@ describe("Service Routes", () => {
 
   test("GET /services/:id", async () => {
     const id = TestServiceRoutes.id // service id
-    const servico = await app.inject({
+    const service = await app.inject({
       method: "GET",
       url: `/services/${id}`,
     })
 
-    expect(servico.statusCode).toBe(200)
+    expect(service.statusCode).toBe(200)
   })
 
   test("GET /services/category/:categoryName", async () => {
     const categoria = "Programacão" // any category
-    const servico = await app.inject({
+    const service = await app.inject({
       method: "GET",
       url: `/services/category/${categoria}`,
     })
 
-    expect(servico.statusCode).toBe(200)
+    expect(service.statusCode).toBe(200)
   })
 })

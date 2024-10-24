@@ -1,7 +1,7 @@
 import { prisma } from "../infra/connection/prisma"
 
 /*
-  OBSERVAÇÃO: a obtenção de categorias está no repository de servicos pois por enquanto, só é usado uma vez, por isso está implementado aqui.
+  OBSERVAÇÃO: a obtenção de categorias está no repository de services pois por enquanto, só é usado uma vez, por isso está implementado aqui.
 */
 
 interface IServiceRepository {

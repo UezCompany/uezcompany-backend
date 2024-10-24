@@ -18,9 +18,9 @@ export default async function GetServicesByCategoryName(app: FastifyInstance) {
     async (request, reply) => {
       const { categoryName } = request.params
 
-      const servico =
+      const service =
         await serviceRepository.getServicesByCategory(categoryName)
-      return reply.status(200).send(servico)
+      return reply.status(200).send(service)
     },
   )
 }

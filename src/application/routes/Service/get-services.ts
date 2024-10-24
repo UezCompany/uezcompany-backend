@@ -12,8 +12,8 @@ export default async function GetServices(app: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      const servicos = await serviceRepository.getServices()
-      return reply.status(200).send(servicos)
+      const services = await serviceRepository.getServices()
+      return reply.status(200).send(services)
     },
   )
 }
