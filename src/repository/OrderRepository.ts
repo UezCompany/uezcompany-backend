@@ -10,33 +10,33 @@ interface IOrderRepository {
 
 class OrderRepository implements IOrderRepository {
   async getOrders() {
-    return await prisma.pedidos.findMany()
+    return await prisma.order.findMany()
   }
 
   async getOrdersByUzer(id: number | string) {
-    return await prisma.pedidos.findMany({
+    return await prisma.order.findMany({
       where: {
-        idUzer: String(id),
+        uzerId: String(id),
       },
     })
   }
 
   async getOrdersByClient(id: number | string) {
-    return await prisma.pedidos.findMany({
+    return await prisma.order.findMany({
       where: {
-        idCliente: String(id),
+        clientId: String(id),
       },
     })
   }
 
   async getOrdersById(id: number | string) {
-    return await prisma.pedidos.findUnique({ where: { id: String(id) } })
+    return await prisma.order.findUnique({ where: { id: String(id) } })
   }
 
   async getActiveOrders() {
-    return await prisma.pedidos.findMany({
+    return await prisma.order.findMany({
       where: {
-        disponivel: true,
+        available: true,
       },
     })
   }

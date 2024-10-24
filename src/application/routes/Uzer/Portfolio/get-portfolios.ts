@@ -38,7 +38,7 @@ export default async function GetPortfolios(app: FastifyInstance) {
       if (!success) {
         const portfolio = await prisma.portfolio.findMany({
           where: {
-            pedido: {
+            order: {
               uzer: {
                 username: slug,
               },
@@ -49,14 +49,14 @@ export default async function GetPortfolios(app: FastifyInstance) {
       } else {
         const portfolio = await prisma.portfolio.findMany({
           where: {
-            pedido: {
+            order: {
               uzer: {
                 id: slug,
               },
             },
           },
           include: {
-            pedido: true,
+            order: true,
           },
         })
         return reply.status(200).send(portfolio)

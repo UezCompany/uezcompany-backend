@@ -4,6 +4,7 @@ generator client {
 
 generator erd {
   provider = "prisma-erd-generator"
+  output   = "../.github/assets/ERD.svg"
 }
 
 datasource db {
@@ -11,171 +12,145 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Clientes {
-  id                String      @id @default(uuid())
-  username          String      @unique
-  nome              String
-  email             String      @unique
-  cpf               String      @unique
-  senha             String
-  situacao          Situacao
-  motivoBloqueio    String?
-  cep               String
-  logradouro        String
-  numero            Int
-  complemento       String?
-  bairro            String
-  cidade            String
-  estado            String
-  dataNascimento    String
-  dataCadastro      DateTime    @default(now())
-  telefone          String
-  tipoUsuario       TipoUsuario
-  quantidadePedidos Int? //mudar depois
-  photoUrl          String      @default("https://cdn-icons-png.flaticon.com/512/74/74472.png")
-  lastOnline        DateTime?   @default(now())
-  lastLogin         DateTime?
-  pedidos           Pedidos[]
-  chats             Chats[]
-  favoriteUzers     Uzers[]
+model User {
+  id                      String         @id @default(uuid())
+  username                String         @unique
+  name                    String
+  email                   String         @unique
+  password                String?
+  cpf                     String?        @unique
+  address                 Address?       @relation(fields: [addressId], references: [id])
+  status                  STATUS         @default(ACTIVE)
+  block_reason            String?
+  birth_date              String
+  created_at              DateTime       @default(now())
+  phone                   String?
+  usertype                USERTYPE
+  orders_amount           Int?
+  image                   String         @default("https://cdn-icons-png.flaticon.com/512/74/74472.png")
+  completed_orders_amount Int?
+  service                 Service?       @relation(fields: [serviceId], references: [id])
+  serviceId               String?
+  rating                  Float          @default(0.0)
+  ratings                 Float[]        @default([])
+  last_online             DateTime?      @default(now())
+  last_login              DateTime?
+  banner                  String?        @default("https://uezcompanys3.s3.us-east-2.amazonaws.com/defaultbanner.jpg")
+  bio                     String?        @default("Usuario criado na UezCompany, somente ele mesmo pode edita-lo.")
+  addressId               String?
+  owner_orders            Order[]        @relation("client")
+  assigned_orders         Order[]        @relation("assigned_uzer")
+  chats                   Chat[]         @relation("UserChats")
+  notifications           Notification[]
 }
 
-model Uzers {
-  id                          String      @id @default(uuid())
-  username                    String      @unique
-  nome                        String
-  email                       String      @unique
-  cpf                         String      @unique
-  senha                       String
-  situacao                    Situacao
-  motivoBloqueio              String?
-  cep                         String
-  logradouro                  String
-  numero                      Int
-  complemento                 String?
-  bairro                      String
-  cidade                      String
-  estado                      String
-  dataNascimento              String
-  dataCadastro                DateTime    @default(now())
-  telefone                    String
-  tipoUsuario                 TipoUsuario
-  quantidadePedidos           Int?
-  photoUrl                    String      @default("https://cdn-icons-png.flaticon.com/512/74/74472.png")
-  quantidadePedidosRealizados Int?
-  servico                     Servicos    @relation(fields: [idServico], references: [id])
-  idServico                   String
-  avaliacao                   Float       @default(0.0)
-  avaliacoes                  Float[]     @default([])
-  lastOnline                  DateTime?   @default(now())
-  lastLogin                   DateTime?
-  Pedidos                     Pedidos[]
-  bannerUrl                   String?     @default("https://uezcompanys3.s3.us-east-2.amazonaws.com/defaultbanner.jpg")
-  bio                         String?     @default("Uzer criado na UezCompany, somente um Uzer pode edita-lo.")
-  chats                       Chats[]
-  cliente                     Clientes?   @relation(fields: [idCliente], references: [id])
-  idCliente                   String?
+model Service {
+  id                      String      @id @default(uuid())
+  name                    String      @unique
+  type                    SERVICETYPE
+  category                Category    @relation(fields: [categoryId], references: [id])
+  description             String      @default("Serviço oferecido pela UezCompany")
+  completed_orders_amount Int?        @default(0)
+  default_tax             Float       @default(5.0)
+  orders                  Order[]
+  users                   User[]
+  categoryId              String
 }
 
-model Servicos {
-  id               String      @id @default(uuid())
-  nome             String      @unique
-  tipo             TipoServico
-  categoria        Categorias  @relation(fields: [idCategoria], references: [id])
-  descricao        String      @default("Serviço oferecido pela UezCompany")
-  quantidadeFeitos Int         @default(0)
-  taxaPadrao       Float       @default(5.0)
-  Pedidos          Pedidos[]
-  Uzers            Uzers[]
-  idCategoria      String
-}
-
-model Categorias {
-  id       String     @id @default(uuid())
-  nome     String     @unique
-  Servicos Servicos[]
-}
-
-model Pedidos {
-  id              String      @id @default(uuid())
-  tipo            TipoServico
-  servico         Servicos    @relation(fields: [idServico], references: [id])
-  titulo          String
-  descricao       String      @default("Pedido criado na UezCompany, somente um Uzer pode finaliza-lo.")
-  status          String      @default("A REALIZAR")
-  uzer            Uzers?      @relation(fields: [idUzer], references: [id])
-  idServico       String
-  idUzer          String?
-  disponivel      Boolean     @default(true)
-  dataCriacao     DateTime    @default(now())
-  dataFinalizacao DateTime?
-  valor           Float       @default(0.0)
-  images          String[]
-  avaliacao       Float       @default(0.0)
-  avaliado        Boolean     @default(false)
-  cliente         Clientes    @relation(fields: [idCliente], references: [id])
-  idCliente       String
-  Portfolio       Portfolio[]
-  Messages        Messages[]
+model Order {
+  id          String      @id @default(uuid())
+  service     Service     @relation(fields: [serviceId], references: [id])
+  serviceId   String
+  title       String
+  description String      @default("Pedido criado na UezCompany, somente um Uzer pode finaliza-lo.")
+  status      String      @default("A REALIZAR")
+  available   Boolean     @default(true)
+  created_at  DateTime    @default(now())
+  end_date    DateTime?
+  value       Float       @default(0.0)
+  images      String[]
+  rating      Float       @default(0.0)
+  rated       Boolean     @default(false)
+  Portfolio   Portfolio[]
+  Messages    Message[]
+  client      User        @relation("client", fields: [clientId], references: [id])
+  clientId    String
+  uzer        User?       @relation("assigned_uzer", fields: [uzerId], references: [id])
+  uzerId      String?
 }
 
 model Portfolio {
-  id       String  @id @default(uuid())
-  pedido   Pedidos @relation(fields: [idPedido], references: [id])
-  idPedido String
+  id      String @id @default(uuid())
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String
 }
 
-model Notificacoes {
+model Notification {
   id         String   @id @default(uuid())
+  receiver   User     @relation(fields: [receiverId], references: [id], onDelete: Cascade)
   type       String
   content    String
-  createdAt  DateTime @default(now())
+  created_at DateTime @default(now())
   readed     Boolean  @default(false)
   receiverId String
 }
 
-model Chats {
-  id        String     @id @default(uuid())
-  cliente   Clientes   @relation(fields: [idCliente], references: [id])
-  uzer      Uzers      @relation(fields: [idUzer], references: [id])
-  idCliente String
-  idUzer    String
-  messages  Messages[]
-  createdAt DateTime   @default(now())
+model Chat {
+  id         String    @id @default(uuid())
+  users      User[]    @relation("UserChats")
+  messages   Message[]
+  created_at DateTime  @default(now())
 }
 
-model Messages {
-  id         String       @id @default(uuid())
-  type       TipoMensagem @default(TEXT)
+model Message {
+  id         String      @id @default(uuid())
+  type       MESSAGETYPE @default(TEXT)
   content    String
-  createdAt  DateTime     @default(now())
-  readed     Boolean      @default(false)
+  created_at DateTime    @default(now())
+  readed     Boolean     @default(false)
   senderId   String
   receiverId String
-  Chat       Chats        @relation(fields: [idChat], references: [id])
-  idChat     String
-  pedido     Pedidos?     @relation(fields: [idPedido], references: [id])
-  idPedido   String?
+  chat       Chat        @relation(fields: [chatId], references: [id])
+  chatId     String
+  order      Order?      @relation(fields: [orderId], references: [id])
+  orderId    String?
 }
 
-enum TipoServico {
+model Address {
+  id           String @id @default(uuid())
+  zip          String
+  street       String
+  neighborhood String
+  city         String
+  state        String
+  complement   String
+  number       Int
+  User         User[]
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  services Service[]
+}
+
+enum SERVICETYPE {
   ONLINE
-  PRESENCIAL
-  AMBOS
 }
 
-enum Situacao {
-  ATIVO
-  INATIVO
-  BLOQUEADO
+enum STATUS {
+  ACTIVE
+  INACTIVE
+  BLOCKED
 }
 
-enum TipoUsuario {
+enum USERTYPE {
   UZER
-  CLIENTE
+  CLIENT
+  BOTH
 }
 
-enum TipoMensagem {
+enum MESSAGETYPE {
   TEXT
   BUDGET
   IMAGE

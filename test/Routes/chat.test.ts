@@ -8,7 +8,7 @@ describe("Chat routes", async () => {
     url: `/login`,
     payload: {
       email: "cliente@gmail.com",
-      senha: "cliente123",
+      password: "cliente123",
     },
   })
 
@@ -31,14 +31,14 @@ describe("Chat routes", async () => {
 
   test("POST /chat/create/:requestedContactId", async () => {
     const uzerContact = await uzerRepository.getUzers(1, 1)
-    const idUzer = uzerContact[0].id
+    const uzerId = uzerContact[0].id
 
     const response = await app.inject({
       method: "POST",
       headers: {
         cookie: cookieWithAuthorization,
       },
-      url: `/chat/create/${idUzer}`,
+      url: `/chat/create/${uzerId}`,
     })
 
     expect([201, 400]).toContain(response.statusCode)

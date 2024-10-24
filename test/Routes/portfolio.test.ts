@@ -6,12 +6,12 @@ describe("Portifolio Route", async () => {
     method: "POST",
     url: `/login`,
     payload: {
-      email: "cliente@gmail.com",
-      senha: "cliente123",
+      email: "uzer@gmail.com",
+      password: "uzer123",
     },
   })
 
-  expect(userLoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
+  expect(userLoginResponse.statusCode, "Uzer logado com sucesso").toBe(200)
   expect(userLoginResponse.headers["set-cookie"]).toBeDefined()
 
   test("GET /portfolio/:slug", async () => {

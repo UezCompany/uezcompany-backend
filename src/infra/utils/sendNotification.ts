@@ -23,10 +23,14 @@ export default async function sendNotification(
     | "servAval"
     | "erro",
 ) {
-  return await prisma.notificacoes.create({
+  return await prisma.notification.create({
     data: {
-      receiverId,
       content,
+      receiver: {
+        connect: {
+          id: receiverId,
+        },
+      },
       type,
     },
   })

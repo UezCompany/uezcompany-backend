@@ -3,6 +3,8 @@ import { orderRepository } from "@/repository/OrderRepository"
 import { uzerRepository } from "@/repository/UzerRepository"
 import { describe, expect, test } from "vitest"
 
+const fields = ["id", "title", "description", "status"]
+
 describe("Order repository", () => {
   let TestOrderRepository: any
   let TestUzer: any
@@ -14,8 +16,9 @@ describe("Order repository", () => {
     TestCliente = (await clientRepository.getClients(1, 1))[0]
 
     TestOrderRepository.forEach((order: any) => {
-      expect(order).toHaveProperty("id")
-      expect(order).toHaveProperty("titulo")
+      fields.forEach((field) => {
+        expect(order).toHaveProperty(field)
+      })
     })
   })
 
@@ -24,8 +27,9 @@ describe("Order repository", () => {
     const TestOrders = await orderRepository.getOrdersByUzer(id)
 
     TestOrders.forEach((order: any) => {
-      expect(order).toHaveProperty("id")
-      expect(order).toHaveProperty("titulo")
+      fields.forEach((field) => {
+        expect(order).toHaveProperty(field)
+      })
     })
   })
 
@@ -34,8 +38,9 @@ describe("Order repository", () => {
     const TestOrders = await orderRepository.getOrdersByUzer(id)
 
     TestOrders.forEach((order: any) => {
-      expect(order).toHaveProperty("id")
-      expect(order).toHaveProperty("titulo")
+      fields.forEach((field) => {
+        expect(order).toHaveProperty(field)
+      })
     })
   })
 
@@ -44,16 +49,18 @@ describe("Order repository", () => {
 
     const order = await orderRepository.getOrdersById(TestOrderRepository[0].id)
 
-    expect(order).toHaveProperty("id")
-    expect(order).toHaveProperty("titulo")
+    fields.forEach((field) => {
+      expect(order).toHaveProperty(field)
+    })
   })
 
   test("lista a ordem pela disponibilidade", async () => {
     TestOrderRepository = await orderRepository.getActiveOrders()
 
     TestOrderRepository.forEach((order: any) => {
-      expect(order).toHaveProperty("id")
-      expect(order).toHaveProperty("titulo")
+      fields.forEach((field) => {
+        expect(order).toHaveProperty(field)
+      })
     })
   })
 })

@@ -23,11 +23,11 @@ export default async function LoginWithGoogle(app: FastifyInstance) {
             code: z.string(),
             user: z.object({
               id: z.string(),
-              nome: z.string(),
+              name: z.string(),
               email: z.string(),
               username: z.string(),
-              photoUrl: z.string().url(),
-              userType: z.string(),
+              image: z.string().url(),
+              usertype: z.string(),
             }),
             token: z.string(),
           }),
@@ -40,9 +40,7 @@ export default async function LoginWithGoogle(app: FastifyInstance) {
     async (request, reply) => {
       const { access_token, email, name, googleId } = request.body
 
-      const user =
-        (await prisma.clientes.findFirst({ where: { email } })) ??
-        (await prisma.uzers.findFirst({ where: { email } }))
+      const user = await prisma.user.findUnique({ where: { email } })
 
       if (!user) {
         return reply.status(404).send({
@@ -61,11 +59,11 @@ export default async function LoginWithGoogle(app: FastifyInstance) {
         code: "AUTHORIZED",
         user: {
           id: user.id,
-          nome: user.nome,
+          name: user.name,
           email: user.email,
           username: user.username,
-          photoUrl: user.photoUrl,
-          userType: user.tipoUsuario,
+          image: user.image,
+          usertype: user.usertype,
         },
         token: token,
       })

@@ -1,4 +1,6 @@
 import { prisma } from "../src/infra/connection/prisma"
+import bcrypt from "bcrypt"
+
 async function main() {
   const arrayOfCategorias = [
     "Programação",
@@ -7,183 +9,183 @@ async function main() {
     "Social Media",
   ]
 
-  const categoryData = await prisma.categorias.createMany({
-    data: arrayOfCategorias.map((nome: string) => ({ nome })),
+  const categoryData = await prisma.category.createMany({
+    data: arrayOfCategorias.map((name: string) => ({ name })),
     skipDuplicates: true,
   })
 
   const servicesData = [
     {
-      nome: "Fullstack",
-      tipo: "ONLINE",
-      idCategoria: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
-      servico: "Programação",
+      name: "Fullstack",
+      type: "ONLINE",
+      categoryId: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
+      categoryName: "Programação",
     },
     {
-      nome: "Frontend",
-      tipo: "ONLINE",
-      idCategoria: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
-      servico: "Programação",
+      name: "Frontend",
+      type: "ONLINE",
+      categoryId: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
+      categoryName: "Programação",
     },
     {
-      nome: "Backend",
-      tipo: "ONLINE",
-      idCategoria: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
-      servico: "Programação",
+      name: "Backend",
+      type: "ONLINE",
+      categoryId: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
+      categoryName: "Programação",
     },
     {
-      nome: "Games",
-      tipo: "ONLINE",
-      idCategoria: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
-      servico: "Programação",
+      name: "Games",
+      type: "ONLINE",
+      categoryId: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
+      categoryName: "Programação",
     },
     {
-      nome: "Mobile",
-      tipo: "ONLINE",
-      idCategoria: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
-      servico: "Programação",
+      name: "Mobile",
+      type: "ONLINE",
+      categoryId: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
+      categoryName: "Programação",
     },
     {
-      nome: "Engenharia de dados",
-      tipo: "ONLINE",
-      idCategoria: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
-      servico: "Programação",
+      name: "Engenharia de dados",
+      type: "ONLINE",
+      categoryId: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
+      categoryName: "Programação",
     },
     {
-      nome: "Web",
-      tipo: "ONLINE",
-      idCategoria: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
-      servico: "Programação",
+      name: "Web",
+      type: "ONLINE",
+      categoryId: "636727e9-7108-4f33-b6dc-fa9e63ac024d",
+      categoryName: "Programação",
     },
     {
-      nome: "Criação de logo",
-      tipo: "ONLINE",
-      idCategoria: "265ef027-b4f8-475d-9975-a6b0caa90da9",
-      servico: "Design",
+      name: "Criação de logo",
+      type: "ONLINE",
+      categoryId: "265ef027-b4f8-475d-9975-a6b0caa90da9",
+      categoryName: "Design",
     },
     {
-      nome: "Papelaria",
-      tipo: "ONLINE",
-      idCategoria: "265ef027-b4f8-475d-9975-a6b0caa90da9",
-      servico: "Design",
+      name: "Papelaria",
+      type: "ONLINE",
+      categoryId: "265ef027-b4f8-475d-9975-a6b0caa90da9",
+      categoryName: "Design",
     },
     {
-      nome: "Tipografia",
-      tipo: "ONLINE",
-      idCategoria: "265ef027-b4f8-475d-9975-a6b0caa90da9",
-      servico: "Design",
+      name: "Tipografia",
+      type: "ONLINE",
+      categoryId: "265ef027-b4f8-475d-9975-a6b0caa90da9",
+      categoryName: "Design",
     },
     {
-      nome: "Artes para redes sociais",
-      tipo: "ONLINE",
-      idCategoria: "265ef027-b4f8-475d-9975-a6b0caa90da9",
-      servico: "Design",
+      name: "Artes para redes sociais",
+      type: "ONLINE",
+      categoryId: "265ef027-b4f8-475d-9975-a6b0caa90da9",
+      categoryName: "Design",
     },
     {
-      nome: "Brand identity",
-      tipo: "ONLINE",
-      idCategoria: "265ef027-b4f8-475d-9975-a6b0caa90da9",
-      servico: "Design",
+      name: "Brand identity",
+      type: "ONLINE",
+      categoryId: "265ef027-b4f8-475d-9975-a6b0caa90da9",
+      categoryName: "Design",
     },
     {
-      nome: "Ilustração 2d/3d",
-      tipo: "ONLINE",
-      idCategoria: "265ef027-b4f8-475d-9975-a6b0caa90da9",
-      servico: "Design",
+      name: "Ilustração 2d/3d",
+      type: "ONLINE",
+      categoryId: "265ef027-b4f8-475d-9975-a6b0caa90da9",
+      categoryName: "Design",
     },
     {
-      nome: "UX/UI",
-      tipo: "ONLINE",
-      idCategoria: "265ef027-b4f8-475d-9975-a6b0caa90da9",
-      servico: "Design",
+      name: "UX/UI",
+      type: "ONLINE",
+      categoryId: "265ef027-b4f8-475d-9975-a6b0caa90da9",
+      categoryName: "Design",
     },
     {
-      nome: "Gestão de editoriais",
-      tipo: "ONLINE",
-      idCategoria: "31acc993-b76b-431a-a83a-81017a20e92f",
-      servico: "Social Media",
+      name: "Gestão de editoriais",
+      type: "ONLINE",
+      categoryId: "31acc993-b76b-431a-a83a-81017a20e92f",
+      categoryName: "Social Media",
     },
     {
-      nome: "Criação de conteúdo",
-      tipo: "ONLINE",
-      idCategoria: "31acc993-b76b-431a-a83a-81017a20e92f",
-      servico: "Social Media",
+      name: "Criação de conteúdo",
+      type: "ONLINE",
+      categoryId: "31acc993-b76b-431a-a83a-81017a20e92f",
+      categoryName: "Social Media",
     },
     {
-      nome: "Copywriter",
-      tipo: "ONLINE",
-      idCategoria: "31acc993-b76b-431a-a83a-81017a20e92f",
-      servico: "Social Media",
+      name: "Copywriter",
+      type: "ONLINE",
+      categoryId: "31acc993-b76b-431a-a83a-81017a20e92f",
+      categoryName: "Social Media",
     },
     {
-      nome: "Gestão de tráfego pago",
-      tipo: "ONLINE",
-      idCategoria: "31acc993-b76b-431a-a83a-81017a20e92f",
-      servico: "Social Media",
+      name: "Gestão de tráfego pago",
+      type: "ONLINE",
+      categoryId: "31acc993-b76b-431a-a83a-81017a20e92f",
+      categoryName: "Social Media",
     },
     {
-      nome: "Gestão de comunidades",
-      tipo: "ONLINE",
-      idCategoria: "31acc993-b76b-431a-a83a-81017a20e92f",
-      servico: "Social Media",
+      name: "Gestão de comunidades",
+      type: "ONLINE",
+      categoryId: "31acc993-b76b-431a-a83a-81017a20e92f",
+      categoryName: "Social Media",
     },
     {
-      nome: "Interação e monitoramento",
-      tipo: "ONLINE",
-      idCategoria: "31acc993-b76b-431a-a83a-81017a20e92f",
-      servico: "Social Media",
+      name: "Interação e monitoramento",
+      type: "ONLINE",
+      categoryId: "31acc993-b76b-431a-a83a-81017a20e92f",
+      categoryName: "Social Media",
     },
     {
-      nome: "Relatório e análises",
-      tipo: "ONLINE",
-      idCategoria: "31acc993-b76b-431a-a83a-81017a20e92f",
-      servico: "Social Media",
+      name: "Relatório e análises",
+      type: "ONLINE",
+      categoryId: "31acc993-b76b-431a-a83a-81017a20e92f",
+      categoryName: "Social Media",
     },
     {
-      nome: "Edição de vídeos",
-      tipo: "ONLINE",
-      servico: "Videomaking",
+      name: "Edição de vídeos",
+      type: "ONLINE",
+      categoryName: "Videomaking",
     },
     {
-      nome: "Roteirização",
-      tipo: "ONLINE",
-      servico: "Videomaking",
+      name: "Roteirização",
+      type: "ONLINE",
+      categoryName: "Videomaking",
     },
     {
-      nome: "Narração",
-      tipo: "ONLINE",
-      servico: "Videomaking",
+      name: "Narração",
+      type: "ONLINE",
+      categoryName: "Videomaking",
     },
     {
-      nome: "Animação 2D/3D",
-      tipo: "ONLINE",
-      servico: "Videomaking",
+      name: "Animação 2D/3D",
+      type: "ONLINE",
+      categoryName: "Videomaking",
     },
     {
-      nome: "Operação de câmera",
-      tipo: "ONLINE",
-      servico: "Videomaking",
+      name: "Operação de câmera",
+      type: "ONLINE",
+      categoryName: "Videomaking",
     },
     {
-      nome: "Operação de áudio",
-      tipo: "ONLINE",
-      servico: "Videomaking",
+      name: "Operação de áudio",
+      type: "ONLINE",
+      categoryName: "Videomaking",
     },
     {
-      nome: "Operação de iluminação",
-      tipo: "ONLINE",
-      servico: "Videomaking",
+      name: "Operação de iluminação",
+      type: "ONLINE",
+      categoryName: "Videomaking",
     },
   ]
 
-  servicesData.forEach(async (servico) => {
-    await prisma.servicos.create({
+  servicesData.forEach(async (categoryName) => {
+    await prisma.service.create({
       data: {
-        nome: servico.nome,
-        tipo: "ONLINE",
-        categoria: {
+        name: categoryName.name,
+        type: "ONLINE",
+        category: {
           connect: {
-            nome: servico.servico,
+            name: categoryName.categoryName,
           },
         },
       },
@@ -191,6 +193,52 @@ async function main() {
   })
 
   console.log(categoryData)
+
+  const client = await prisma.user.create({
+    data: {
+      name: "Cliente",
+      birth_date: "1990-01-01",
+      username: "cliente",
+      email: "cliente@gmail.com",
+      usertype: "CLIENT",
+      password: bcrypt.hashSync("cliente123", 10),
+    },
+  })
+
+  const uzer = await prisma.user.create({
+    data: {
+      name: "Uzer",
+      birth_date: "1990-01-01",
+      username: "uzer",
+      email: "uzer@gmail.com",
+      usertype: "UZER",
+      password: bcrypt.hashSync("uzer123", 10),
+    },
+  })
+
+  const order = await prisma.order.create({
+    data: {
+      title: "Order",
+      description: "Description",
+      client: {
+        connect: {
+          id: client.id,
+        },
+      },
+      uzer: {
+        connect: {
+          id: uzer.id,
+        },
+      },
+      service: {
+        connect: {
+          name: "Fullstack",
+        },
+      },
+    },
+  })
+
+  console.log(client, uzer, order)
 }
 main()
   .then(async () => {

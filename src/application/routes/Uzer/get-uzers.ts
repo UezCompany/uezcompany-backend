@@ -20,12 +20,6 @@ export default async function GetUzers(app: FastifyInstance) {
             page: data.page ? parseInt(data.page, 10) : 1,
             pageSize: data.pageSize ? parseInt(data.pageSize, 10) : 50,
           })),
-        response: {
-          200: z.array(uzerSchema),
-          401: z.object({
-            message: z.string(),
-          }),
-        },
       },
     },
     async (request, reply) => {
@@ -45,9 +39,7 @@ export default async function GetUzers(app: FastifyInstance) {
 
       const { page, pageSize } = request.query
 
-      const offset = (page <= 1 ? 0 : page - 1) * pageSize
-
-      const uzers = await uzerRepository.getUzers(offset, pageSize)
+      const uzers = await uzerRepository.getUzers(page, pageSize)
       return reply.status(200).send(uzers)
     },
   )

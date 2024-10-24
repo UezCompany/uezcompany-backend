@@ -2,28 +2,31 @@ import app from "@/application/server"
 import { prisma } from "@/infra/connection/prisma"
 import { describe, expect, test } from "vitest"
 
+/*
+  name,
+  email,
+  password,
+  birth_date,
+  phone,
+  username,
+  usertype,
+  image,
+  serviceId,
+*/
+
 describe("Auth routes", async () => {
   test("POST /register", async () => {
     const response = await app.inject({
       method: "POST",
       url: `/register`,
       payload: {
-        nome: "João Silva",
+        name: "João Silva",
         email: "joao.silva@example.com",
-        senha: "senhaSegura123",
-        cpf: "123.456.789-00",
-        dataNasc: "01/01/1990",
-        cep: "12345-678",
-        telefone: "(11) 91234-5678",
-        bairro: "Centro",
-        cidade: "São Paulo",
-        estado: "SP",
-        logradouro: "Rua Exemplo",
-        numero: "123",
-        complemento: "Apto 45",
-        idServico: "001",
-        usertype: "CLIENTE",
+        password: "senhaSegura123",
+        birth_date: "01/01/1990",
+        phone: "(11) 91234-5678",
         username: "joaosilva",
+        usertype: "CLIENT",
       },
     })
 
@@ -42,7 +45,7 @@ describe("Auth routes", async () => {
       url: `/login`,
       payload: {
         email: "joao.silva@example.com",
-        senha: "senhaSegura123",
+        password: "senhaSegura123",
       },
     })
 
@@ -69,11 +72,14 @@ describe("Auth routes", async () => {
   })
 
   test("DELETE user", async () => {
-    const response = await prisma.clientes.delete({
+    const response = await prisma.user.delete({
       where: {
         email: "joao.silva@example.com",
       },
     })
+
+    console.log(response)
+
     expect(response.email).toBe("joao.silva@example.com")
     expect(response).not.toBeNull()
   })

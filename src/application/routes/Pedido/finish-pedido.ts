@@ -30,19 +30,15 @@ export default async function FinishPedido(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const params = z.object({
-        id: z.string(),
-      })
+      const { id } = request.params
 
-      const { id } = params.parse(request.params)
-
-      const pedido = await prisma.pedidos.update({
+      const pedido = await prisma.order.update({
         where: {
           id,
         },
         data: {
           status: "A AVALIAR",
-          disponivel: false,
+          available: false,
           uzer: {
             connect: {
               id: decryptedToken.id,

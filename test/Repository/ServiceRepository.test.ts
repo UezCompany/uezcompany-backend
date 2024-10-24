@@ -1,31 +1,37 @@
 import { assert, describe, expect, test } from "vitest"
 import { serviceRepository } from "@/repository/ServiceRepository"
-import { Servicos } from "@prisma/client"
+import { Service } from "@prisma/client"
+
+const fields = ["id", "name", "type", "description", "categoryId"]
 
 describe("Service repository", () => {
-  let TestServiceRepository: Servicos
+  let TestServiceRepository: Service
 
   test("Listar todos os serviços", async () => {
     const services = await serviceRepository.getServices()
     assert(Array.isArray(services), "Expected an array of services")
     TestServiceRepository = services[0]
     services.forEach((service) => {
-      expect(service).toHaveProperty("id")
-      expect(service).toHaveProperty("nome")
+      fields.forEach((field) => {
+        expect(service).toHaveProperty(field)
+      })
     })
   })
 
   test("Listar todos os serviços pela categoria", async () => {
     const category = "Programação"
     const services = await serviceRepository.getServicesByCategory(category)
-    expect(services[0]).toHaveProperty("id")
+    fields.forEach((field) => {
+      expect(services[0]).toHaveProperty(field)
+    })
   })
 
   test("Listar todos os serviços pelo id", async () => {
     const id = TestServiceRepository.id
     const service = await serviceRepository.getServicesById(id)
-    expect(service).toHaveProperty("id")
-    expect(service).toHaveProperty("nome")
+    fields.forEach((field) => {
+      expect(service).toHaveProperty(field)
+    })
   })
 
   test("Listar todas as categorias", async () => {

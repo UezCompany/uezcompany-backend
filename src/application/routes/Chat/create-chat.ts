@@ -28,36 +28,21 @@ export default async function CreateChat(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const params = z.object({
-        requestedContactId: z.string(),
-      })
-
-      const { requestedContactId } = params.parse(request.params)
+      const { requestedContactId } = request.params
 
       const [requestedContact, myContact, chatAlreadyExists] =
         await Promise.all([
           GetUserdataById(requestedContactId),
           GetUserdataById(decryptedToken.id),
-          prisma.chats.findFirst({
+          prisma.chat.findFirst({
             where: {
-              OR: [
-                {
-                  idCliente: {
-                    equals: requestedContactId,
-                  },
-                  idUzer: {
-                    equals: decryptedToken.id,
+              users: {
+                every: {
+                  id: {
+                    in: [decryptedToken.id, requestedContactId],
                   },
                 },
-                {
-                  idCliente: {
-                    equals: decryptedToken.id,
-                  },
-                  idUzer: {
-                    equals: requestedContactId,
-                  },
-                },
-              ],
+              },
             },
           }),
         ])
@@ -75,7 +60,7 @@ export default async function CreateChat(app: FastifyInstance) {
         })
       }
 
-      if (requestedContact.tipoUsuario === myContact.tipoUsuario) {
+      if (requestedContact.usertype === myContact.usertype) {
         return reply.status(400).send({
           message: "Os dois usuários devem ser de tipos diferentes.",
         })
@@ -88,16 +73,11 @@ export default async function CreateChat(app: FastifyInstance) {
         })
       }
 
-      const chat = await prisma.chats.create({
+      const chat = await prisma.chat.create({
         data: {
-          idCliente:
-            myContact.tipoUsuario === "CLIENTE"
-              ? myContact.id
-              : requestedContact.id,
-          idUzer:
-            myContact.tipoUsuario === "CLIENTE"
-              ? requestedContact.id
-              : myContact.id,
+          users: {
+            connect: [{ id: myContact.id }, { id: requestedContact.id }],
+          },
         },
       })
 

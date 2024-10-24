@@ -14,6 +14,9 @@ export default async function AvaliarPedido(app: FastifyInstance) {
         params: z.object({
           id: z.string().uuid(),
         }),
+        body: z.object({
+          rating: z.number(),
+        }),
       },
     },
     async (request, reply) => {
@@ -31,22 +34,14 @@ export default async function AvaliarPedido(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const params = z.object({
-        id: z.string(),
-      })
+      const { id } = request.params
 
-      const { id } = params.parse(request.params)
+      const { rating } = request.body
 
-      const avaliarPedidoBody = z.object({
-        avaliacao: z.number(),
-      })
-
-      const { avaliacao } = avaliarPedidoBody.parse(request.body)
-
-      const estaAvaliado = await prisma.pedidos.findUnique({
+      const estaAvaliado = await prisma.order.findUnique({
         where: {
           id,
-          avaliado: true,
+          rated: true,
         },
       })
 
@@ -54,42 +49,39 @@ export default async function AvaliarPedido(app: FastifyInstance) {
         return reply.status(400).send({ message: "O pedido ja foi avaliado." })
       }
 
-      const pedido = await prisma.pedidos.update({
+      const pedido = await prisma.order.update({
         where: { id },
         data: {
-          avaliado: true,
-          avaliacao: Number(avaliacao),
+          rated: true,
+          rating: Number(rating),
           status: "CONCLUIDO",
         },
       })
 
-      const uzer = await prisma.uzers.update({
+      const uzer = await prisma.user.update({
         where: {
-          id: pedido.idUzer || "",
+          id: pedido.uzerId || "",
         },
         data: {
-          avaliacoes: {
-            push: avaliacao,
+          ratings: {
+            push: rating,
           },
         },
       })
 
       const newAvaliacao =
-        uzer.avaliacoes.length === 0
-          ? avaliacao
-          : (uzer.avaliacoes.reduce(
-              (acc, curr) => Number(acc) + Number(curr),
-              0,
-            ) +
-              Number(avaliacao)) /
-              uzer.avaliacoes.length +
+        uzer.ratings.length === 0
+          ? rating
+          : (uzer.ratings.reduce((acc, curr) => Number(acc) + Number(curr), 0) +
+              Number(rating)) /
+              uzer.ratings.length +
             1
-      const uzerAvaliado = await prisma.uzers.update({
+      const uzerAvaliado = await prisma.user.update({
         where: {
           id: uzer.id,
         },
         data: {
-          avaliacao: newAvaliacao,
+          rating: newAvaliacao,
         },
       })
 
@@ -99,7 +91,7 @@ export default async function AvaliarPedido(app: FastifyInstance) {
 
       await sendNotification(
         uzer.id,
-        `R$ ${pedido.valor} do serviço ${pedido.titulo} já está na sua carteira`,
+        `R$ ${pedido.value} do serviço ${pedido.title} já está na sua carteira`,
         "servAval",
       )
 

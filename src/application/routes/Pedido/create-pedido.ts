@@ -11,6 +11,12 @@ export default async function CreatePedido(app: FastifyInstance) {
       schema: {
         summary: "Create an order",
         tags: ["Order"],
+        body: z.object({
+          category: z.string(),
+          serviceId: z.string(),
+          value: z.optional(z.number()),
+          title: z.string(),
+        }),
       },
     },
     async (request, reply) => {
@@ -28,28 +34,20 @@ export default async function CreatePedido(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const createPedidoBody = z.object({
-        categoria: z.string(),
-        servicoId: z.string(),
-        valor: z.optional(z.number()),
-        titulo: z.string(),
-      })
+      const { serviceId, title, value } = request.body
 
-      const { servicoId, titulo, valor } = createPedidoBody.parse(request.body)
-
-      const pedido = await prisma.pedidos.create({
+      const pedido = await prisma.order.create({
         data: {
-          tipo: "ONLINE",
-          valor,
-          titulo,
-          cliente: {
+          value,
+          title,
+          client: {
             connect: {
               id: decryptedToken.id,
             },
           },
-          servico: {
+          service: {
             connect: {
-              id: servicoId,
+              id: serviceId,
             },
           },
         },

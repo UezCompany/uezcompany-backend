@@ -7,7 +7,7 @@ describe("Cliente routes", async () => {
     url: `/login`,
     payload: {
       email: "cliente@gmail.com",
-      senha: "cliente123",
+      password: "cliente123",
     },
   })
 

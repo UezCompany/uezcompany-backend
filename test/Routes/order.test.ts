@@ -1,6 +1,6 @@
 import app from "@/application/server"
 import { serviceRepository } from "@/repository/ServiceRepository"
-import { Pedidos } from "@prisma/client"
+import { Order } from "@prisma/client"
 import { describe, expect, test } from "vitest"
 
 describe("Pedido routes", async () => {
@@ -9,7 +9,7 @@ describe("Pedido routes", async () => {
     url: `/login`,
     payload: {
       email: "cliente@gmail.com",
-      senha: "cliente123",
+      password: "cliente123",
     },
   })
 
@@ -21,7 +21,7 @@ describe("Pedido routes", async () => {
     url: `/login`,
     payload: {
       email: "uzer@gmail.com",
-      senha: "uzer123",
+      password: "uzer123",
     },
   })
 
@@ -96,7 +96,7 @@ describe("Pedido routes", async () => {
     expect(response.statusCode).toBe(200)
   })
 
-  let pedido: Pedidos
+  let pedido: Order
 
   test("POST /create/pedido", async () => {
     const category = "Programação"
@@ -110,10 +110,10 @@ describe("Pedido routes", async () => {
         cookie: cookieWithAuthorizationClient,
       },
       body: {
-        categoria: category,
-        servicoId: service.id,
-        valor: 123,
-        titulo: "Teste de serviço",
+        category: category,
+        serviceId: service.id,
+        value: 123,
+        title: "Teste de serviço",
       },
       url: `/create/pedido`,
     })
@@ -145,7 +145,7 @@ describe("Pedido routes", async () => {
         cookie: cookieWithAuthorizationClient,
       },
       body: {
-        avaliacao: 5,
+        rating: 5,
       },
       url: `/pedido/avaliar/${id}`,
     })
@@ -155,15 +155,15 @@ describe("Pedido routes", async () => {
 
   test("PUT /pedido/assignUzer/:id", async () => {
     const id = pedido.id
-    const idUzer = JSON.parse(uzerLoginResponse.body).user.id
+    const uzerId = JSON.parse(uzerLoginResponse.body).user.id
     const response = await app.inject({
       method: "PUT",
       headers: {
         cookie: cookieWithAuthorizationClient,
       },
       body: {
-        valor: 5,
-        idUzer,
+        value: 5,
+        uzerId,
       },
       url: `/pedido/assignUzer/${id}`,
     })

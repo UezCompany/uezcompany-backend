@@ -13,6 +13,10 @@ export default async function AssignPedido(app: FastifyInstance) {
         params: z.object({
           id: z.string().uuid(),
         }),
+        body: z.object({
+          value: z.optional(z.number()),
+          uzerId: z.string(),
+        }),
       },
     },
     async (request, reply) => {
@@ -30,31 +34,22 @@ export default async function AssignPedido(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const params = z.object({
-        id: z.string(),
-      })
+      const { id } = request.params
 
-      const { id } = params.parse(request.params)
+      const { value, uzerId } = request.body
 
-      const assignUzerBody = z.object({
-        valor: z.optional(z.number()),
-        idUzer: z.string(),
-      })
-
-      const { valor, idUzer } = assignUzerBody.parse(request.body)
-
-      const pedido = await prisma.pedidos
+      const pedido = await prisma.order
         .update({
           where: {
             id,
           },
           data: {
             status: "EM ANDAMENTO",
-            disponivel: false,
-            valor,
+            available: false,
+            value,
             uzer: {
               connect: {
-                id: idUzer,
+                id: uzerId,
               },
             },
           },

@@ -14,41 +14,28 @@ export default async function Login(app: FastifyInstance) {
         summary: "Authenticates a user",
         body: z.object({
           email: z.string().email(),
-          senha: z.string(),
+          password: z.string(),
         }),
       },
     },
     async (request, reply) => {
-      const { email, senha } = request.body
+      const { email, password } = request.body
 
-      const user =
-        (await prisma.clientes.findFirst({ where: { email } })) ??
-        (await prisma.uzers.findFirst({ where: { email } }))
+      const user = await prisma.user.findUnique({ where: { email } })
 
-      if (!user) {
+      if (!user || !user.password) {
         return reply.status(404).send({ message: "Usuário não encontrado" })
       }
 
-      if (bcrypt.compareSync(senha, user.senha)) {
-        if (user.tipoUsuario === "CLIENTE") {
-          await prisma.clientes.update({
-            where: {
-              id: user.id,
-            },
-            data: {
-              lastLogin: new Date(),
-            },
-          })
-        } else {
-          await prisma.uzers.update({
-            where: {
-              id: user.id,
-            },
-            data: {
-              lastLogin: new Date(),
-            },
-          })
-        }
+      if (bcrypt.compareSync(password, user.password)) {
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            last_login: new Date(),
+          },
+        })
 
         const token = app.jwt.sign({ id: user.id })
 
@@ -61,11 +48,11 @@ export default async function Login(app: FastifyInstance) {
           code: "AUTHORIZED",
           user: {
             id: user.id,
-            nome: user.nome,
+            name: user.name,
             email: user.email,
             username: user.username,
-            photoUrl: user.photoUrl,
-            userType: user.tipoUsuario,
+            image: user.image,
+            usertype: user.usertype,
           },
           token: token,
         })
