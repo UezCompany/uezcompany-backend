@@ -2,12 +2,12 @@ import { FastifyInstance } from "fastify"
 import { prisma } from "@/infra/connection/prisma"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function ReadAllNotificacoes(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().post(
-    "/notifications/readall",
+export default async function GetUserNotifications(app: FastifyInstance) {
+  app.withTypeProvider<ZodTypeProvider>().get(
+    "/notifications",
     {
       schema: {
-        summary: "View all existing notifications",
+        summary: "Get all notifications",
         tags: ["Notification"],
       },
     },
@@ -23,25 +23,17 @@ export default async function ReadAllNotificacoes(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const notifications = await prisma.notificacoes.updateMany({
+      const notifications = await prisma.notification.findMany({
         where: {
           receiverId: decryptedToken.id,
         },
-        data: {
-          readed: true,
-        },
       })
-
       if (!notifications) {
-        return reply.status(404).send({
-          message: "Notificação não encontrada",
-        })
+        return reply
+          .status(404)
+          .send({ message: "O usuário não tem notificações" })
       }
-
-      return reply.status(200).send({
-        message: "Notificações lidas",
-        notifications,
-      })
+      return reply.status(200).send({ notifications })
     },
   )
 }

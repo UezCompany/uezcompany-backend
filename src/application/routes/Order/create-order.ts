@@ -4,9 +4,9 @@ import { z } from "zod"
 import sendNotification from "@/infra/utils/sendNotification"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function CreatePedido(app: FastifyInstance) {
+export default async function CreateOrder(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
-    "/create/pedido",
+    "/orders",
     {
       schema: {
         summary: "Create an order",
@@ -36,7 +36,7 @@ export default async function CreatePedido(app: FastifyInstance) {
 
       const { serviceId, title, value } = request.body
 
-      const pedido = await prisma.order.create({
+      const order = await prisma.order.create({
         data: {
           value,
           title,
@@ -52,7 +52,7 @@ export default async function CreatePedido(app: FastifyInstance) {
           },
         },
       })
-      if (!pedido) {
+      if (!order) {
         return reply.status(400).send({ message: "Erro ao criar pedido." })
       }
 
@@ -62,7 +62,7 @@ export default async function CreatePedido(app: FastifyInstance) {
         "pedLance",
       )
 
-      return reply.status(201).send(pedido)
+      return reply.status(201).send(order)
     },
   )
 }

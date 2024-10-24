@@ -16,18 +16,18 @@ describe("Cliente routes", async () => {
 
   const cookieWithAuthorization = LoginResponse.headers["set-cookie"]
 
-  test("GET /clientes", async () => {
+  test("GET /clients", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
         cookie: cookieWithAuthorization,
       },
-      url: `/clientes`,
+      url: `/clients`,
     })
     expect(response.statusCode).toBe(200)
   })
 
-  test("GET /clientes/:slug", async () => {
+  test("GET /clients/:slug", async () => {
     const slug = "cliente"
     const response = await app.inject({
       method: "GET",
@@ -35,7 +35,7 @@ describe("Cliente routes", async () => {
         cookie: cookieWithAuthorization,
       },
 
-      url: `/clientes/${slug}`,
+      url: `/clients/${slug}`,
     })
 
     expect(response.statusCode).toBe(200)

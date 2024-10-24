@@ -4,18 +4,18 @@ import { z } from "zod"
 import sendNotification from "@/infra/utils/sendNotification"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function AvaliarPedido(app: FastifyInstance) {
+export default async function RateOrder(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().put(
-    "/pedido/avaliar/:id",
+    "/orders/:orderId/rate",
     {
       schema: {
         summary: "Evaluate the order through the Id",
         tags: ["Order"],
         params: z.object({
-          id: z.string().uuid(),
+          orderId: z.string().uuid(),
         }),
         body: z.object({
-          rating: z.number(),
+          rating: z.coerce.number(),
         }),
       },
     },
@@ -34,13 +34,13 @@ export default async function AvaliarPedido(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const { id } = request.params
+      const { orderId } = request.params
 
       const { rating } = request.body
 
       const estaAvaliado = await prisma.order.findUnique({
         where: {
-          id,
+          id: orderId,
           rated: true,
         },
       })
@@ -49,8 +49,8 @@ export default async function AvaliarPedido(app: FastifyInstance) {
         return reply.status(400).send({ message: "O pedido ja foi avaliado." })
       }
 
-      const pedido = await prisma.order.update({
-        where: { id },
+      const order = await prisma.order.update({
+        where: { id: orderId },
         data: {
           rated: true,
           rating: Number(rating),
@@ -60,7 +60,7 @@ export default async function AvaliarPedido(app: FastifyInstance) {
 
       const uzer = await prisma.user.update({
         where: {
-          id: pedido.uzerId || "",
+          id: order.uzerId || "",
         },
         data: {
           ratings: {
@@ -85,19 +85,19 @@ export default async function AvaliarPedido(app: FastifyInstance) {
         },
       })
 
-      if (!uzerAvaliado || !pedido) {
+      if (!uzerAvaliado || !order) {
         return reply.status(400).send({ message: "Erro ao avaliar o pedido." })
       }
 
       await sendNotification(
         uzer.id,
-        `R$ ${pedido.value} do serviço ${pedido.title} já está na sua carteira`,
+        `R$ ${order.value} do serviço ${order.title} já está na sua carteira`,
         "servAval",
       )
 
       return reply
         .status(200)
-        .send({ message: "O pedido foi avaliado com sucesso.", pedido })
+        .send({ message: "O pedido foi avaliado com sucesso.", order: order })
     },
   )
 }

@@ -1,15 +1,14 @@
 import { FastifyInstance } from "fastify"
+import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
-import { ZodTypeProvider } from "fastify-type-provider-zod"
-import { orderRepository } from "@/repository/OrderRepository"
 
-export default async function GetPedidosByCliente(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().get(
-    "/pedidos/cliente/:id",
+export default async function ReadNotificacao(app: FastifyInstance) {
+  app.post(
+    "/notifications/read/:id",
     {
       schema: {
-        summary: "Get orders by client Id",
-        tags: ["Order"],
+        summary: "View the notification by id",
+        tags: ["Notification"],
         params: z.object({
           id: z.string().uuid(),
         }),
@@ -17,13 +16,10 @@ export default async function GetPedidosByCliente(app: FastifyInstance) {
     },
     async (request, reply) => {
       const { token } = request.cookies
-
       if (!token) {
         return reply.status(401).send({ message: "Token não informado" })
       }
-
       const decryptedToken: any = app.jwt.verify(token)
-
       if (!decryptedToken) {
         return reply
           .status(401)
@@ -36,8 +32,25 @@ export default async function GetPedidosByCliente(app: FastifyInstance) {
 
       const { id } = params.parse(request.params)
 
-      const pedidos = await orderRepository.getOrdersByClient(id)
-      return reply.status(200).send(pedidos)
+      const notification = await prisma.notification.update({
+        where: {
+          id,
+        },
+        data: {
+          readed: true,
+        },
+      })
+
+      if (!notification) {
+        return reply.status(404).send({
+          message: "Notificação não encontrada",
+        })
+      }
+
+      return reply.status(200).send({
+        message: "Notificação lida",
+        notification,
+      })
     },
   )
 }

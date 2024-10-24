@@ -2,7 +2,6 @@ import { FastifyInstance } from "fastify"
 import { z } from "zod"
 import { uzerRepository } from "@/repository/UzerRepository"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
-import { uzerSchema } from "@/infra/lib/ZodSchemas/Response/UzerSchema"
 
 export default async function GetUzers(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(

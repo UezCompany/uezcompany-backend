@@ -3,15 +3,15 @@ import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function FinishPedido(app: FastifyInstance) {
+export default async function FinishOrder(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().put(
-    "/pedidos/finish/:id",
+    "/orders/:orderId/finish",
     {
       schema: {
-        summary: "Complete the order using Id",
+        summary: "Complete the order using order Id",
         tags: ["Order"],
         params: z.object({
-          id: z.string().uuid(),
+          orderId: z.string().uuid(),
         }),
       },
     },
@@ -30,11 +30,11 @@ export default async function FinishPedido(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const { id } = request.params
+      const { orderId } = request.params
 
-      const pedido = await prisma.order.update({
+      const order = await prisma.order.update({
         where: {
-          id,
+          id: orderId,
         },
         data: {
           status: "A AVALIAR",
@@ -46,10 +46,10 @@ export default async function FinishPedido(app: FastifyInstance) {
           },
         },
       })
-      if (!pedido) {
+      if (!order) {
         return reply.status(400).send({ message: "Erro ao atribuir o pedido." })
       }
-      return reply.status(200).send(pedido)
+      return reply.status(200).send(order)
     },
   )
 }

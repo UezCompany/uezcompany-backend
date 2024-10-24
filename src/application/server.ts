@@ -3,46 +3,46 @@ import fastifyJwt from "@fastify/jwt"
 import fastifyCors from "@fastify/cors"
 import fastifyCookie from "@fastify/cookie"
 import fastifyWebSocket from "fastify-socket.io"
-import GetClientes from "./routes/Cliente/get-clientes"
-import GetUzers from "./routes/Uzer/get-uzers"
-import GetServicos from "./routes/Servico/get-servicos"
-import GetServicoById from "./routes/Servico/get-servico-by-id"
-import GetServicoByCategoria from "./routes/Servico/get-servicos-by-categoria"
-import GetCategorias from "./routes/Servico/get-categorias"
-import Register from "./routes/Auth/register"
-import GetPedidos from "./routes/Pedido/get-pedidos"
-import GetPedidosByCliente from "./routes/Pedido/get-pedidos-by-cliente"
-import GetPedidosByUzer from "./routes/Pedido/get-pedidos-by-uzer"
-import GetActivePedidos from "./routes/Pedido/get-active-pedidos"
-import AssignPedido from "./routes/Pedido/assign-pedido-to-uzer"
-import CreatePedido from "./routes/Pedido/create-pedido"
-import FinishPedido from "./routes/Pedido/finish-pedido"
-import AvaliarPedido from "./routes/Pedido/avaliar-pedido"
-import GetUserNotifications from "./routes/Notificacao/get-notificacoes"
-import ReadNotificacao from "./routes/Notificacao/read-notificacao"
-import ReadAllNotificacoes from "./routes/Notificacao/read-all-notificacao"
-import Login from "./routes/Auth/login"
-import Logout from "./routes/Auth/logout"
-import { env } from "../../env"
-import CreateChat from "./routes/Chat/create-chat"
-import GetChats from "./routes/Chat/get-chats"
-import { Server } from "socket.io"
-import GetUzerBySlug from "./routes/Uzer/get-uzer-by-slug"
-import GetClienteBySlug from "./routes/Cliente/get-cliente-by-slug"
-import GetPortfolios from "./routes/Uzer/Portfolio/get-portfolios"
-import MessageForSocket from "./routes/Chat/ws/send-message"
-import JoinSocket from "./routes/Chat/ws/join"
-import BudgetForSocket from "./routes/Chat/ws/send-budget"
-import GetPedidosById from "./routes/Pedido/get-pedidos-by-id"
+import fastifySwagger from "@fastify/swagger"
+import fastifySwaggerUI from "@fastify/swagger-ui"
 import {
   jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
 } from "fastify-type-provider-zod"
-import fastifySwagger from "@fastify/swagger"
-import fastifySwaggerUI from "@fastify/swagger-ui"
+import { Server } from "socket.io"
 import { errorHandler } from "./error-handle"
+import GetClients from "./routes/Client/get-clients"
+import GetUzers from "./routes/Uzer/get-uzers"
+import GetServices from "./routes/Service/get-services"
+import GetService from "./routes/Service/get-service"
+import GetServicesByCategoryName from "./routes/Service/get-services-by-category-name"
+import GetCategories from "./routes/Service/get-categories"
+import Register from "./routes/Auth/register"
+import GetOrders from "./routes/Order/get-orders"
+import GetOrdersCreatedByUser from "./routes/Order/get-orders-created-by-user"
+import GetOrdersAssignedsToUser from "./routes/Order/get-orders-assigneds-to-user"
+import GetActiveOrders from "./routes/Order/get-active-orders"
+import AssignOrderToUzer from "./routes/Order/assign-order-to-uzer"
+import CreateOrder from "./routes/Order/create-order"
+import FinishOrder from "./routes/Order/finish-order"
+import RateOrder from "./routes/Order/rate-order"
+import GetUserNotifications from "./routes/Notification/get-notifications"
+import ReadNotification from "./routes/Notification/read-notification"
+import ReadAllNotificacions from "./routes/Notification/read-all-notifications"
+import Login from "./routes/Auth/login"
+import Logout from "./routes/Auth/logout"
+import CreateChat from "./routes/Chat/create-chat"
+import GetChats from "./routes/Chat/get-chats"
+import GetUzerBySlug from "./routes/Uzer/get-uzer-by-slug"
+import GetClient from "./routes/Client/get-client"
+import GetPortfolios from "./routes/Uzer/Portfolio/get-portfolios"
+import MessageForSocket from "./routes/Chat/ws/send-message"
+import JoinSocket from "./routes/Chat/ws/join"
+import BudgetForSocket from "./routes/Chat/ws/send-budget"
+import GetOrdersById from "./routes/Order/get-order-by-id"
 import LoginWithGoogle from "./routes/Auth/login-google"
+import { env } from "@/../env"
 
 const app = fastify()
 
@@ -85,37 +85,37 @@ app.get("/", (req, reply) => {
   reply.status(200).send({ message: "Server is running" })
 })
 
-// ROTEAMENTO - Auth
+// Auth
 app.register(Register)
 app.register(Login)
 app.register(Logout)
 app.register(LoginWithGoogle)
-// Cliente
-app.register(GetClientes)
-app.register(GetClienteBySlug)
+// Client
+app.register(GetClients)
+app.register(GetClient)
 // Uzer
 app.register(GetUzers)
 app.register(GetUzerBySlug)
 app.register(GetPortfolios)
-// Servico
-app.register(GetServicos)
-app.register(GetServicoById)
-app.register(GetServicoByCategoria)
-app.register(GetCategorias)
-// Pedido
-app.register(GetPedidos)
-app.register(GetPedidosById)
-app.register(GetPedidosByCliente)
-app.register(GetPedidosByUzer)
-app.register(GetActivePedidos)
-app.register(AssignPedido)
-app.register(CreatePedido)
-app.register(FinishPedido)
-app.register(AvaliarPedido)
-// Notificacoes
+// Service
+app.register(GetServices)
+app.register(GetService)
+app.register(GetServicesByCategoryName)
+app.register(GetCategories)
+// Order
+app.register(GetOrders)
+app.register(GetOrdersById)
+app.register(GetOrdersCreatedByUser)
+app.register(GetOrdersAssignedsToUser)
+app.register(GetActiveOrders)
+app.register(AssignOrderToUzer)
+app.register(CreateOrder)
+app.register(FinishOrder)
+app.register(RateOrder)
+// Notification
 app.register(GetUserNotifications)
-app.register(ReadNotificacao)
-app.register(ReadAllNotificacoes)
+app.register(ReadNotification)
+app.register(ReadAllNotificacions)
 // Chat
 app.register(CreateChat)
 app.register(GetChats)

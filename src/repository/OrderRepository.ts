@@ -3,8 +3,8 @@ import { prisma } from "../infra/connection/prisma"
 interface IOrderRepository {
   getOrders(): Promise<any>
   getOrdersByUzer(idUzer: number | string): Promise<any>
-  getOrdersByClient(idClient: number | string): Promise<any>
-  getOrdersById(id: number | string): Promise<any>
+  getCreatedOrdersByUser(idClient: number | string): Promise<any>
+  getOrderById(id: number | string): Promise<any>
   getActiveOrders(): Promise<any>
 }
 
@@ -21,7 +21,7 @@ class OrderRepository implements IOrderRepository {
     })
   }
 
-  async getOrdersByClient(id: number | string) {
+  async getCreatedOrdersByUser(id: number | string) {
     return await prisma.order.findMany({
       where: {
         clientId: String(id),
@@ -29,7 +29,7 @@ class OrderRepository implements IOrderRepository {
     })
   }
 
-  async getOrdersById(id: number | string) {
+  async getOrderById(id: number | string) {
     return await prisma.order.findUnique({ where: { id: String(id) } })
   }
 

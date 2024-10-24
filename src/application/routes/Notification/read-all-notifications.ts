@@ -1,17 +1,14 @@
 import { FastifyInstance } from "fastify"
 import { prisma } from "@/infra/connection/prisma"
-import { z } from "zod"
+import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function ReadNotificacao(app: FastifyInstance) {
-  app.post(
-    "/notifications/read/:id",
+export default async function ReadAllNotificacoes(app: FastifyInstance) {
+  app.withTypeProvider<ZodTypeProvider>().post(
+    "/notifications/readall",
     {
       schema: {
-        summary: "View the notification by id",
+        summary: "View all existing notifications",
         tags: ["Notification"],
-        params: z.object({
-          id: z.string().uuid(),
-        }),
       },
     },
     async (request, reply) => {
@@ -26,30 +23,24 @@ export default async function ReadNotificacao(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const params = z.object({
-        id: z.string(),
-      })
-
-      const { id } = params.parse(request.params)
-
-      const notification = await prisma.notificacoes.update({
+      const notifications = await prisma.notification.updateMany({
         where: {
-          id,
+          receiverId: decryptedToken.id,
         },
         data: {
           readed: true,
         },
       })
 
-      if (!notification) {
+      if (!notifications) {
         return reply.status(404).send({
           message: "Notificação não encontrada",
         })
       }
 
       return reply.status(200).send({
-        message: "Notificação lida",
-        notification,
+        message: "Notificações lidas",
+        notifications,
       })
     },
   )

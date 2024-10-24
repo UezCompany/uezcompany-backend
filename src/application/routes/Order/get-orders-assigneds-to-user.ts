@@ -1,14 +1,18 @@
 import { FastifyInstance } from "fastify"
 import { orderRepository } from "@/repository/OrderRepository"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
+import { z } from "zod"
 
-export default async function GetActivePedidos(app: FastifyInstance) {
+export default async function GetOrdersAssignedsToUser(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/pedidosativos",
+    "/orders/:userId/assigned-orders",
     {
       schema: {
-        summary: "Get all active orders",
+        summary: "Get all orders from a uzer",
         tags: ["Order"],
+        params: z.object({
+          userId: z.string(),
+        }),
       },
     },
     async (request, reply) => {
@@ -18,7 +22,7 @@ export default async function GetActivePedidos(app: FastifyInstance) {
         return reply.status(401).send({ message: "Token não informado" })
       }
 
-      const decryptedToken = app.jwt.verify(token)
+      const decryptedToken: any = app.jwt.verify(token)
 
       if (!decryptedToken) {
         return reply
@@ -26,8 +30,10 @@ export default async function GetActivePedidos(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const pedidos = await orderRepository.getActiveOrders()
-      return reply.status(200).send(pedidos)
+      const { userId } = request.params
+
+      const orders = await orderRepository.getOrdersByUzer(userId)
+      return reply.status(200).send(orders)
     },
   )
 }

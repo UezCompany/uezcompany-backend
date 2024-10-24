@@ -1,35 +1,35 @@
 import app from "@/application/server"
-import { Servicos } from "@prisma/client"
+import { Service } from "@prisma/client"
 import { describe, expect, test } from "vitest"
 
-describe("Serviço Routes", () => {
-  let TestServiceRoutes: Servicos
+describe("Service Routes", () => {
+  let TestServiceRoutes: Service
 
-  test("GET /servicos", async () => {
+  test("GET /services", async () => {
     const { statusCode, body } = await app.inject({
       method: "GET",
-      url: `/servicos`,
+      url: `/services`,
     })
 
     TestServiceRoutes = JSON.parse(body)[0]
     expect(statusCode).toBe(200)
   })
 
-  test("GET /servicos/:id", async () => {
-    const id = TestServiceRoutes.id // ID de um serviço
+  test("GET /services/:id", async () => {
+    const id = TestServiceRoutes.id // service id
     const servico = await app.inject({
       method: "GET",
-      url: `/servicos/${id}`,
+      url: `/services/${id}`,
     })
 
     expect(servico.statusCode).toBe(200)
   })
 
-  test("GET /servicos/categoria/:categoria", async () => {
-    const categoria = "Programacão" // qualquer categoria
+  test("GET /services/category/:categoryName", async () => {
+    const categoria = "Programacão" // any category
     const servico = await app.inject({
       method: "GET",
-      url: `/servicos/categoria/${categoria}`,
+      url: `/services/category/${categoria}`,
     })
 
     expect(servico.statusCode).toBe(200)

@@ -33,9 +33,9 @@ describe("Order repository", () => {
     })
   })
 
-  test("lista a ordem pelo cliente", async () => {
+  test("List orders created by user", async () => {
     const id = TestCliente.id
-    const TestOrders = await orderRepository.getOrdersByUzer(id)
+    const TestOrders = await orderRepository.getCreatedOrdersByUser(id)
 
     TestOrders.forEach((order: any) => {
       fields.forEach((field) => {
@@ -47,7 +47,7 @@ describe("Order repository", () => {
   test("lista a ordem pelo id", async () => {
     TestOrderRepository = await orderRepository.getOrders()
 
-    const order = await orderRepository.getOrdersById(TestOrderRepository[0].id)
+    const order = await orderRepository.getOrderById(TestOrderRepository[0].id)
 
     fields.forEach((field) => {
       expect(order).toHaveProperty(field)

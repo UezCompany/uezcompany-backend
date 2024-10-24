@@ -1,4 +1,3 @@
-import { Uzer } from "@/infra/lib/ZodSchemas/Response/UzerSchema"
 import { prisma } from "../infra/connection/prisma"
 
 interface IUzerRepository {

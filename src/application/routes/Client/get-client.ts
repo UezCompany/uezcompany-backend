@@ -5,7 +5,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function GetClienteBySlug(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/clientes/:slug",
+    "/clients/:slug",
     {
       schema: {
         summary: "Get an Client by Slug (Id or Username)",

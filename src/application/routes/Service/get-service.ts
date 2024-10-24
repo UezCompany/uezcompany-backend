@@ -3,9 +3,9 @@ import { serviceRepository } from "@/repository/ServiceRepository"
 import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function GetServicoById(app: FastifyInstance) {
+export default async function GetService(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/servicos/:id",
+    "/services/:id",
     {
       schema: {
         summary: "Get service by Id",

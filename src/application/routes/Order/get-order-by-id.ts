@@ -1,14 +1,18 @@
 import { FastifyInstance } from "fastify"
-import { orderRepository } from "@/repository/OrderRepository"
+import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
+import { orderRepository } from "@/repository/OrderRepository"
 
-export default async function GetPedidos(app: FastifyInstance) {
+export default async function GetOrderById(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/pedidos",
+    "/orders/:orderId",
     {
       schema: {
-        summary: "Get all orders",
+        summary: "Get order by order Id",
         tags: ["Order"],
+        params: z.object({
+          orderId: z.string().uuid(),
+        }),
       },
     },
     async (request, reply) => {
@@ -26,8 +30,10 @@ export default async function GetPedidos(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const pedidos = await orderRepository.getOrders()
-      return reply.status(200).send(pedidos)
+      const { orderId } = request.params
+
+      const orders = orderRepository.getOrderById(orderId)
+      return reply.status(200).send(orders)
     },
   )
 }

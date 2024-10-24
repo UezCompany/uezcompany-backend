@@ -5,7 +5,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function GetClientes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/clientes",
+    "/clients",
     {
       schema: {
         summary: "Get all Clients",
