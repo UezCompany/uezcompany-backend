@@ -39,10 +39,10 @@ describe("Auth routes", async () => {
 
   let cookieWithAuthorization: string | any
 
-  test("POST /login", async () => {
+  test("POST /auth", async () => {
     const response = await app.inject({
       method: "POST",
-      url: `/login`,
+      url: `/auth`,
       payload: {
         email: "joao.silva@example.com",
         password: "senhaSegura123",

@@ -15,18 +15,18 @@ export default function BudgetForSocket(socket: Socket) {
 
     const myId = socket.data.userId
 
-    const newMessage = await prisma.messages.create({
+    const newMessage = await prisma.message.create({
       data: {
         content: String(value),
         type: "BUDGET",
         senderId: myId,
         receiverId,
-        Chat: {
+        chat: {
           connect: {
             id: chatId,
           },
         },
-        pedido: {
+        order: {
           connect: {
             id: idPedido,
           },

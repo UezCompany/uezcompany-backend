@@ -30,7 +30,7 @@ import RateOrder from "./routes/Order/rate-order"
 import GetUserNotifications from "./routes/Notification/get-notifications"
 import ReadNotification from "./routes/Notification/read-notification"
 import ReadAllNotificacions from "./routes/Notification/read-all-notifications"
-import Login from "./routes/Auth/login"
+import Auth from "./routes/Auth/auth"
 import Logout from "./routes/Auth/logout"
 import CreateChat from "./routes/Chat/create-chat"
 import GetChats from "./routes/Chat/get-chats"
@@ -41,8 +41,9 @@ import MessageForSocket from "./routes/Chat/ws/send-message"
 import JoinSocket from "./routes/Chat/ws/join"
 import BudgetForSocket from "./routes/Chat/ws/send-budget"
 import GetOrdersById from "./routes/Order/get-order-by-id"
-import LoginWithGoogle from "./routes/Auth/login-google"
+import AuthWithGoogle from "./routes/Auth/google-auth"
 import { env } from "@/../env"
+import ForgotPassword from "./routes/Auth/forgot-password"
 
 const app = fastify()
 
@@ -87,9 +88,10 @@ app.get("/", (req, reply) => {
 
 // Auth
 app.register(Register)
-app.register(Login)
+app.register(Auth)
 app.register(Logout)
-app.register(LoginWithGoogle)
+app.register(AuthWithGoogle)
+app.register(ForgotPassword)
 // Client
 app.register(GetClients)
 app.register(GetClient)

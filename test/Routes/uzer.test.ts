@@ -4,7 +4,7 @@ import { describe, expect, test } from "vitest"
 describe("Uzer Routes", async () => {
   const LoginResponse = await app.inject({
     method: "POST",
-    url: `/login`,
+    url: `/auth`,
     payload: {
       email: "uzer@gmail.com",
       password: "uzer123",

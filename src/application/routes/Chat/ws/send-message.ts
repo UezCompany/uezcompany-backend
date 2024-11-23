@@ -14,12 +14,12 @@ export default function MessageForSocket(socket: Socket) {
 
     const myId = socket.data.userId
 
-    const newMessage = await prisma.messages.create({
+    const newMessage = await prisma.message.create({
       data: {
         content,
         senderId: myId,
         receiverId,
-        Chat: {
+        chat: {
           connect: {
             id: chatId,
           },

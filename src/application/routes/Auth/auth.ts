@@ -5,9 +5,9 @@ import bcrypt from "bcrypt"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 import { defaultAuthTokenConfig } from "@/infra/utils/cookies/defaultAuthTokenConfig"
 
-export default async function Login(app: FastifyInstance) {
+export default async function Auth(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
-    "/login",
+    "/auth",
     {
       schema: {
         tags: ["Auth"],

@@ -4,9 +4,9 @@ import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 import { defaultAuthTokenConfig } from "@/infra/utils/cookies/defaultAuthTokenConfig"
 
-export default async function LoginWithGoogle(app: FastifyInstance) {
+export default async function AuthWithGoogle(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
-    "/login/google",
+    "/auth/google",
     {
       schema: {
         tags: ["Auth"],
@@ -16,6 +16,7 @@ export default async function LoginWithGoogle(app: FastifyInstance) {
           name: z.string(),
           googleId: z.string(),
           access_token: z.string(),
+          image: z.optional(z.string().url()),
         }),
         response: {
           200: z.object({
@@ -38,7 +39,7 @@ export default async function LoginWithGoogle(app: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      const { access_token, email, name, googleId } = request.body
+      const { access_token, email, name, googleId, image } = request.body
 
       const user = await prisma.user.findUnique({ where: { email } })
 

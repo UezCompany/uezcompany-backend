@@ -31,6 +31,7 @@ class UzerRepository implements IUzerRepository {
         image: true,
         last_online: true,
         last_login: true,
+        rating: true,
       },
     })
   }

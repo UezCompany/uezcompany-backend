@@ -5,7 +5,7 @@ import { describe, expect, test } from "vitest"
 describe("Chat routes", async () => {
   const LoginResponse = await app.inject({
     method: "POST",
-    url: `/login`,
+    url: `/auth`,
     payload: {
       email: "cliente@gmail.com",
       password: "cliente123",
