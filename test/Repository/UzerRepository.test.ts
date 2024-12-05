@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest"
 import { uzerRepository } from "@/repository/UzerRepository"
 
-const fields = ["id", "username", "name", "email", "status", "block_reason"]
+const fields = ["id", "username", "name", "status"]
 
 describe("Uzer repository", () => {
   let TestUzerRepository: any

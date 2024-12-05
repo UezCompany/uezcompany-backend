@@ -6,4 +6,5 @@ const host = env.HOST
 
 server.listen({ port, host }).then(async () => {
   console.log(`Servidor iniciado em http://${host}:${port}`)
+  console.log(`Documentação: http://${host}:${port}/docs`)
 })

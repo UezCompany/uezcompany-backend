@@ -7,6 +7,7 @@ export default async function GetUzers(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
     "/uzers",
     {
+      onRequest: [app.authenticate],
       schema: {
         summary: "Get all Uzers",
         tags: ["Uzer"],
@@ -22,20 +23,6 @@ export default async function GetUzers(app: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      const { token } = request.cookies
-
-      if (!token) {
-        return reply.status(401).send({ message: "Token não informado" })
-      }
-
-      const decryptedToken = app.jwt.verify(token)
-
-      if (!decryptedToken) {
-        return reply
-          .status(401)
-          .send({ message: "Token inválido ou expirado." })
-      }
-
       const { page, pageSize } = request.query
 
       const uzers = await uzerRepository.getUzers(page, pageSize)

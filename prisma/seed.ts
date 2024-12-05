@@ -192,6 +192,11 @@ async function main() {
       email: "uzer@gmail.com",
       usertype: "UZER",
       password: bcrypt.hashSync("uzer123", 10),
+      service: {
+        connect: {
+          name: "Fullstack",
+        },
+      },
     },
   })
 

@@ -2,7 +2,7 @@ import { assert, describe, expect, test } from "vitest"
 import { serviceRepository } from "@/repository/ServiceRepository"
 import { Service } from "@prisma/client"
 
-const fields = ["id", "name", "type", "description", "categoryId"]
+const fields = ["id", "name", "type", "description"]
 
 describe("Service repository", () => {
   let TestServiceRepository: Service

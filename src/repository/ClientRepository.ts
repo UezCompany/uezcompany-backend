@@ -6,6 +6,36 @@ interface IClientRepository {
   getClientById(id: string): Promise<any>
 }
 
+const optimizedDetails = {
+  id: true,
+  username: true,
+  name: true,
+  usertype: true,
+  status: true,
+  image: true,
+  rating: true,
+}
+
+const allDetails = {
+  id: true,
+  username: true,
+  name: true,
+  email: true,
+  usertype: true,
+  status: true,
+  block_reason: true,
+  image: true,
+  banner: true,
+  bio: true,
+  phone: true,
+  birth_date: true,
+  last_online: true,
+  last_login: true,
+  rating: true,
+  ratings: true,
+  created_at: true,
+}
+
 class ClientRepository implements IClientRepository {
   async getClients(page: number, pageSize: number) {
     const offset = (page <= 1 ? 0 : page - 1) * pageSize
@@ -15,69 +45,21 @@ class ClientRepository implements IClientRepository {
       where: {
         OR: [{ usertype: "CLIENT" }, { usertype: "BOTH" }],
       },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        email: true,
-        status: true,
-        block_reason: true,
-        address: true,
-        birth_date: true,
-        created_at: true,
-        phone: true,
-        usertype: true,
-        orders_amount: true,
-        image: true,
-        last_online: true,
-        last_login: true,
-      },
+      select: optimizedDetails,
     })
   }
 
   async getClientByUsername(username: string) {
     return await prisma.user.findUnique({
       where: { username, OR: [{ usertype: "CLIENT" }, { usertype: "BOTH" }] },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        email: true,
-        status: true,
-        block_reason: true,
-        address: true,
-        birth_date: true,
-        created_at: true,
-        phone: true,
-        usertype: true,
-        orders_amount: true,
-        image: true,
-        last_online: true,
-        last_login: true,
-      },
+      select: allDetails,
     })
   }
 
   async getClientById(id: string) {
     return await prisma.user.findUnique({
       where: { id, OR: [{ usertype: "CLIENT" }, { usertype: "BOTH" }] },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        email: true,
-        status: true,
-        block_reason: true,
-        address: true,
-        birth_date: true,
-        created_at: true,
-        phone: true,
-        usertype: true,
-        orders_amount: true,
-        image: true,
-        last_online: true,
-        last_login: true,
-      },
+      select: allDetails,
     })
   }
 }

@@ -11,7 +11,7 @@ import {
   validatorCompiler,
 } from "fastify-type-provider-zod"
 import { Server } from "socket.io"
-import { errorHandler } from "./error-handle"
+import { errorHandler } from "./error-handler"
 import GetClients from "./routes/Client/get-clients"
 import GetUzers from "./routes/Uzer/get-uzers"
 import GetServices from "./routes/Service/get-services"
@@ -44,6 +44,7 @@ import GetOrdersById from "./routes/Order/get-order-by-id"
 import AuthWithGoogle from "./routes/Auth/google-auth"
 import { env } from "@/../env"
 import ForgotPassword from "./routes/Auth/forgot-password"
+import authPlugin from "./plugins/auth"
 
 const app = fastify()
 
@@ -70,15 +71,15 @@ app.register(fastifyCors, {
   origin: true,
   credentials: true,
 })
-
-app.register(fastifyJwt, {
-  secret: env.SECRET || "SECRET CABULOSO",
-})
-
 app.register(fastifyCookie, {
   secret: env.SECRET || "SECRET CABULOSO",
   hook: "onRequest",
 })
+app.register(fastifyJwt, {
+  secret: env.SECRET || "SECRET CABULOSO",
+})
+
+app.register(authPlugin)
 
 app.register(fastifyWebSocket)
 

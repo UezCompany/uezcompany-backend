@@ -63,11 +63,16 @@ export default async function RateOrder(app: FastifyInstance) {
           id: order.uzerId || "",
         },
         data: {
+          completed_orders_amount: {
+            increment: 1,
+          },
           ratings: {
             push: rating,
           },
         },
       })
+
+      console.log(uzer)
 
       const newAvaliacao =
         uzer.ratings.length === 0
