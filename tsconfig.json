@@ -12,6 +12,7 @@
       "@/*": ["*"]
     },
     "baseUrl": "src",
+    "typeRoots": ["./types"],
     "esModuleInterop": true
   }
 }
