@@ -1,12 +1,26 @@
 # uez-api
 
-A uez api é uma aplicação de **networking**.
+A Uez API é uma aplicação de **networking**.
 
-A ferramenta permite que um usuário se cadastre seja como o prestador de serviços(Uzer), ou alguém que necessita de um serviço(Cliente).
+A ferramenta permite que um usuário se cadastre seja como o prestador de serviços(Uzer), ou alguém que necessita de um serviço (Cliente).
 
 Os Clientes podem criar Pedidos de serviços, que serão assimiladas á algum Uzer competente, e finalizado..
 
 O sistema gerenciará todo o fluxo, permitindo com que o Cliente possa acompanhar o andamento do seu Pedido, e o Uzer não precisará se preocupar com mais nada além de concluir seu serviço.
+
+## Como rodar a aplicação
+
+Antes de mais nada, certifique-se de ter o `pnpm` instalado, e também configure as variáveis de ambiente seguindo o `env.ts`
+
+### Em ambiente de desenvolvimento
+
+- Execute o comando: `docker compose up -d`, para criar e iniciar o container docker responsavel pelo banco de dados postgres.
+
+- Depois, execute o `pnpm install` para instalar as dependências do projeto, e o `pnpm husky:prepare` para configurar o git hooks.
+
+- Em seguida, rode o `pnpm migrate` para criar as tabelas no banco de dados, e o `npx prisma db seed` para popular as tabelas.
+
+- Por fim, rode o `pnpm dev` para iniciar a aplicação.
 
 ## Requisitos
 

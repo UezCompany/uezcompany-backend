@@ -10,22 +10,13 @@ export default async function GetUserNotifications(app: FastifyInstance) {
         summary: "Get all notifications",
         tags: ["Notification"],
       },
+      onRequest: [app.authenticate],
     },
     async (request, reply) => {
-      const { token } = request.cookies
-      if (!token) {
-        return reply.status(401).send({ message: "Token não informado" })
-      }
-      const decryptedToken: any = app.jwt.verify(token)
-      if (!decryptedToken) {
-        return reply
-          .status(401)
-          .send({ message: "Token inválido ou expirado." })
-      }
-
       const notifications = await prisma.notification.findMany({
         where: {
-          receiverId: decryptedToken.id,
+          // @ts-expect-error has id
+          receiverId: request.user.id,
         },
       })
       if (!notifications) {

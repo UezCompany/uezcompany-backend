@@ -6,6 +6,7 @@ const envSchema = z.object({
   PORT: z.string().default("3333"),
   HOST: z.string().default("localhost"),
   FRONTEND_DOMAIN: z.string().default("uezcompany.com"),
+  SERVICE_API_KEY: z.string().min(1),
   AWS_ACCESS_KEY_ID: z.optional(z.string()),
   AWS_SECRET_ACCESS_KEY: z.optional(z.string()),
   AWS_REGION: z.optional(z.string()),
