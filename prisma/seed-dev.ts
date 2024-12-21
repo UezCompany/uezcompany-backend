@@ -2,6 +2,9 @@ import { prisma } from "../src/infra/connection/prisma"
 import bcrypt from "bcrypt"
 
 async function main() {
+  console.log("Seeding development data...")
+
+  // Criando as categorias
   const arrayOfCategorias = [
     "Programação",
     "Videomaking",
@@ -9,82 +12,36 @@ async function main() {
     "Social Media",
   ]
 
+  // Criando as categorias no banco de dados
   const categoryData = await prisma.category.createMany({
     data: arrayOfCategorias.map((name: string) => ({ name })),
     skipDuplicates: true,
   })
 
+  // Dados dos serviços
   const servicesData = [
-    {
-      name: "Fullstack",
-      type: "ONLINE",
-      categoryName: "Programação",
-    },
-    {
-      name: "Frontend",
-      type: "ONLINE",
-      categoryName: "Programação",
-    },
-    {
-      name: "Backend",
-      type: "ONLINE",
-      categoryName: "Programação",
-    },
-    {
-      name: "Games",
-      type: "ONLINE",
-      categoryName: "Programação",
-    },
-    {
-      name: "Mobile",
-      type: "ONLINE",
-      categoryName: "Programação",
-    },
+    { name: "Fullstack", type: "ONLINE", categoryName: "Programação" },
+    { name: "Frontend", type: "ONLINE", categoryName: "Programação" },
+    { name: "Backend", type: "ONLINE", categoryName: "Programação" },
+    { name: "Games", type: "ONLINE", categoryName: "Programação" },
+    { name: "Mobile", type: "ONLINE", categoryName: "Programação" },
     {
       name: "Engenharia de dados",
       type: "ONLINE",
       categoryName: "Programação",
     },
-    {
-      name: "Web",
-      type: "ONLINE",
-      categoryName: "Programação",
-    },
-    {
-      name: "Criação de logo",
-      type: "ONLINE",
-      categoryName: "Design",
-    },
-    {
-      name: "Papelaria",
-      type: "ONLINE",
-      categoryName: "Design",
-    },
-    {
-      name: "Tipografia",
-      type: "ONLINE",
-      categoryName: "Design",
-    },
+    { name: "Web", type: "ONLINE", categoryName: "Programação" },
+    { name: "Criação de logo", type: "ONLINE", categoryName: "Design" },
+    { name: "Papelaria", type: "ONLINE", categoryName: "Design" },
+    { name: "Tipografia", type: "ONLINE", categoryName: "Design" },
     {
       name: "Artes para redes sociais",
       type: "ONLINE",
       categoryName: "Design",
     },
-    {
-      name: "Brand identity",
-      type: "ONLINE",
-      categoryName: "Design",
-    },
-    {
-      name: "Ilustração 2d/3d",
-      type: "ONLINE",
-      categoryName: "Design",
-    },
-    {
-      name: "UX/UI",
-      type: "ONLINE",
-      categoryName: "Design",
-    },
+    { name: "Brand identity", type: "ONLINE", categoryName: "Design" },
+    { name: "Ilustração 2d/3d", type: "ONLINE", categoryName: "Design" },
+    { name: "UX/UI", type: "ONLINE", categoryName: "Design" },
     {
       name: "Gestão de editoriais",
       type: "ONLINE",
@@ -95,11 +52,7 @@ async function main() {
       type: "ONLINE",
       categoryName: "Social Media",
     },
-    {
-      name: "Copywriter",
-      type: "ONLINE",
-      categoryName: "Social Media",
-    },
+    { name: "Copywriter", type: "ONLINE", categoryName: "Social Media" },
     {
       name: "Gestão de tráfego pago",
       type: "ONLINE",
@@ -121,58 +74,50 @@ async function main() {
       categoryName: "Social Media",
     },
     {
-      name: "Edição de vídeos",
+      name: "Edição de vídeos longos",
+      type: "ONLINE",
+      categoryName: "Videomaking",
+    },
+    { name: "Roteirização", type: "ONLINE", categoryName: "Videomaking" },
+    { name: "Narração", type: "ONLINE", categoryName: "Videomaking" },
+    { name: "Animação 2D/3D", type: "ONLINE", categoryName: "Videomaking" },
+    {
+      name: "Edição de vídeos curtos",
       type: "ONLINE",
       categoryName: "Videomaking",
     },
     {
-      name: "Roteirização",
+      name: "Gravação de vídeos promocionais",
       type: "ONLINE",
       categoryName: "Videomaking",
     },
-    {
-      name: "Narração",
-      type: "ONLINE",
-      categoryName: "Videomaking",
-    },
-    {
-      name: "Animação 2D/3D",
-      type: "ONLINE",
-      categoryName: "Videomaking",
-    },
-    {
-      name: "Operação de câmera",
-      type: "ONLINE",
-      categoryName: "Videomaking",
-    },
-    {
-      name: "Operação de áudio",
-      type: "ONLINE",
-      categoryName: "Videomaking",
-    },
-    {
-      name: "Operação de iluminação",
-      type: "ONLINE",
-      categoryName: "Videomaking",
-    },
+    { name: "Edição de áudio", type: "ONLINE", categoryName: "Videomaking" },
   ]
 
-  servicesData.forEach(async (categoryName) => {
-    await prisma.service.create({
-      data: {
-        name: categoryName.name,
-        type: "ONLINE",
-        category: {
-          connect: {
-            name: categoryName.categoryName,
+  // Criando os serviços no banco de dados
+  for (const service of servicesData) {
+    const category = await prisma.category.findUnique({
+      where: { name: service.categoryName },
+    })
+
+    if (category) {
+      await prisma.service.create({
+        data: {
+          name: service.name,
+          type: "ONLINE",
+          category: {
+            connect: {
+              id: category.id,
+            },
           },
         },
-      },
-    })
-  })
+      })
+    }
+  }
 
   console.log(categoryData)
 
+  // Criando um usuário cliente
   const client = await prisma.user.create({
     data: {
       name: "Cliente",
@@ -184,6 +129,7 @@ async function main() {
     },
   })
 
+  // Criando um usuário uzer
   const uzer = await prisma.user.create({
     data: {
       name: "Uzer",
@@ -200,6 +146,7 @@ async function main() {
     },
   })
 
+  // Criando um pedido (order)
   const order = await prisma.order.create({
     data: {
       title: "Order",
@@ -224,6 +171,7 @@ async function main() {
 
   console.log(client, uzer, order)
 }
+
 main()
   .then(async () => {
     await prisma.$disconnect()

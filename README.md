@@ -18,7 +18,7 @@ Antes de mais nada, certifique-se de ter o `pnpm` instalado, e também configure
 
 - Depois, execute o `pnpm install` para instalar as dependências do projeto, e o `pnpm husky:prepare` para configurar o git hooks.
 
-- Em seguida, rode o `pnpm migrate` para criar as tabelas no banco de dados, e o `npx prisma db seed` para popular as tabelas.
+- Em seguida, rode o `pnpm migrate` para criar as tabelas no banco de dados, e o `pnpm seed:dev` para popular as tabelas.
 
 - Por fim, rode o `pnpm dev` para iniciar a aplicação.
 

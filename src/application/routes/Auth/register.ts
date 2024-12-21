@@ -19,8 +19,8 @@ export default async function Register(app: FastifyInstance) {
             .string()
             .min(6, "A senha deve ter pelo menos 6 caracteres"),
           birth_date: z.string(),
-          phone: z.string(),
-          serviceId: z.optional(z.string()),
+          phone: z.optional(z.string()),
+          serviceId: z.optional(z.string().uuid()),
           usertype: z.enum(["UZER", "CLIENT"]),
           username: z.string(),
           image: z.optional(z.string().url()),
@@ -64,6 +64,7 @@ export default async function Register(app: FastifyInstance) {
           service: serviceId ? { connect: { id: serviceId } } : undefined,
         },
       })
+      console.log("chegou aqui")
 
       if (!newUser) {
         return reply.status(500).send({ message: "Erro ao cadastrar." })
