@@ -1,5 +1,5 @@
 import { prisma } from "../src/infra/connection/prisma"
-import bcrypt from "bcrypt"
+// import bcrypt from "bcrypt"
 
 async function main() {
   const arrayOfCategorias = [
@@ -121,7 +121,7 @@ async function main() {
       categoryName: "Social Media",
     },
     {
-      name: "Edição de vídeos",
+      name: "Edição de vídeos longos",
       type: "ONLINE",
       categoryName: "Videomaking",
     },
@@ -141,17 +141,17 @@ async function main() {
       categoryName: "Videomaking",
     },
     {
-      name: "Operação de câmera",
+      name: "Edição de vídeos curtos",
       type: "ONLINE",
       categoryName: "Videomaking",
     },
     {
-      name: "Operação de áudio",
+      name: "Gravação de vídeos promocionais",
       type: "ONLINE",
       categoryName: "Videomaking",
     },
     {
-      name: "Operação de iluminação",
+      name: "Edição de áudio",
       type: "ONLINE",
       categoryName: "Videomaking",
     },
@@ -173,56 +173,56 @@ async function main() {
 
   console.log(categoryData)
 
-  const client = await prisma.user.create({
-    data: {
-      name: "Cliente",
-      birth_date: "1990-01-01",
-      username: "cliente",
-      email: "cliente@gmail.com",
-      usertype: "CLIENT",
-      password: bcrypt.hashSync("cliente123", 10),
-    },
-  })
+  // const client = await prisma.user.create({
+  //   data: {
+  //     name: "Cliente",
+  //     birth_date: "1990-01-01",
+  //     username: "cliente",
+  //     email: "cliente@gmail.com",
+  //     usertype: "CLIENT",
+  //     password: bcrypt.hashSync("cliente123", 10),
+  //   },
+  // })
 
-  const uzer = await prisma.user.create({
-    data: {
-      name: "Uzer",
-      birth_date: "1990-01-01",
-      username: "uzer",
-      email: "uzer@gmail.com",
-      usertype: "UZER",
-      password: bcrypt.hashSync("uzer123", 10),
-      service: {
-        connect: {
-          name: "Fullstack",
-        },
-      },
-    },
-  })
+  // const uzer = await prisma.user.create({
+  //   data: {
+  //     name: "Uzer",
+  //     birth_date: "1990-01-01",
+  //     username: "uzer",
+  //     email: "uzer@gmail.com",
+  //     usertype: "UZER",
+  //     password: bcrypt.hashSync("uzer123", 10),
+  //     service: {
+  //       connect: {
+  //         name: "Fullstack",
+  //       },
+  //     },
+  //   },
+  // })
 
-  const order = await prisma.order.create({
-    data: {
-      title: "Order",
-      description: "Description",
-      client: {
-        connect: {
-          id: client.id,
-        },
-      },
-      uzer: {
-        connect: {
-          id: uzer.id,
-        },
-      },
-      service: {
-        connect: {
-          name: "Fullstack",
-        },
-      },
-    },
-  })
+  // const order = await prisma.order.create({
+  //   data: {
+  //     title: "Order",
+  //     description: "Description",
+  //     client: {
+  //       connect: {
+  //         id: client.id,
+  //       },
+  //     },
+  //     uzer: {
+  //       connect: {
+  //         id: uzer.id,
+  //       },
+  //     },
+  //     service: {
+  //       connect: {
+  //         name: "Fullstack",
+  //       },
+  //     },
+  //   },
+  // })
 
-  console.log(client, uzer, order)
+  // console.log(client, uzer, order)
 }
 main()
   .then(async () => {

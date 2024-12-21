@@ -10,13 +10,28 @@ interface IOrderRepository {
 
 class OrderRepository implements IOrderRepository {
   async getOrders() {
-    return await prisma.order.findMany()
+    return await prisma.order.findMany({
+      include: {
+        service: {
+          include: {
+            category: true,
+          },
+        },
+      },
+    })
   }
 
   async getOrdersByUzer(id: number | string) {
     return await prisma.order.findMany({
       where: {
         uzerId: String(id),
+      },
+      include: {
+        service: {
+          include: {
+            category: true,
+          },
+        },
       },
     })
   }
@@ -25,6 +40,13 @@ class OrderRepository implements IOrderRepository {
     return await prisma.order.findMany({
       where: {
         clientId: String(id),
+      },
+      include: {
+        service: {
+          include: {
+            category: true,
+          },
+        },
       },
     })
   }
@@ -37,6 +59,13 @@ class OrderRepository implements IOrderRepository {
     return await prisma.order.findMany({
       where: {
         available: true,
+      },
+      include: {
+        service: {
+          include: {
+            category: true,
+          },
+        },
       },
     })
   }
