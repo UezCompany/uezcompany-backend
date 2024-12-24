@@ -29,8 +29,8 @@ model User {
   orders_amount           Int            @default(0)
   image                   String         @default("https://cdn-icons-png.flaticon.com/512/74/74472.png")
   completed_orders_amount Int            @default(0)
-  service                 Service?       @relation(fields: [serviceId], references: [id])
-  serviceId               String?
+  speciality              Speciality?    @relation(fields: [specialityId], references: [id])
+  specialityId            String?
   rating                  Float          @default(0.0)
   ratings                 Float[]        @default([])
   last_online             DateTime?      @default(now())
@@ -44,39 +44,45 @@ model User {
   notifications           Notification[]
 }
 
-model Service {
-  id                      String      @id @default(uuid())
-  name                    String      @unique
-  type                    SERVICETYPE
-  category                Category    @relation(fields: [categoryId], references: [id])
-  description             String      @default("Serviço oferecido pela UezCompany")
-  completed_orders_amount Int?        @default(0)
-  default_tax             Float       @default(5.0)
+model Speciality {
+  id                      String         @id @default(uuid())
+  name                    String         @unique
+  type                    SPECIALITYTYPE
+  profession              Profession     @relation(fields: [professionId], references: [id])
+  description             String         @default("Especialidade oferecido pela UezCompany")
+  completed_orders_amount Int?           @default(0)
+  default_tax             Float          @default(5.0)
   orders                  Order[]
   users                   User[]
-  categoryId              String
+  professionId            String
+}
+
+model Profession {
+  id           String       @id @default(uuid())
+  name         String       @unique
+  specialities Speciality[]
 }
 
 model Order {
-  id          String      @id @default(uuid())
-  service     Service     @relation(fields: [serviceId], references: [id])
-  serviceId   String
-  title       String
-  description String      @default("Pedido criado na UezCompany, somente um Uzer pode finaliza-lo.")
-  status      String      @default("A REALIZAR")
-  available   Boolean     @default(true)
-  created_at  DateTime    @default(now())
-  end_date    DateTime?
-  value       Float       @default(0.0)
-  images      String[]
-  rating      Float       @default(0.0)
-  rated       Boolean     @default(false)
-  Portfolio   Portfolio[]
-  Messages    Message[]
-  client      User        @relation("client", fields: [clientId], references: [id])
-  clientId    String
-  uzer        User?       @relation("assigned_uzer", fields: [uzerId], references: [id])
-  uzerId      String?
+  id           String      @id @default(uuid())
+  speciality   Speciality  @relation(fields: [specialityId], references: [id])
+  specialityId String
+  title        String
+  description  String      @default("Pedido criado na UezCompany, somente um Uzer pode finaliza-lo.")
+  status       String      @default("A REALIZAR")
+  available    Boolean     @default(true)
+  created_at   DateTime    @default(now())
+  end_date     DateTime?
+  value        Float       @default(0.0)
+  images       String[]
+  rating       Float       @default(0.0)
+  rated        Boolean     @default(false)
+  Portfolio    Portfolio[]
+  Messages     Message[]
+  client       User        @relation("client", fields: [clientId], references: [id])
+  clientId     String
+  uzer         User?       @relation("assigned_uzer", fields: [uzerId], references: [id])
+  uzerId       String?
 }
 
 model Portfolio {
@@ -116,25 +122,7 @@ model Message {
   orderId    String?
 }
 
-// model Address {
-//   id           String @id @default(uuid())
-//   zip          String
-//   street       String
-//   neighborhood String
-//   city         String
-//   state        String
-//   complement   String
-//   number       Int
-//   User         User[]
-// }
-
-model Category {
-  id       String    @id @default(uuid())
-  name     String    @unique
-  services Service[]
-}
-
-enum SERVICETYPE {
+enum SPECIALITYTYPE {
   ONLINE
 }
 
@@ -156,3 +144,15 @@ enum MESSAGETYPE {
   IMAGE
   FILE
 }
+
+// model Address {
+//   id           String @id @default(uuid())
+//   zip          String
+//   street       String
+//   neighborhood String
+//   city         String
+//   state        String
+//   complement   String
+//   number       Int
+//   User         User[]
+// }

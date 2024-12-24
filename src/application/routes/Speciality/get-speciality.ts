@@ -1,15 +1,15 @@
 import { FastifyInstance } from "fastify"
-import { serviceRepository } from "@/repository/ServiceRepository"
+import { specialityRepository } from "@/repository/SpecialityRepository"
 import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function GetService(app: FastifyInstance) {
+export default async function GetSpeciality(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/services/:id",
+    "/specialities/:id",
     {
       schema: {
-        summary: "Get service by Id",
-        tags: ["Service"],
+        summary: "Get speciality by Id",
+        tags: ["Speciality"],
         params: z.object({
           id: z.string().uuid(),
         }),
@@ -21,8 +21,8 @@ export default async function GetService(app: FastifyInstance) {
       })
       const { id } = params.parse(request.params)
 
-      const service = await serviceRepository.getServicesById(id)
-      return reply.status(200).send(service || null)
+      const speciality = await specialityRepository.getSpecialitiesById(id)
+      return reply.status(200).send(speciality || null)
     },
   )
 }

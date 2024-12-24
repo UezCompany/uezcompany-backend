@@ -13,7 +13,7 @@
 //         body: z.object({
 //           amount: z.number(),
 //           currency: z.string().default("brl"),
-//           serviceId: z.string(),
+//           specialityId: z.string(),
 //         }),
 //       },
 //     },
@@ -21,10 +21,10 @@
 //       const createPaymentBody = z.object({
 //         amount: z.number(),
 //         currency: z.string().default("brl"),
-//         serviceId: z.string(),
+//         specialityId: z.string(),
 //       })
 
-//       const { amount, currency, serviceId } = createPaymentBody.parse(
+//       const { amount, currency, specialityId } = createPaymentBody.parse(
 //         request.body,
 //       )
 
@@ -32,7 +32,7 @@
 //         const paymentIntent = await stripe.paymentIntents.create({
 //           amount: amount,
 //           currency: currency,
-//           metadata: { serviceId: serviceId },
+//           metadata: { specialityId: specialityId },
 //           automatic_payment_methods: { enabled: true },
 //         })
 //         return reply

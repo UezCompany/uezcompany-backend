@@ -12,9 +12,9 @@ class OrderRepository implements IOrderRepository {
   async getOrders() {
     return await prisma.order.findMany({
       include: {
-        service: {
+        speciality: {
           include: {
-            category: true,
+            profession: true,
           },
         },
       },
@@ -27,9 +27,9 @@ class OrderRepository implements IOrderRepository {
         uzerId: String(id),
       },
       include: {
-        service: {
+        speciality: {
           include: {
-            category: true,
+            profession: true,
           },
         },
       },
@@ -42,9 +42,9 @@ class OrderRepository implements IOrderRepository {
         clientId: String(id),
       },
       include: {
-        service: {
+        speciality: {
           include: {
-            category: true,
+            profession: true,
           },
         },
       },
@@ -61,9 +61,9 @@ class OrderRepository implements IOrderRepository {
         available: true,
       },
       include: {
-        service: {
+        speciality: {
           include: {
-            category: true,
+            profession: true,
           },
         },
       },

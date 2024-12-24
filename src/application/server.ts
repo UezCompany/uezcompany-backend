@@ -14,10 +14,10 @@ import { Server } from "socket.io"
 import { errorHandler } from "./error-handler"
 import GetClients from "./routes/Client/get-clients"
 import GetUzers from "./routes/Uzer/get-uzers"
-import GetServices from "./routes/Service/get-services"
-import GetService from "./routes/Service/get-service"
-import GetServicesByCategoryName from "./routes/Service/get-services-by-category-name"
-import GetCategories from "./routes/Service/get-categories"
+import GetSpecialities from "./routes/Speciality/get-specialities"
+import GetSpeciality from "./routes/Speciality/get-speciality"
+import GetSpecialitiesByProfessionName from "./routes/Speciality/get-specialities-by-profession"
+import GetProfessions from "./routes/Speciality/get-professions"
 import Register from "./routes/Auth/register"
 import GetOrders from "./routes/Order/get-orders"
 import GetOrdersCreatedByUser from "./routes/Order/get-orders-created-by-user"
@@ -100,11 +100,11 @@ app.register(GetClient)
 app.register(GetUzers)
 app.register(GetUzerBySlug)
 app.register(GetPortfolios)
-// Service
-app.register(GetServices)
-app.register(GetService)
-app.register(GetServicesByCategoryName)
-app.register(GetCategories)
+// Speciality
+app.register(GetSpecialities)
+app.register(GetSpeciality)
+app.register(GetSpecialitiesByProfessionName)
+app.register(GetProfessions)
 // Order
 app.register(GetOrders)
 app.register(GetOrdersById)

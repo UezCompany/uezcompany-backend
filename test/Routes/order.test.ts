@@ -1,6 +1,6 @@
 import app from "@/application/server"
 import { orderRepository } from "@/repository/OrderRepository"
-import { serviceRepository } from "@/repository/ServiceRepository"
+import { specialityRepository } from "@/repository/SpecialityRepository"
 import { Order } from "@prisma/client"
 import { describe, expect, test } from "vitest"
 
@@ -103,10 +103,10 @@ describe("Order routes", async () => {
   let order: Order
 
   test("POST /orders", async () => {
-    const category = "Programação"
-    const arrayOfServices =
-      await serviceRepository.getServicesByCategory(category)
-    const service = arrayOfServices[0]
+    const profession = "Programação"
+    const arrayOfSpecialities =
+      await specialityRepository.getSpecialitiesByProfession(profession)
+    const speciality = arrayOfSpecialities[0]
 
     const response = await app.inject({
       method: "POST",
@@ -114,10 +114,10 @@ describe("Order routes", async () => {
         cookie: cookieWithAuthorizationClient,
       },
       body: {
-        category: category,
-        serviceId: service.id,
+        profession: profession,
+        specialityId: speciality.id,
         value: 123,
-        title: "Teste de serviço",
+        title: "Teste de Especialidade",
       },
       url: `/orders`,
     })

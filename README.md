@@ -2,11 +2,11 @@
 
 A Uez API é uma aplicação de **networking**.
 
-A ferramenta permite que um usuário se cadastre seja como o prestador de serviços(Uzer), ou alguém que necessita de um serviço (Cliente).
+A ferramenta permite que um usuário se cadastre seja como o prestador de Especialidades(Uzer), ou alguém que necessita de um Especialidade (Cliente).
 
-Os Clientes podem criar Pedidos de serviços, que serão assimiladas á algum Uzer competente, e finalizado..
+Os Clientes podem criar Pedidos de Especialidades, que serão assimiladas á algum Uzer competente, e finalizado..
 
-O sistema gerenciará todo o fluxo, permitindo com que o Cliente possa acompanhar o andamento do seu Pedido, e o Uzer não precisará se preocupar com mais nada além de concluir seu serviço.
+O sistema gerenciará todo o fluxo, permitindo com que o Cliente possa acompanhar o andamento do seu Pedido, e o Uzer não precisará se preocupar com mais nada além de concluir seu Especialidade.
 
 ## Como rodar a aplicação
 

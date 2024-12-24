@@ -20,7 +20,7 @@ export default async function Register(app: FastifyInstance) {
             .min(6, "A senha deve ter pelo menos 6 caracteres"),
           birth_date: z.string(),
           phone: z.optional(z.string()),
-          serviceId: z.optional(z.string().uuid()),
+          specialityId: z.optional(z.string().uuid()),
           usertype: z.enum(["UZER", "CLIENT"]),
           username: z.string(),
           image: z.optional(z.string().url()),
@@ -37,7 +37,7 @@ export default async function Register(app: FastifyInstance) {
         username,
         usertype,
         image,
-        serviceId,
+        specialityId,
       } = request.body
 
       const [userWithThisEmail, userWithThisUsername] = await Promise.all([
@@ -61,7 +61,9 @@ export default async function Register(app: FastifyInstance) {
           password: password ? bcrypt.hashSync(password, 10) : null,
           phone: phone ? phone : null,
           image: image ? image : undefined,
-          service: serviceId ? { connect: { id: serviceId } } : undefined,
+          speciality: specialityId
+            ? { connect: { id: specialityId } }
+            : undefined,
         },
       })
       console.log("chegou aqui")

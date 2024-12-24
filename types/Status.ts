@@ -1,0 +1,6 @@
+export type STATUS =
+  | "OPEN"
+  | "WAITING_EVALUATION"
+  | "COMPLETED"
+  | "IN_PROGRESS"
+  | "CANCELLED"

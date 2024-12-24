@@ -11,7 +11,7 @@ import { describe, expect, test } from "vitest"
   username,
   usertype,
   image,
-  serviceId,
+  specialityId,
 */
 
 describe("Auth routes", async () => {

@@ -16,7 +16,7 @@ const optimizedDetails = {
   orders_amount: true,
   completed_orders_amount: true,
   rating: true,
-  service: {
+  speciality: {
     select: {
       id: true,
       name: true,
@@ -44,9 +44,9 @@ const allDetails = {
   rating: true,
   ratings: true,
   created_at: true,
-  service: {
+  speciality: {
     select: {
-      category: {
+      profession: {
         select: {
           id: true,
           name: true,

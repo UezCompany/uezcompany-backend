@@ -96,7 +96,7 @@ export default async function RateOrder(app: FastifyInstance) {
 
       await sendNotification(
         uzer.id,
-        `R$ ${order.value} do serviço ${order.title} já está na sua carteira`,
+        `R$ ${order.value} do Especialidade ${order.title} já está na sua carteira`,
         "servAval",
       )
 

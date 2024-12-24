@@ -12,8 +12,8 @@ export default async function CreateOrder(app: FastifyInstance) {
         summary: "Create an order",
         tags: ["Order"],
         body: z.object({
-          category: z.string(),
-          serviceId: z.string(),
+          profession: z.string(),
+          specialityId: z.string(),
           value: z.optional(z.number()),
           title: z.string(),
         }),
@@ -34,7 +34,7 @@ export default async function CreateOrder(app: FastifyInstance) {
           .send({ message: "Token inválido ou expirado." })
       }
 
-      const { serviceId, title, value } = request.body
+      const { specialityId, title, value } = request.body
 
       const order = await prisma.order.create({
         data: {
@@ -45,9 +45,9 @@ export default async function CreateOrder(app: FastifyInstance) {
               id: decryptedToken.id,
             },
           },
-          service: {
+          speciality: {
             connect: {
-              id: serviceId,
+              id: specialityId,
             },
           },
         },
