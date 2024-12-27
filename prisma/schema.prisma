@@ -39,7 +39,7 @@ model User {
   bio                     String?        @default("Usuario criado na UezCompany, somente ele mesmo pode edita-lo.")
   addressId               String?
   owner_orders            Order[]        @relation("client")
-  assigned_orders         Order[]        @relation("assigned_uzer")
+  assigned_orders         Order[]        @relation("assigned_uezer")
   chats                   Chat[]         @relation("UserChats")
   notifications           Notification[]
 }
@@ -68,7 +68,7 @@ model Order {
   speciality   Speciality  @relation(fields: [specialityId], references: [id])
   specialityId String
   title        String
-  description  String      @default("Pedido criado na UezCompany, somente um Uzer pode finaliza-lo.")
+  description  String      @default("Pedido criado na UezCompany, somente um Uezer pode finaliza-lo.")
   status       String      @default("A REALIZAR")
   available    Boolean     @default(true)
   created_at   DateTime    @default(now())
@@ -81,8 +81,8 @@ model Order {
   Messages     Message[]
   client       User        @relation("client", fields: [clientId], references: [id])
   clientId     String
-  uzer         User?       @relation("assigned_uzer", fields: [uzerId], references: [id])
-  uzerId       String?
+  uezer        User?       @relation("assigned_uezer", fields: [uezerId], references: [id])
+  uezerId      String?
 }
 
 model Portfolio {
@@ -133,7 +133,7 @@ enum STATUS {
 }
 
 enum USERTYPE {
-  UZER
+  UEZER
   CLIENT
   BOTH
 }

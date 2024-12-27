@@ -58,7 +58,7 @@ export default async function CreateOrder(app: FastifyInstance) {
 
       await sendNotification(
         decryptedToken.id,
-        "Em breve um uzer mandará mensagem.",
+        "Em breve um uezer mandará mensagem.",
         "pedLance",
       )
 

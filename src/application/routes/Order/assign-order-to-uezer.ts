@@ -3,19 +3,19 @@ import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function AssignOrderToUzer(app: FastifyInstance) {
+export default async function AssignOrderToUezer(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().put(
     "/orders/:orderId/assign",
     {
       schema: {
-        summary: "Assigns an order to a uzer by order Id",
+        summary: "Assigns an order to a uezer by order Id",
         tags: ["Order"],
         params: z.object({
           orderId: z.string().uuid(),
         }),
         body: z.object({
           value: z.optional(z.number()),
-          uzerId: z.string(),
+          uezerId: z.string(),
         }),
       },
     },
@@ -36,7 +36,7 @@ export default async function AssignOrderToUzer(app: FastifyInstance) {
 
       const { orderId } = request.params
 
-      const { value, uzerId } = request.body
+      const { value, uezerId } = request.body
 
       const order = await prisma.order
         .update({
@@ -47,9 +47,9 @@ export default async function AssignOrderToUzer(app: FastifyInstance) {
             status: "EM ANDAMENTO",
             available: false,
             value,
-            uzer: {
+            uezer: {
               connect: {
-                id: uzerId,
+                id: uezerId,
               },
             },
           },

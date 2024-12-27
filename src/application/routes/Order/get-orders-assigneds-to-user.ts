@@ -8,7 +8,7 @@ export default async function GetOrdersAssignedsToUser(app: FastifyInstance) {
     "/orders/:userId/assigned-orders",
     {
       schema: {
-        summary: "Get all orders from a uzer",
+        summary: "Get all orders from a uezer",
         tags: ["Order"],
         params: z.object({
           userId: z.string(),
@@ -32,7 +32,7 @@ export default async function GetOrdersAssignedsToUser(app: FastifyInstance) {
 
       const { userId } = request.params
 
-      const orders = await orderRepository.getOrdersByUzer(userId)
+      const orders = await orderRepository.getOrdersByUezer(userId)
       return reply.status(200).send(orders)
     },
   )

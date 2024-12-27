@@ -1,5 +1,5 @@
 import app from "@/application/server"
-import { uzerRepository } from "@/repository/UzerRepository"
+import { uezerRepository } from "@/repository/UezerRepository"
 import { describe, expect, test } from "vitest"
 
 describe("Chat routes", async () => {
@@ -30,15 +30,15 @@ describe("Chat routes", async () => {
   })
 
   test("POST /chat/create/:requestedContactId", async () => {
-    const uzerContact = await uzerRepository.getUzers(1, 1)
-    const uzerId = uzerContact[0].id
+    const uezerContact = await uezerRepository.getUezers(1, 1)
+    const uezerId = uezerContact[0].id
 
     const response = await app.inject({
       method: "POST",
       headers: {
         cookie: cookieWithAuthorization,
       },
-      url: `/chat/create/${uzerId}`,
+      url: `/chat/create/${uezerId}`,
     })
 
     expect([201, 400]).toContain(response.statusCode)

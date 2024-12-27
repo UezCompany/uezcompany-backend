@@ -1,15 +1,15 @@
 import { FastifyInstance } from "fastify"
 import { z } from "zod"
-import { uzerRepository } from "@/repository/UzerRepository"
+import { uezerRepository } from "@/repository/UezerRepository"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function GetUzerBySlug(app: FastifyInstance) {
+export default async function GetUezerBySlug(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/uzers/:slug",
+    "/uezers/:slug",
     {
       schema: {
-        summary: "Get an Uzer by Slug (Id or Username)",
-        tags: ["Uzer"],
+        summary: "Get an Uezer by Slug (Id or Username)",
+        tags: ["Uezer"],
         params: z.object({
           slug: z.string(),
         }),
@@ -23,17 +23,17 @@ export default async function GetUzerBySlug(app: FastifyInstance) {
       const { success } = uuidSchema.safeParse(slug)
 
       if (!success) {
-        const uzer = await uzerRepository.getUzerByUsername(slug)
-        if (!uzer) {
+        const uezer = await uezerRepository.getUezerByUsername(slug)
+        if (!uezer) {
           return reply.status(404).send({ message: "Usuário não encontrado" })
         }
-        return reply.status(200).send(uzer)
+        return reply.status(200).send(uezer)
       } else {
-        const uzer = uzerRepository.getUzerById(slug)
-        if (!uzer) {
+        const uezer = uezerRepository.getUezerById(slug)
+        if (!uezer) {
           return reply.status(404).send({ message: "Usuário não encontrado" })
         }
-        return reply.status(200).send(uzer)
+        return reply.status(200).send(uezer)
       }
     },
   )

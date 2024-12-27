@@ -1,6 +1,6 @@
 export type STATUS =
   | "OPEN"
+  | "CANCELLED"
+  | "IN_PROGRESS"
   | "WAITING_EVALUATION"
   | "COMPLETED"
-  | "IN_PROGRESS"
-  | "CANCELLED"

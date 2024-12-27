@@ -2,11 +2,11 @@
 
 A Uez API é uma aplicação de **networking**.
 
-A ferramenta permite que um usuário se cadastre seja como o prestador de Especialidades(Uzer), ou alguém que necessita de um Especialidade (Cliente).
+A ferramenta permite que um usuário cadastre-se, seja como o prestador de serviços (Uezer), ou alguém que necessita de um serviço (Cliente).
 
-Os Clientes podem criar Pedidos de Especialidades, que serão assimiladas á algum Uzer competente, e finalizado..
+Os Clientes podem criar Pedidos de alguma Especialidade, que serão assimiladas á algum Uezer competente, e finalizado..
 
-O sistema gerenciará todo o fluxo, permitindo com que o Cliente possa acompanhar o andamento do seu Pedido, e o Uzer não precisará se preocupar com mais nada além de concluir seu Especialidade.
+O sistema gerenciará todo o fluxo, permitindo com que o Cliente possa acompanhar o andamento do seu Pedido, e o Uezer não precisará se preocupar com mais nada além de concluir seu serviço.
 
 ## Como rodar a aplicação
 
@@ -27,19 +27,19 @@ Antes de mais nada, certifique-se de ter o `pnpm` instalado, e também configure
 ### Requisitos funcionais
 
 - [x] O usuário deve poder se cadastrar como Cliente;
-- [x] O usuário deve poder se cadastrar como Uzer;
+- [x] O usuário deve poder se cadastrar como Uezer;
 - [x] O Cliente deve poder criar um Pedido;
-- [x] O Cliente deve poder visualizar a lista de Uzers;
-- [x] O Uzer deve poder visualizar a lista de Pedidos;
-- [x] O Uzer deve poder se "encarregar" de um Pedido;
-- [x] O Uzer deve poder finalizar o Pedido;
+- [x] O Cliente deve poder visualizar a lista de Uezers;
+- [x] O Uezer deve poder visualizar a lista de Pedidos;
+- [x] O Uezer deve poder se "encarregar" de um Pedido;
+- [x] O Uezer deve poder finalizar o Pedido;
 - [x] O Cliente deve poder avaliar o Pedido;
-- [x] O Cliente deve poder avaliar o Uzer que realizou seu Pedido;
+- [x] O Cliente deve poder avaliar o Uezer que realizou seu Pedido;
 
 ### Regras de negócio
 
-- [x] O usuário que se cadastra, deve poder escolher apenas uma opção de usuário (Uzer ou Cliente);
-- [x] O Pedido só pode ter um único Uzer atrelado a ele;
+- [x] O usuário que se cadastra, deve poder escolher apenas uma opção de usuário (Uezer ou Cliente);
+- [x] O Pedido só pode ter um único Uezer atrelado a ele;
 - [x] O Pedido só deve ser dado como concluido, quando o cliente avalia-lo;
 
 ### Requisitos não-funcionais

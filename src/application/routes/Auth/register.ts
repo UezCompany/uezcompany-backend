@@ -21,7 +21,7 @@ export default async function Register(app: FastifyInstance) {
           birth_date: z.string(),
           phone: z.optional(z.string()),
           specialityId: z.optional(z.string().uuid()),
-          usertype: z.enum(["UZER", "CLIENT"]),
+          usertype: z.enum(["UEZER", "CLIENT"]),
           username: z.string(),
           image: z.optional(z.string().url()),
         }),

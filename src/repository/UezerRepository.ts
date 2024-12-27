@@ -1,9 +1,9 @@
 import { prisma } from "../infra/connection/prisma"
 
-interface IUzerRepository {
-  getUzers(page: number, pageSize: number): Promise<any>
-  getUzerByUsername(username: string): Promise<any>
-  getUzerById(id: string): Promise<any>
+interface IUezerRepository {
+  getUezers(page: number, pageSize: number): Promise<any>
+  getUezerByUsername(username: string): Promise<any>
+  getUezerById(id: string): Promise<any>
 }
 
 const optimizedDetails = {
@@ -62,32 +62,32 @@ const allDetails = {
   },
 }
 
-class UzerRepository implements IUzerRepository {
-  async getUzers(page: number, pageSize: number) {
+class UezerRepository implements IUezerRepository {
+  async getUezers(page: number, pageSize: number) {
     const offset = (page <= 1 ? 0 : page - 1) * pageSize
     return await prisma.user.findMany({
       skip: offset,
       take: pageSize,
       where: {
-        OR: [{ usertype: "UZER" }, { usertype: "BOTH" }],
+        OR: [{ usertype: "UEZER" }, { usertype: "BOTH" }],
       },
       select: optimizedDetails,
     })
   }
 
-  async getUzerByUsername(username: string) {
+  async getUezerByUsername(username: string) {
     return await prisma.user.findUnique({
-      where: { username, OR: [{ usertype: "UZER" }, { usertype: "BOTH" }] },
+      where: { username, OR: [{ usertype: "UEZER" }, { usertype: "BOTH" }] },
       select: allDetails,
     })
   }
 
-  async getUzerById(id: string) {
+  async getUezerById(id: string) {
     return await prisma.user.findUnique({
-      where: { id, OR: [{ usertype: "UZER" }, { usertype: "BOTH" }] },
+      where: { id, OR: [{ usertype: "UEZER" }, { usertype: "BOTH" }] },
       select: allDetails,
     })
   }
 }
 
-export const uzerRepository = new UzerRepository()
+export const uezerRepository = new UezerRepository()

@@ -2,7 +2,7 @@ import { prisma } from "../infra/connection/prisma"
 
 interface IOrderRepository {
   getOrders(): Promise<any>
-  getOrdersByUzer(idUzer: number | string): Promise<any>
+  getOrdersByUezer(idUezer: number | string): Promise<any>
   getCreatedOrdersByUser(idClient: number | string): Promise<any>
   getOrderById(id: number | string): Promise<any>
   getActiveOrders(): Promise<any>
@@ -21,10 +21,10 @@ class OrderRepository implements IOrderRepository {
     })
   }
 
-  async getOrdersByUzer(id: number | string) {
+  async getOrdersByUezer(id: number | string) {
     return await prisma.order.findMany({
       where: {
-        uzerId: String(id),
+        uezerId: String(id),
       },
       include: {
         speciality: {

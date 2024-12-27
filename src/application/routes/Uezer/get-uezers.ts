@@ -1,16 +1,16 @@
 import { FastifyInstance } from "fastify"
 import { z } from "zod"
-import { uzerRepository } from "@/repository/UzerRepository"
+import { uezerRepository } from "@/repository/UezerRepository"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function GetUzers(app: FastifyInstance) {
+export default async function GetUezers(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    "/uzers",
+    "/uezers",
     {
       onRequest: [app.authenticate],
       schema: {
-        summary: "Get all Uzers",
-        tags: ["Uzer"],
+        summary: "Get all Uezers",
+        tags: ["Uezer"],
         querystring: z
           .object({
             page: z.optional(z.string()),
@@ -26,8 +26,8 @@ export default async function GetUzers(app: FastifyInstance) {
       const { page, pageSize } = request.query
       console.log(request.user)
 
-      const uzers = await uzerRepository.getUzers(page, pageSize)
-      return reply.status(200).send(uzers)
+      const uezers = await uezerRepository.getUezers(page, pageSize)
+      return reply.status(200).send(uezers)
     },
   )
 }

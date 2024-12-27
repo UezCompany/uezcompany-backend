@@ -31,7 +31,7 @@
 //             id: decryptedToken.id,
 //           },
 //         })) ||
-//         (await prisma.uzers.findUnique({
+//         (await prisma.uezers.findUnique({
 //           where: {
 //             id: decryptedToken.id,
 //           },

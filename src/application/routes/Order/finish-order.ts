@@ -39,7 +39,7 @@ export default async function FinishOrder(app: FastifyInstance) {
         data: {
           status: "A AVALIAR",
           available: false,
-          uzer: {
+          uezer: {
             connect: {
               id: decryptedToken.id,
             },

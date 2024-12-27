@@ -13,7 +13,7 @@ export default async function sendNotification(
   type:
     | "orcaReceb"
     | "servFim"
-    | "solicitUzer"
+    | "solicitUezer"
     | "pedLance"
     | "ban"
     | "parabens"

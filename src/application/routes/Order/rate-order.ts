@@ -58,9 +58,9 @@ export default async function RateOrder(app: FastifyInstance) {
         },
       })
 
-      const uzer = await prisma.user.update({
+      const uezer = await prisma.user.update({
         where: {
-          id: order.uzerId || "",
+          id: order.uezerId || "",
         },
         data: {
           completed_orders_amount: {
@@ -72,30 +72,33 @@ export default async function RateOrder(app: FastifyInstance) {
         },
       })
 
-      console.log(uzer)
+      console.log(uezer)
 
       const newAvaliacao =
-        uzer.ratings.length === 0
+        uezer.ratings.length === 0
           ? rating
-          : (uzer.ratings.reduce((acc, curr) => Number(acc) + Number(curr), 0) +
+          : (uezer.ratings.reduce(
+              (acc, curr) => Number(acc) + Number(curr),
+              0,
+            ) +
               Number(rating)) /
-              uzer.ratings.length +
+              uezer.ratings.length +
             1
-      const uzerAvaliado = await prisma.user.update({
+      const uezerAvaliado = await prisma.user.update({
         where: {
-          id: uzer.id,
+          id: uezer.id,
         },
         data: {
           rating: newAvaliacao,
         },
       })
 
-      if (!uzerAvaliado || !order) {
+      if (!uezerAvaliado || !order) {
         return reply.status(400).send({ message: "Erro ao avaliar o pedido." })
       }
 
       await sendNotification(
-        uzer.id,
+        uezer.id,
         `R$ ${order.value} do Especialidade ${order.title} já está na sua carteira`,
         "servAval",
       )

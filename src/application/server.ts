@@ -13,7 +13,7 @@ import {
 import { Server } from "socket.io"
 import { errorHandler } from "./error-handler"
 import GetClients from "./routes/Client/get-clients"
-import GetUzers from "./routes/Uzer/get-uzers"
+import GetUezers from "./routes/Uezer/get-uezers"
 import GetSpecialities from "./routes/Speciality/get-specialities"
 import GetSpeciality from "./routes/Speciality/get-speciality"
 import GetSpecialitiesByProfessionName from "./routes/Speciality/get-specialities-by-profession"
@@ -23,7 +23,7 @@ import GetOrders from "./routes/Order/get-orders"
 import GetOrdersCreatedByUser from "./routes/Order/get-orders-created-by-user"
 import GetOrdersAssignedsToUser from "./routes/Order/get-orders-assigneds-to-user"
 import GetActiveOrders from "./routes/Order/get-active-orders"
-import AssignOrderToUzer from "./routes/Order/assign-order-to-uzer"
+import AssignOrderToUezer from "./routes/Order/assign-order-to-uezer"
 import CreateOrder from "./routes/Order/create-order"
 import FinishOrder from "./routes/Order/finish-order"
 import RateOrder from "./routes/Order/rate-order"
@@ -34,9 +34,9 @@ import Auth from "./routes/Auth/auth"
 import Logout from "./routes/Auth/logout"
 import CreateChat from "./routes/Chat/create-chat"
 import GetChats from "./routes/Chat/get-chats"
-import GetUzerBySlug from "./routes/Uzer/get-uzer-by-slug"
+import GetUezerBySlug from "./routes/Uezer/get-uezer-by-slug"
 import GetClient from "./routes/Client/get-client"
-import GetPortfolios from "./routes/Uzer/Portfolio/get-portfolios"
+import GetPortfolios from "./routes/Uezer/Portfolio/get-portfolios"
 import MessageForSocket from "./routes/Chat/ws/send-message"
 import JoinSocket from "./routes/Chat/ws/join"
 import BudgetForSocket from "./routes/Chat/ws/send-budget"
@@ -96,9 +96,9 @@ app.register(ForgotPassword)
 // Client
 app.register(GetClients)
 app.register(GetClient)
-// Uzer
-app.register(GetUzers)
-app.register(GetUzerBySlug)
+// Uezer
+app.register(GetUezers)
+app.register(GetUezerBySlug)
 app.register(GetPortfolios)
 // Speciality
 app.register(GetSpecialities)
@@ -111,7 +111,7 @@ app.register(GetOrdersById)
 app.register(GetOrdersCreatedByUser)
 app.register(GetOrdersAssignedsToUser)
 app.register(GetActiveOrders)
-app.register(AssignOrderToUzer)
+app.register(AssignOrderToUezer)
 app.register(CreateOrder)
 app.register(FinishOrder)
 app.register(RateOrder)

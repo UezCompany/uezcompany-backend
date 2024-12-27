@@ -6,16 +6,16 @@ describe("Portifolio Route", async () => {
     method: "POST",
     url: `/auth`,
     payload: {
-      email: "uzer@gmail.com",
-      password: "uzer123",
+      email: "uezer@gmail.com",
+      password: "uezer123",
     },
   })
 
-  expect(userLoginResponse.statusCode, "Uzer logado com sucesso").toBe(200)
+  expect(userLoginResponse.statusCode, "Uezer logado com sucesso").toBe(200)
   expect(userLoginResponse.headers["set-cookie"]).toBeDefined()
 
   test("GET /portfolio/:slug", async () => {
-    const slug = "uzer"
+    const slug = "uezer"
 
     const cookieWithAuthorization = userLoginResponse.headers["set-cookie"]
 

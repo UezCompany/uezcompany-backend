@@ -8,8 +8,8 @@ export default async function GetPortfolios(app: FastifyInstance) {
     "/portfolios/:slug",
     {
       schema: {
-        summary: "Get portfolio by uzerId",
-        tags: ["Uzer", "Portfolio"],
+        summary: "Get portfolio by uezerId",
+        tags: ["Uezer", "Portfolio"],
         params: z.object({
           slug: z.string(),
         }),
@@ -26,7 +26,7 @@ export default async function GetPortfolios(app: FastifyInstance) {
         const portfolio = await prisma.portfolio.findMany({
           where: {
             order: {
-              uzer: {
+              uezer: {
                 username: slug,
               },
             },
@@ -37,7 +37,7 @@ export default async function GetPortfolios(app: FastifyInstance) {
         const portfolio = await prisma.portfolio.findMany({
           where: {
             order: {
-              uzer: {
+              uezer: {
                 id: slug,
               },
             },

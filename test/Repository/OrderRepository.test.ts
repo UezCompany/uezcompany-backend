@@ -1,18 +1,18 @@
 import { clientRepository } from "@/repository/ClientRepository"
 import { orderRepository } from "@/repository/OrderRepository"
-import { uzerRepository } from "@/repository/UzerRepository"
+import { uezerRepository } from "@/repository/UezerRepository"
 import { describe, expect, test } from "vitest"
 
 const fields = ["id", "title", "description", "status"]
 
 describe("Order repository", () => {
   let TestOrderRepository: any
-  let TestUzer: any
+  let TestUezer: any
   let TestClient: any
 
   test("lista todas as ordens", async () => {
     TestOrderRepository = await orderRepository.getOrders()
-    TestUzer = (await uzerRepository.getUzers(1, 1))[0]
+    TestUezer = (await uezerRepository.getUezers(1, 1))[0]
     TestClient = (await clientRepository.getClients(1, 1))[0]
 
     TestOrderRepository.forEach((order: any) => {
@@ -22,9 +22,9 @@ describe("Order repository", () => {
     })
   })
 
-  test("lista a ordem pelo uzer", async () => {
-    const id = TestUzer.id
-    const TestOrders = await orderRepository.getOrdersByUzer(id)
+  test("lista a ordem pelo uezer", async () => {
+    const id = TestUezer.id
+    const TestOrders = await orderRepository.getOrdersByUezer(id)
 
     TestOrders.forEach((order: any) => {
       fields.forEach((field) => {

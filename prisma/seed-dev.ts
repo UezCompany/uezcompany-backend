@@ -129,15 +129,15 @@ async function main() {
     },
   })
 
-  // Criando um usuário uzer
-  const uzer = await prisma.user.create({
+  // Criando um usuário uezer
+  const uezer = await prisma.user.create({
     data: {
-      name: "Uzer",
+      name: "Uezer",
       birth_date: "1990-01-01",
-      username: "uzer",
-      email: "uzer@gmail.com",
-      usertype: "UZER",
-      password: bcrypt.hashSync("uzer123", 10),
+      username: "uezer",
+      email: "uezer@gmail.com",
+      usertype: "UEZER",
+      password: bcrypt.hashSync("uezer123", 10),
       speciality: {
         connect: {
           name: "Fullstack",
@@ -156,9 +156,9 @@ async function main() {
           id: client.id,
         },
       },
-      uzer: {
+      uezer: {
         connect: {
-          id: uzer.id,
+          id: uezer.id,
         },
       },
       speciality: {
@@ -169,7 +169,7 @@ async function main() {
     },
   })
 
-  console.log(client, uzer, order)
+  console.log(client, uezer, order)
 }
 
 main()

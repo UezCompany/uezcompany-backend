@@ -17,21 +17,21 @@ describe("Order routes", async () => {
   expect(clientLoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
   expect(clientLoginResponse.headers["set-cookie"]).toBeDefined()
 
-  const uzerLoginResponse = await app.inject({
+  const uezerLoginResponse = await app.inject({
     method: "POST",
     url: `/auth`,
     payload: {
-      email: "uzer@gmail.com",
-      password: "uzer123",
+      email: "uezer@gmail.com",
+      password: "uezer123",
     },
   })
 
-  expect(uzerLoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
-  expect(uzerLoginResponse.headers["set-cookie"]).toBeDefined()
+  expect(uezerLoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
+  expect(uezerLoginResponse.headers["set-cookie"]).toBeDefined()
 
   const cookieWithAuthorizationClient =
     clientLoginResponse.headers["set-cookie"]
-  const cookieWithAuthorizationUzer = uzerLoginResponse.headers["set-cookie"]
+  const cookieWithAuthorizationUezer = uezerLoginResponse.headers["set-cookie"]
 
   test("GET /orders", async () => {
     const response = await app.inject({
@@ -67,7 +67,7 @@ describe("Order routes", async () => {
         cookie: cookieWithAuthorizationClient,
       },
       url: `/orders/${
-        JSON.parse(uzerLoginResponse.body).user.id
+        JSON.parse(uezerLoginResponse.body).user.id
       }/assigned-orders`,
     })
 
@@ -133,7 +133,7 @@ describe("Order routes", async () => {
     const response = await app.inject({
       method: "PUT",
       headers: {
-        cookie: cookieWithAuthorizationUzer,
+        cookie: cookieWithAuthorizationUezer,
       },
       url: `/orders/${id}/finish`,
     })
@@ -159,7 +159,7 @@ describe("Order routes", async () => {
 
   test("PUT /order/:orderId/assign", async () => {
     const id = order.id
-    const uzerId = JSON.parse(uzerLoginResponse.body).user.id
+    const uezerId = JSON.parse(uezerLoginResponse.body).user.id
     const response = await app.inject({
       method: "PUT",
       headers: {
@@ -167,7 +167,7 @@ describe("Order routes", async () => {
       },
       body: {
         value: 5,
-        uzerId,
+        uezerId,
       },
       url: `/orders/${id}/assign`,
     })
