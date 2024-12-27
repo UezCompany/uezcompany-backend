@@ -1,7 +1,6 @@
 import { FastifyInstance } from "fastify"
 import { z } from "zod"
 import { prisma } from "@/infra/connection/prisma"
-import { GetUserdataById } from "@/infra/utils/getUserdataById"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function CreateChat(app: FastifyInstance) {
@@ -90,4 +89,12 @@ export default async function CreateChat(app: FastifyInstance) {
         .send({ message: "Chat criado com sucesso.", chat })
     },
   )
+}
+
+function GetUserdataById(id: string) {
+  return prisma.user.findUnique({
+    where: {
+      id,
+    },
+  })
 }

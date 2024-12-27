@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify"
 import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
-import sendNotification from "@/infra/utils/sendNotification"
+import { sendNotification } from "@/infra/utils/sendNotification"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function RateOrder(app: FastifyInstance) {
@@ -97,11 +97,7 @@ export default async function RateOrder(app: FastifyInstance) {
         return reply.status(400).send({ message: "Erro ao avaliar o pedido." })
       }
 
-      await sendNotification(
-        uezer.id,
-        `R$ ${order.value} do Especialidade ${order.title} já está na sua carteira`,
-        "servAval",
-      )
+      await sendNotification.serviceRated(uezer.id, order.value, order.title)
 
       return reply
         .status(200)

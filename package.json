@@ -21,8 +21,6 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.490.0",
-    "@aws-sdk/s3-request-presigner": "^3.490.0",
     "@fastify/cookie": "^9.3.1",
     "@fastify/cors": "^9.0.1",
     "@fastify/jwt": "^8.0.0",

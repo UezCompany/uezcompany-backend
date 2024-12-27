@@ -1,7 +1,7 @@
 import { FastifyInstance } from "fastify"
 import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
-import sendNotification from "@/infra/utils/sendNotification"
+import { sendNotification } from "@/infra/utils/sendNotification"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function CreateOrder(app: FastifyInstance) {
@@ -12,28 +12,14 @@ export default async function CreateOrder(app: FastifyInstance) {
         summary: "Create an order",
         tags: ["Order"],
         body: z.object({
-          profession: z.string(),
           specialityId: z.string(),
           value: z.optional(z.number()),
           title: z.string(),
         }),
       },
+      onRequest: [app.authenticate],
     },
     async (request, reply) => {
-      const { token } = request.cookies
-
-      if (!token) {
-        return reply.status(401).send({ message: "Token não informado" })
-      }
-
-      const decryptedToken: any = app.jwt.verify(token)
-
-      if (!decryptedToken) {
-        return reply
-          .status(401)
-          .send({ message: "Token inválido ou expirado." })
-      }
-
       const { specialityId, title, value } = request.body
 
       const order = await prisma.order.create({
@@ -42,7 +28,8 @@ export default async function CreateOrder(app: FastifyInstance) {
           title,
           client: {
             connect: {
-              id: decryptedToken.id,
+              // @ts-expect-error has id
+              id: request.user.id,
             },
           },
           speciality: {
@@ -51,16 +38,16 @@ export default async function CreateOrder(app: FastifyInstance) {
             },
           },
         },
+        include: {
+          client: true,
+          speciality: true,
+        },
       })
       if (!order) {
         return reply.status(400).send({ message: "Erro ao criar pedido." })
       }
 
-      await sendNotification(
-        decryptedToken.id,
-        "Em breve um uezer mandará mensagem.",
-        "pedLance",
-      )
+      await sendNotification.orderCreated(order.client.id)
 
       return reply.status(201).send(order)
     },

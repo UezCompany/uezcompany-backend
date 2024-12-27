@@ -2,7 +2,7 @@ import { FastifyInstance } from "fastify"
 import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
 import bcrypt from "bcrypt"
-import sendNotification from "@/infra/utils/sendNotification"
+import { sendNotification } from "@/infra/utils/sendNotification"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function Register(app: FastifyInstance) {
@@ -72,11 +72,7 @@ export default async function Register(app: FastifyInstance) {
         return reply.status(500).send({ message: "Erro ao cadastrar." })
       }
 
-      await sendNotification(
-        newUser.id,
-        `Seja bem-vindo(a) ${newUser.name}, ficamos muito felizes em ter você conosco!`,
-        "parabens",
-      )
+      await sendNotification.congratsForSignup(newUser.id, newUser.name)
 
       return reply.status(201).send({ message: "Usuário criado com sucesso!" })
     },
