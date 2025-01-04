@@ -46,6 +46,7 @@ import { env } from "@/../env"
 import ForgotPassword from "./routes/Auth/forgot-password"
 import authPlugin from "./plugins/auth"
 import GetUserBySlug from "./routes/User/get-user-by-slug"
+import GetUsers from "./routes/User/get-users"
 
 const app = fastify()
 
@@ -96,6 +97,7 @@ app.register(AuthWithGoogle)
 app.register(ForgotPassword)
 // User
 app.register(GetUserBySlug)
+app.register(GetUsers)
 // Client
 app.register(GetClients)
 app.register(GetClient)
