@@ -47,6 +47,8 @@ import ForgotPassword from "./routes/Auth/forgot-password"
 import authPlugin from "./plugins/auth"
 import GetUserBySlug from "./routes/User/get-user-by-slug"
 import GetUsers from "./routes/User/get-users"
+import CreatePortfolio from "./routes/Uezer/Portfolio/create-portfolio"
+import DeletePortfolio from "./routes/Uezer/Portfolio/delete-portfolio"
 
 const app = fastify()
 
@@ -104,7 +106,10 @@ app.register(GetClient)
 // Uezer
 app.register(GetUezers)
 app.register(GetUezerBySlug)
+// Portfolio
 app.register(GetPortfolios)
+app.register(CreatePortfolio)
+app.register(DeletePortfolio)
 // Speciality
 app.register(GetSpecialities)
 app.register(GetSpeciality)

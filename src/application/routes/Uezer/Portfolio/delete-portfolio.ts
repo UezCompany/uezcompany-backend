@@ -7,12 +7,15 @@ import { z } from "zod";
 export default async function DeletePortfolio(app: FastifyInstance) {
      app
           .withTypeProvider<ZodTypeProvider>()
-          .post('/portfolios/:id', {
+          .delete('/portfolios/:id', {
                schema: {
+                    summary: "Delete Portfolio by PortfolioId",
+                    tags: ["Uezer", "Portfolio"],
                     params: z.object({
-                         id: z.string().uuid()
+                         id: z.string()
                     })
-               }
+               },
+               onRequest: [app.authenticate],
           }, async (request, reply) => {
                const { id } = request.params
 

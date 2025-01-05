@@ -9,10 +9,13 @@ export default async function CreatePortfolio(app: FastifyInstance) {
           .withTypeProvider<ZodTypeProvider>()
           .post('/portfolios', {
                schema: {
+                    summary: "Create Portfolio by OrdeId",
+                    tags: ["Uezer", "Portfolio"],
                     body: z.object({
-                         order_id: z.string().uuid()
+                         order_id: z.string()
                     })
-               }
+               },
+               onRequest: [app.authenticate]
           }, async (request, reply) => {
                const { order_id } = request.body
 
