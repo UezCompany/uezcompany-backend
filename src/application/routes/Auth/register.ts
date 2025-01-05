@@ -13,7 +13,9 @@ export default async function Register(app: FastifyInstance) {
         tags: ["Auth"],
         summary: "Register a user",
         body: z.object({
-          name: z.string(),
+          name: z.string()
+            .min(1, 'O nome não pode estar vazio')
+            .transform((valor) => valor.trim().replace(/\b\w/g, (letra) => letra.toUpperCase())),
           email: z.string().email(),
           password: z
             .string()
@@ -22,7 +24,7 @@ export default async function Register(app: FastifyInstance) {
           phone: z.optional(z.string()),
           specialityId: z.optional(z.string().uuid()),
           usertype: z.enum(["UEZER", "CLIENT"]),
-          username: z.string(),
+          username: z.string().toLowerCase(),
           image: z.optional(z.string().url()),
         }),
       },
