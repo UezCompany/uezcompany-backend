@@ -1,4 +1,5 @@
 import app from "@/application/server"
+import { orderRepository } from "@/repository/OrderRepository"
 import { describe, expect, test } from "vitest"
 
 describe("Portifolio Route", async () => {
@@ -16,8 +17,11 @@ describe("Portifolio Route", async () => {
 
   let orderId: string
 
-  test('POST /portfolios', async () => {
+  test("POST /portfolios", async () => {
     const cookieWithAuthorization = userLoginResponse.headers["set-cookie"]
+
+    const orders = await orderRepository.getOrders()
+    const order = orders.find((order) => order.available === true)
 
     const response = await app.inject({
       method: "POST",
@@ -26,8 +30,8 @@ describe("Portifolio Route", async () => {
       },
       url: `/portfolios`,
       body: {
-        order_id: '2841fd81-9fa9-4c57-81ff-c7c65eb7c7cf'
-      }
+        order_id: order?.id,
+      },
     })
 
     const { id } = JSON.parse(response.body)
@@ -37,7 +41,7 @@ describe("Portifolio Route", async () => {
     expect(response.statusCode).toBe(201)
   })
 
-  test('Delete /portfolio/:id', async () => {
+  test("Delete /portfolio/:id", async () => {
     const cookieWithAuthorization = userLoginResponse.headers["set-cookie"]
 
     const response = await app.inject({
