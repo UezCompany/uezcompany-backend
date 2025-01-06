@@ -12,47 +12,25 @@ import {
 } from "fastify-type-provider-zod"
 import { Server } from "socket.io"
 import { errorHandler } from "./error-handler"
-import GetClients from "./routes/Client/get-clients"
-import GetUezers from "./routes/Uezer/get-uezers"
-import GetSpecialities from "./routes/Speciality/get-specialities"
-import GetSpeciality from "./routes/Speciality/get-speciality"
-import GetSpecialitiesByProfessionName from "./routes/Speciality/get-specialities-by-profession"
-import GetProfessions from "./routes/Speciality/get-professions"
-import Register from "./routes/Auth/register"
-import GetOrders from "./routes/Order/get-orders"
-import GetOrdersCreatedByUser from "./routes/Order/get-orders-created-by-user"
-import GetOrdersAssignedsToUser from "./routes/Order/get-orders-assigneds-to-user"
-import GetActiveOrders from "./routes/Order/get-active-orders"
-import AssignOrderToUezer from "./routes/Order/assign-order-to-uezer"
-import CreateOrder from "./routes/Order/create-order"
-import FinishOrder from "./routes/Order/finish-order"
-import RateOrder from "./routes/Order/rate-order"
-import GetUserNotifications from "./routes/Notification/get-notifications"
-import ReadNotification from "./routes/Notification/read-notification"
-import ReadAllNotificacions from "./routes/Notification/read-all-notifications"
-import Auth from "./routes/Auth/auth"
-import Logout from "./routes/Auth/logout"
-import CreateChat from "./routes/Chat/create-chat"
-import GetChats from "./routes/Chat/get-chats"
-import GetUezerBySlug from "./routes/Uezer/get-uezer-by-slug"
-import GetClient from "./routes/Client/get-client"
-import GetPortfolios from "./routes/Uezer/Portfolio/get-portfolios"
 import MessageForSocket from "./routes/Chat/ws/send-message"
 import JoinSocket from "./routes/Chat/ws/join"
 import BudgetForSocket from "./routes/Chat/ws/send-budget"
-import GetOrdersById from "./routes/Order/get-order-by-id"
-import AuthWithGoogle from "./routes/Auth/google-auth"
 import { env } from "@/../env"
-import ForgotPassword from "./routes/Auth/forgot-password"
 import authPlugin from "./plugins/auth"
-import GetUserBySlug from "./routes/User/get-user-by-slug"
-import GetUsers from "./routes/User/get-users"
+import { SetupRoutes } from "./routes/setup-routes"
 
+// Instancia do Fastify
 const app = fastify()
 
+
+// Compiladores
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
+
+// Error Handler
 app.setErrorHandler(errorHandler)
+
+// Plugins
 app.register(fastifySwagger, {
   swagger: {
     consumes: ["application/json"],
@@ -65,6 +43,7 @@ app.register(fastifySwagger, {
   },
   transform: jsonSchemaTransform,
 })
+
 app.register(fastifySwaggerUI, {
   routePrefix: "/docs",
 })
@@ -85,53 +64,15 @@ app.register(authPlugin)
 
 app.register(fastifyWebSocket)
 
-app.get("/", (req, reply) => {
-  reply.status(200).send({ message: "Server is running" })
-})
-
-// Auth
-app.register(Register)
-app.register(Auth)
-app.register(Logout)
-app.register(AuthWithGoogle)
-app.register(ForgotPassword)
-// User
-app.register(GetUserBySlug)
-app.register(GetUsers)
-// Client
-app.register(GetClients)
-app.register(GetClient)
-// Uezer
-app.register(GetUezers)
-app.register(GetUezerBySlug)
-app.register(GetPortfolios)
-// Speciality
-app.register(GetSpecialities)
-app.register(GetSpeciality)
-app.register(GetSpecialitiesByProfessionName)
-app.register(GetProfessions)
-// Order
-app.register(GetOrders)
-app.register(GetOrdersById)
-app.register(GetOrdersCreatedByUser)
-app.register(GetOrdersAssignedsToUser)
-app.register(GetActiveOrders)
-app.register(AssignOrderToUezer)
-app.register(CreateOrder)
-app.register(FinishOrder)
-app.register(RateOrder)
-// Notification
-app.register(GetUserNotifications)
-app.register(ReadNotification)
-app.register(ReadAllNotificacions)
-// Chat
-app.register(CreateChat)
-app.register(GetChats)
+// Setup Routes
+SetupRoutes(app)
 
 if (process.env.NODE_ENV !== "test") {
   console.log("CORS Habilitado. URL do domínio: " + env.FRONTEND_DOMAIN || "*")
 }
 
+
+// Iniciando servidor 
 app.ready(() => {
   app.io = new Server(app.server, {
     cors: {

@@ -20,9 +20,14 @@ export default async function GetPortfolios(app: FastifyInstance) {
       const { slug } = request.params
 
       const uuidSchema = z.string().uuid()
-      const { success } = uuidSchema.safeParse(slug)
+      const { success } = uuidSchema.safeParse(slug) 
 
       if (!success) {
+
+        const existUser = await prisma.user.findUnique({ where: { username: slug } })
+
+        if (!existUser) return reply.send({ Message: "Não existe nenhum usuario com o username informado" })
+
         const portfolio = await prisma.portfolio.findMany({
           where: {
             order: {
@@ -34,6 +39,11 @@ export default async function GetPortfolios(app: FastifyInstance) {
         })
         return reply.status(200).send(portfolio)
       } else {
+
+        const existUser = await prisma.user.findUnique({ where: { id: slug } })
+
+        if (!existUser) return reply.send({ Message: "Não existe nenhum usuario com o ID informado" })
+
         const portfolio = await prisma.portfolio.findMany({
           where: {
             order: {
