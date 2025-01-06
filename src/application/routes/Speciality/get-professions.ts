@@ -2,7 +2,7 @@ import { specialityRepository } from "@/repository/SpecialityRepository"
 import { FastifyInstance } from "fastify"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
-export default async function GetSpecialities(app: FastifyInstance) {
+export default async function GetProfessions(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
     "/professions",
     {

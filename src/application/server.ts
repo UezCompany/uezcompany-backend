@@ -19,11 +19,18 @@ import { env } from "@/../env"
 import authPlugin from "./plugins/auth"
 import { SetupRoutes } from "./routes/setup-routes"
 
+// Instancia do Fastify
 const app = fastify()
 
+
+// Compiladores
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
+
+// Error Handler
 app.setErrorHandler(errorHandler)
+
+// Plugins
 app.register(fastifySwagger, {
   swagger: {
     consumes: ["application/json"],
@@ -36,6 +43,7 @@ app.register(fastifySwagger, {
   },
   transform: jsonSchemaTransform,
 })
+
 app.register(fastifySwaggerUI, {
   routePrefix: "/docs",
 })
@@ -56,12 +64,15 @@ app.register(authPlugin)
 
 app.register(fastifyWebSocket)
 
+// Setup Routes
 SetupRoutes(app)
 
 if (process.env.NODE_ENV !== "test") {
   console.log("CORS Habilitado. URL do domínio: " + env.FRONTEND_DOMAIN || "*")
 }
 
+
+// Iniciando servidor 
 app.ready(() => {
   app.io = new Server(app.server, {
     cors: {
