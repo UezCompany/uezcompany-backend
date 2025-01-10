@@ -31,6 +31,8 @@ import GetUsers from "./User/get-users"
 import CreatePortfolio from "./Uezer/Portfolio/create-portfolio"
 import DeletePortfolio from "./Uezer/Portfolio/delete-portfolio"
 import ForgotPassword from "./Auth/forgot-password"
+import UpdateClientBySlug from "./Client/update-client";
+import UpdateUezertBySlug from "./Uezer/update-uezer";
 
 export async function SetupRoutes(app: FastifyInstance) {
      app.get("/", (req, reply) => {
@@ -49,9 +51,11 @@ export async function SetupRoutes(app: FastifyInstance) {
      // Client
      app.register(GetClient)
      app.register(GetClients)
+     app.register(UpdateClientBySlug)
      // Uezer
      app.register(GetUezers)
      app.register(GetUezerBySlug)
+     app.register(UpdateUezertBySlug)
      // Portfolio
      app.register(GetPortfolios)
      app.register(CreatePortfolio)

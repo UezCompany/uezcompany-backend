@@ -1,15 +1,15 @@
 import { FastifyInstance } from "fastify"
 import { z } from "zod"
-import { clientRepository } from "@/repository/ClientRepository"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
+import { uezerRepository } from "@/repository/UezerRepository"
 
-export default async function UpdateClientBySlug(app: FastifyInstance) {
+export default async function UpdateUezertBySlug(app: FastifyInstance) {
      app
           .withTypeProvider<ZodTypeProvider>()
-          .get("/clients/:slug", {
+          .get("/uezers/:slug", {
                schema: {
-                    summary: "Update an Client by Slug (Id or Username)",
-                    tags: ["Client"],
+                    summary: "Update an Uezer by Slug (Id or Username)",
+                    tags: ["Uezer"],
                     params: z.object({
                          slug: z.string(),
                     }),
@@ -37,25 +37,25 @@ export default async function UpdateClientBySlug(app: FastifyInstance) {
                const bodyData = request.body
 
                if (!success) {
-                    const client = await clientRepository.getClientByUsername(slug)
+                    const uezer = await uezerRepository.getUezerByUsername(slug)
 
-                    if (!client) {
+                    if (!uezer) {
                          return reply.status(404).send({ message: "Usuário não encontrado" })
                     }
 
-                    await clientRepository.updateClientByUsername(slug, bodyData)
+                    await uezerRepository.updateUezerByUsername(slug, bodyData)
 
-                    return reply.status(200).send(client)
+                    return reply.status(200).send(uezer)
                } else {
-                    const client = await clientRepository.getClientById(slug)
+                    const uezer = await uezerRepository.getUezerById(slug)
 
-                    if (!client) {
+                    if (!uezer) {
                          return reply.status(404).send({ message: "Usuário não encontrado" })
                     }
 
-                    await clientRepository.updateClientById(slug, bodyData)
+                    await uezerRepository.updateUezerById(slug, bodyData)
 
-                    return reply.status(200).send(client)
+                    return reply.status(200).send(uezer)
                }
           })
 }

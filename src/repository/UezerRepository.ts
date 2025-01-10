@@ -62,6 +62,16 @@ const allDetails = {
   },
 }
 
+interface updateDetails  {
+  username: string,
+  name: string,
+  email: string,
+  image: string,
+  bio: string,
+  phone: string,
+  birth_date: string,
+}
+
 class UezerRepository implements IUezerRepository {
   async getUezers(page: number, pageSize: number) {
     const offset = (page <= 1 ? 0 : page - 1) * pageSize
@@ -88,6 +98,19 @@ class UezerRepository implements IUezerRepository {
       select: allDetails,
     })
   }
+
+    async updateUezerByUsername(username: string, dataUpdate: updateDetails): Promise<any> {
+      return await prisma.user.update({
+        where: { username },
+        data: dataUpdate
+      })
+    }
+    async updateUezerById(id: string, dataUpdate: updateDetails) {
+      return await prisma.user.update({
+        where: { id },
+        data: dataUpdate
+      })
+    }
 }
 
 export const uezerRepository = new UezerRepository()
