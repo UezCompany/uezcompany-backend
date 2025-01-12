@@ -27,20 +27,22 @@ describe("Uezer Routes", async () => {
     expect(response.statusCode).toBe(200)
   })
 
-  test("GET /uezers/:slug", async () => {
+  test("UPDATE /uezers/:slug", async () => {
     const slug = "uezer"
 
     const cookieWithAuthorization = LoginResponse.headers["set-cookie"]
 
     const response = await app.inject({
-      method: "GET",
+      method: "PATCH",
       headers: {
         cookie: cookieWithAuthorization,
       },
       url: `/uezers/${slug}`,
+      body: {
+        bio: "Gosto muito de trabalhar na escala 8X0"
+      }
     })
 
     expect(response.statusCode).toBe(200)
-    // Fazer testes do retorno payload
   })
 })
