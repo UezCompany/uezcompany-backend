@@ -74,13 +74,13 @@ class ClientRepository implements IClientRepository {
     })
   }
 
-  async updateClientByUsername(username: string, dataUpdate: updateDetails): Promise<any> {
+  async updateClientByUsername(username: string, dataUpdate: Partial<updateDetails>): Promise<any> {
     return await prisma.user.update({
       where: { username },
       data: dataUpdate
     })
   }
-  async updateClientById(id: string, dataUpdate: updateDetails) {
+  async updateClientById(id: string, dataUpdate: Partial<updateDetails>) {
     return await prisma.user.update({
       where: { id },
       data: dataUpdate

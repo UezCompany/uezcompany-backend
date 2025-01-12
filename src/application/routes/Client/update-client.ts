@@ -6,7 +6,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod"
 export default async function UpdateClientBySlug(app: FastifyInstance) {
      app
           .withTypeProvider<ZodTypeProvider>()
-          .get("/clients/:slug", {
+          .patch("/clients/:slug", {
                schema: {
                     summary: "Update an Client by Slug (Id or Username)",
                     tags: ["Client"],
@@ -16,13 +16,14 @@ export default async function UpdateClientBySlug(app: FastifyInstance) {
                     body: z.object({
                          name: z.string()
                               .min(1, 'O nome não pode estar vazio')
-                              .transform((valor) => valor.trim().replace(/\b\w/g, (letra) => letra.toUpperCase())),
-                         email: z.string().email(),
-                         bio: z.string(),
-                         birth_date: z.string(),
-                         phone: z.string(),
-                         username: z.string().toLowerCase(),
-                         image: z.string().url(),
+                              .transform((valor) => valor.trim().replace(/\b\w/g, (letra) => letra.toUpperCase()))
+                              .optional(),
+                         email: z.string().email().optional(),
+                         bio: z.string().optional(),
+                         birth_date: z.string().optional(),
+                         phone: z.string().optional(),
+                         username: z.string().toLowerCase().optional(),
+                         image: z.string().url().optional(),
                     })
                },
                onRequest: [app.authenticate],
@@ -35,6 +36,8 @@ export default async function UpdateClientBySlug(app: FastifyInstance) {
                const { success } = uuidSchema.safeParse(slug)
 
                const bodyData = request.body
+
+               if(!bodyData) return reply.status(400).send({Message: "Não e possivel fazer uma atualização sem dados"})
 
                if (!success) {
                     const client = await clientRepository.getClientByUsername(slug)

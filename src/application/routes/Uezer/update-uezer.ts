@@ -6,7 +6,7 @@ import { uezerRepository } from "@/repository/UezerRepository"
 export default async function UpdateUezertBySlug(app: FastifyInstance) {
      app
           .withTypeProvider<ZodTypeProvider>()
-          .get("/uezers/:slug", {
+          .patch("/uezers/:slug", {
                schema: {
                     summary: "Update an Uezer by Slug (Id or Username)",
                     tags: ["Uezer"],
@@ -16,13 +16,14 @@ export default async function UpdateUezertBySlug(app: FastifyInstance) {
                     body: z.object({
                          name: z.string()
                               .min(1, 'O nome não pode estar vazio')
-                              .transform((valor) => valor.trim().replace(/\b\w/g, (letra) => letra.toUpperCase())),
-                         email: z.string().email(),
-                         bio: z.string(),
-                         birth_date: z.string(),
-                         phone: z.string(),
-                         username: z.string().toLowerCase(),
-                         image: z.string().url(),
+                              .transform((valor) => valor.trim().replace(/\b\w/g, (letra) => letra.toUpperCase()))
+                              .optional(),
+                         email: z.string().email().optional(),
+                         bio: z.string().optional(),
+                         birth_date: z.string().optional(),
+                         phone: z.string().optional(),
+                         username: z.string().toLowerCase().optional(),
+                         image: z.string().url().optional(),
                     })
                },
                onRequest: [app.authenticate],

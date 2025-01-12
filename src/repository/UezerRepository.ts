@@ -99,13 +99,13 @@ class UezerRepository implements IUezerRepository {
     })
   }
 
-    async updateUezerByUsername(username: string, dataUpdate: updateDetails): Promise<any> {
+    async updateUezerByUsername(username: string, dataUpdate: Partial<updateDetails>): Promise<any> {
       return await prisma.user.update({
         where: { username },
         data: dataUpdate
       })
     }
-    async updateUezerById(id: string, dataUpdate: updateDetails) {
+    async updateUezerById(id: string, dataUpdate: Partial<updateDetails>) {
       return await prisma.user.update({
         where: { id },
         data: dataUpdate
