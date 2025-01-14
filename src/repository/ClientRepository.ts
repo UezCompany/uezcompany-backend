@@ -4,6 +4,7 @@ interface IClientRepository {
   getClients(page: number, pageSize: number): Promise<any>
   getClientByUsername(username: string): Promise<any>
   getClientById(id: string): Promise<any>
+  updateClientByUsername(username: string, data:  updateDetails): Promise<any>
 }
 
 const optimizedDetails = {
@@ -36,6 +37,16 @@ const allDetails = {
   created_at: true,
 }
 
+interface updateDetails  {
+  username: string,
+  name: string,
+  email: string,
+  image: string,
+  bio: string,
+  phone: string,
+  birth_date: string,
+}
+
 class ClientRepository implements IClientRepository {
   async getClients(page: number, pageSize: number) {
     const offset = (page <= 1 ? 0 : page - 1) * pageSize
@@ -60,6 +71,19 @@ class ClientRepository implements IClientRepository {
     return await prisma.user.findUnique({
       where: { id, OR: [{ usertype: "CLIENT" }, { usertype: "BOTH" }] },
       select: allDetails,
+    })
+  }
+
+  async updateClientByUsername(username: string, dataUpdate: Partial<updateDetails>): Promise<any> {
+    return await prisma.user.update({
+      where: { username },
+      data: dataUpdate
+    })
+  }
+  async updateClientById(id: string, dataUpdate: Partial<updateDetails>) {
+    return await prisma.user.update({
+      where: { id },
+      data: dataUpdate
     })
   }
 }

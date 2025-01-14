@@ -40,4 +40,21 @@ describe("Cliente routes", async () => {
 
     expect(response.statusCode).toBe(200)
   })
+
+  test('UPDATE /clients/:slug', async () => {
+    const slug = "cliente"
+    const response = await app.inject({
+      method: "PATCH",
+      headers: {
+        cookie: cookieWithAuthorization,
+      },
+      url: `/clients/${slug}`,
+      body: {
+        bio: "Eu acho que esse teste funcionou"
+      }
+    })
+
+    console.log(JSON.parse(response.body))
+    expect(response.statusCode).toBe(200)
+  })
 })
