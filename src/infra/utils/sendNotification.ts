@@ -1,9 +1,9 @@
 import { prisma } from "../connection/prisma"
 
-type NotificationType =
-  | "congratsForSignup" // Parabéns por se cadastrar
-  | "serviceRated" // Serviço avaliado
-  | "orderCreated" // Pedido criado
+// type NotificationType =
+//   | "congratsForSignup" // Parabéns por se cadastrar
+//   | "serviceRated" // Serviço avaliado
+//   | "orderCreated" // Pedido criado
 
 const sendNotification = {
   congratsForSignup: async (receiverId: string, userName: string) => {

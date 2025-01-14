@@ -14,31 +14,24 @@ export default async function CreateChat(app: FastifyInstance) {
           requestedContactId: z.string(),
         }),
       },
+      onRequest: [app.authenticate],
     },
     async (request, reply) => {
-      const { token } = request.cookies
-      if (!token) {
-        return reply.status(401).send({ message: "Token não informado" })
-      }
-      const decryptedToken: { id: string } = app.jwt.verify(token)
-      if (!decryptedToken) {
-        return reply
-          .status(401)
-          .send({ message: "Token inválido ou expirado." })
-      }
+      // @ts-expect-error - decryptedToken is added by the authenticate hook
+      const userId = request.user.id
 
       const { requestedContactId } = request.params
 
       const [requestedContact, myContact, chatAlreadyExists] =
         await Promise.all([
           GetUserdataById(requestedContactId),
-          GetUserdataById(decryptedToken.id),
+          GetUserdataById(userId),
           prisma.chat.findFirst({
             where: {
               users: {
                 every: {
                   id: {
-                    in: [decryptedToken.id, requestedContactId],
+                    in: [userId, requestedContactId],
                   },
                 },
               },
@@ -52,7 +45,7 @@ export default async function CreateChat(app: FastifyInstance) {
           .send({ message: "O usuário que você deseja chamar não existe." })
       }
 
-      if (requestedContactId === decryptedToken.id) {
+      if (requestedContactId === userId) {
         return reply.status(400).send({
           message:
             "O usuário que você deseja chamar não pode ser o mesmo que você.",

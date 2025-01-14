@@ -9,6 +9,14 @@ const authPlugin: FastifyPluginAsync = fp(async (app) => {
       // checando se tem chave de API
       const apiKey = request.headers["x-api-key"]
       if (apiKey && apiKey === env.SERVICE_API_KEY) {
+        const bearerToken = request.headers.authorization
+
+        // Verificar token JWT nos cookies
+        if (bearerToken && bearerToken.startsWith("Bearer ")) {
+          const token = bearerToken.replace("Bearer ", "")
+          const decryptedToken = app.jwt.verify(token) as FastifyRequest["user"]
+          request.user = decryptedToken
+        }
         return // Acesso permitido
       }
 
@@ -24,7 +32,7 @@ const authPlugin: FastifyPluginAsync = fp(async (app) => {
       try {
         const decryptedToken = app.jwt.verify(token) as FastifyRequest["user"]
         request.user = decryptedToken
-      } catch (err) {
+      } catch {
         return reply
           .status(401)
           .send({ message: "Token inválido ou expirado." })

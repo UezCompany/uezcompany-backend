@@ -10,24 +10,17 @@ export default async function GetChats(app: FastifyInstance) {
         summary: "Get all chats",
         tags: ["Chat"],
       },
+      onRequest: [app.authenticate],
     },
     async (request, reply) => {
-      const { token } = request.cookies
-      if (!token) {
-        return reply.status(401).send({ message: "Token não informado" })
-      }
-      const decryptedToken: { id: string } = app.jwt.verify(token)
-      if (!decryptedToken) {
-        return reply
-          .status(401)
-          .send({ message: "Token inválido ou expirado." })
-      }
+      // @ts-expect-error - decryptedToken is added by the authenticate hook
+      const userId = request.user.id
 
       const chats = await prisma.chat.findMany({
         where: {
           users: {
             some: {
-              id: decryptedToken.id,
+              id: userId,
             },
           },
         },

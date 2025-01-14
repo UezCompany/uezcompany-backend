@@ -12,15 +12,15 @@ describe("Cliente routes", async () => {
   })
 
   expect(LoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
-  expect(LoginResponse.headers["set-cookie"]).toBeDefined()
 
-  const cookieWithAuthorization = LoginResponse.headers["set-cookie"]
+  const cookieWithAuthorization = JSON.parse(LoginResponse.body).token
+  // const cookieWithAuthorization = global.authorization.tokenClient
 
   test("GET /clients", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        cookie: cookieWithAuthorization,
+        authorization: `Bearer ${cookieWithAuthorization}`,
       },
       url: `/clients`,
     })
@@ -32,7 +32,7 @@ describe("Cliente routes", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        cookie: cookieWithAuthorization,
+        authorization: `Bearer ${cookieWithAuthorization}`,
       },
 
       url: `/clients/${slug}`,
@@ -41,17 +41,17 @@ describe("Cliente routes", async () => {
     expect(response.statusCode).toBe(200)
   })
 
-  test('UPDATE /clients/:slug', async () => {
+  test("UPDATE /clients/:slug", async () => {
     const slug = "cliente"
     const response = await app.inject({
       method: "PATCH",
       headers: {
-        cookie: cookieWithAuthorization,
+        authorization: `Bearer ${cookieWithAuthorization}`,
       },
       url: `/clients/${slug}`,
       body: {
-        bio: "Eu acho que esse teste funcionou"
-      }
+        bio: "Eu acho que esse teste funcionou",
+      },
     })
 
     console.log(JSON.parse(response.body))

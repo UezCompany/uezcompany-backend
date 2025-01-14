@@ -15,7 +15,6 @@ describe("Order routes", async () => {
   })
 
   expect(clientLoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
-  expect(clientLoginResponse.headers["set-cookie"]).toBeDefined()
 
   const uezerLoginResponse = await app.inject({
     method: "POST",
@@ -27,17 +26,17 @@ describe("Order routes", async () => {
   })
 
   expect(uezerLoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
-  expect(uezerLoginResponse.headers["set-cookie"]).toBeDefined()
 
-  const cookieWithAuthorizationClient =
-    clientLoginResponse.headers["set-cookie"]
-  const cookieWithAuthorizationUezer = uezerLoginResponse.headers["set-cookie"]
+  const cookieWithAuthorizationClient = JSON.parse(
+    clientLoginResponse.body,
+  ).token
+  const cookieWithAuthorizationUezer = JSON.parse(uezerLoginResponse.body).token
 
   test("GET /orders", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        cookie: cookieWithAuthorizationClient,
+        authorization: `Bearer ${cookieWithAuthorizationClient}`,
       },
       url: `/orders`,
     })
@@ -52,7 +51,7 @@ describe("Order routes", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        cookie: cookieWithAuthorizationClient,
+        authorization: `Bearer ${cookieWithAuthorizationClient}`,
       },
       url: `/orders/${order.id}`,
     })
@@ -64,7 +63,7 @@ describe("Order routes", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        cookie: cookieWithAuthorizationClient,
+        authorization: `Bearer ${cookieWithAuthorizationUezer}`,
       },
       url: `/orders/${
         JSON.parse(uezerLoginResponse.body).user.id
@@ -80,7 +79,7 @@ describe("Order routes", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        cookie: cookieWithAuthorizationClient,
+        authorization: `Bearer ${cookieWithAuthorizationClient}`,
       },
       url: `/orders/${id}/created-orders`,
     })
@@ -92,7 +91,7 @@ describe("Order routes", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        cookie: cookieWithAuthorizationClient,
+        authorization: `Bearer ${cookieWithAuthorizationClient}`,
       },
       url: `/orders/active`,
     })
@@ -111,7 +110,7 @@ describe("Order routes", async () => {
     const response = await app.inject({
       method: "POST",
       headers: {
-        cookie: cookieWithAuthorizationClient,
+        authorization: `Bearer ${cookieWithAuthorizationClient}`,
       },
       body: {
         profession: profession,
@@ -133,7 +132,7 @@ describe("Order routes", async () => {
     const response = await app.inject({
       method: "PUT",
       headers: {
-        cookie: cookieWithAuthorizationUezer,
+        authorization: `Bearer ${cookieWithAuthorizationUezer}`,
       },
       url: `/orders/${id}/finish`,
     })
@@ -146,7 +145,7 @@ describe("Order routes", async () => {
     const response = await app.inject({
       method: "PUT",
       headers: {
-        cookie: cookieWithAuthorizationClient,
+        authorization: `Bearer ${cookieWithAuthorizationClient}`,
       },
       body: {
         rating: 5,
@@ -163,7 +162,7 @@ describe("Order routes", async () => {
     const response = await app.inject({
       method: "PUT",
       headers: {
-        cookie: cookieWithAuthorizationClient,
+        authorization: `Bearer ${cookieWithAuthorizationClient}`,
       },
       body: {
         value: 5,

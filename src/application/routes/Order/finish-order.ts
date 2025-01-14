@@ -14,21 +14,11 @@ export default async function FinishOrder(app: FastifyInstance) {
           orderId: z.string().uuid(),
         }),
       },
+      onRequest: [app.authenticate],
     },
     async (request, reply) => {
-      const { token } = request.cookies
-
-      if (!token) {
-        return reply.status(401).send({ message: "Token não informado" })
-      }
-
-      const decryptedToken: any = app.jwt.verify(token)
-
-      if (!decryptedToken) {
-        return reply
-          .status(401)
-          .send({ message: "Token inválido ou expirado." })
-      }
+      // @ts-expect-error - decryptedToken is added by the authenticate hook
+      const userId = request.user.id
 
       const { orderId } = request.params
 
@@ -41,7 +31,7 @@ export default async function FinishOrder(app: FastifyInstance) {
           available: false,
           uezer: {
             connect: {
-              id: decryptedToken.id,
+              id: userId,
             },
           },
         },

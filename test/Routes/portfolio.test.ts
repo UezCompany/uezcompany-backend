@@ -13,12 +13,11 @@ describe("Portifolio Route", async () => {
   })
 
   expect(userLoginResponse.statusCode, "Uezer logado com sucesso").toBe(200)
-  expect(userLoginResponse.headers["set-cookie"]).toBeDefined()
 
   let orderId: string
 
   test("POST /portfolios", async () => {
-    const cookieWithAuthorization = userLoginResponse.headers["set-cookie"]
+    const cookieWithAuthorization = JSON.parse(userLoginResponse.body).token
 
     const orders = await orderRepository.getOrders()
     const order = orders.find((order) => order.available === true)
@@ -26,7 +25,7 @@ describe("Portifolio Route", async () => {
     const response = await app.inject({
       method: "POST",
       headers: {
-        cookie: cookieWithAuthorization,
+        authorization: `Bearer ${cookieWithAuthorization}`,
       },
       url: `/portfolios`,
       body: {
@@ -42,12 +41,12 @@ describe("Portifolio Route", async () => {
   })
 
   test("Delete /portfolio/:id", async () => {
-    const cookieWithAuthorization = userLoginResponse.headers["set-cookie"]
+    const cookieWithAuthorization = JSON.parse(userLoginResponse.body).token
 
     const response = await app.inject({
       method: "DELETE",
       headers: {
-        cookie: cookieWithAuthorization,
+        authorization: `Bearer ${cookieWithAuthorization}`,
       },
       url: `/portfolios/${orderId}`,
     })
@@ -61,12 +60,12 @@ describe("Portifolio Route", async () => {
   test("GET /portfolios/:slug", async () => {
     const slug = "uezer"
 
-    const cookieWithAuthorization = userLoginResponse.headers["set-cookie"]
+    const cookieWithAuthorization = JSON.parse(userLoginResponse.body).token
 
     const response = await app.inject({
       method: "GET",
       headers: {
-        cookie: cookieWithAuthorization,
+        authorization: `Bearer ${cookieWithAuthorization}`,
       },
       url: `/portfolios/${slug}`,
     })

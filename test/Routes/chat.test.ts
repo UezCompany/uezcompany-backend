@@ -13,15 +13,14 @@ describe("Chat routes", async () => {
   })
 
   expect(LoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
-  expect(LoginResponse.headers["set-cookie"]).toBeDefined()
 
-  const cookieWithAuthorization = LoginResponse.headers["set-cookie"]
+  const cookieWithAuthorization = JSON.parse(LoginResponse.body).token
 
   test("GET /chats", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        cookie: cookieWithAuthorization,
+        authorization: `Bearer ${cookieWithAuthorization}`,
       },
       url: `/chats`,
     })
@@ -36,7 +35,7 @@ describe("Chat routes", async () => {
     const response = await app.inject({
       method: "POST",
       headers: {
-        cookie: cookieWithAuthorization,
+        authorization: `Bearer ${cookieWithAuthorization}`,
       },
       url: `/chat/create/${uezerId}`,
     })

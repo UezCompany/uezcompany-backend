@@ -13,23 +13,10 @@ export default async function GetOrderById(app: FastifyInstance) {
         params: z.object({
           orderId: z.string().uuid(),
         }),
+        onRequest: [app.authenticate],
       },
     },
     async (request, reply) => {
-      const { token } = request.cookies
-
-      if (!token) {
-        return reply.status(401).send({ message: "Token não informado" })
-      }
-
-      const decryptedToken = app.jwt.verify(token)
-
-      if (!decryptedToken) {
-        return reply
-          .status(401)
-          .send({ message: "Token inválido ou expirado." })
-      }
-
       const { orderId } = request.params
 
       const orders = orderRepository.getOrderById(orderId)

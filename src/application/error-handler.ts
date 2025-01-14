@@ -1,6 +1,5 @@
 import type { FastifyInstance } from "fastify"
 import { ClientError } from "./errors/ClientError"
-import { ZodError } from "zod"
 import { hasZodFastifySchemaValidationErrors } from "fastify-type-provider-zod"
 
 type FastifyErrorHandler = FastifyInstance["errorHandler"]

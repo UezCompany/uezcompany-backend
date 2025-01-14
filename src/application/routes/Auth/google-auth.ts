@@ -39,7 +39,7 @@ export default async function AuthWithGoogle(app: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      const { access_token, email, name, googleId, image } = request.body
+      const { email } = request.body
 
       const user = await prisma.user.findUnique({ where: { email } })
 

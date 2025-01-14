@@ -1,5 +1,4 @@
 import { FastifyInstance } from "fastify"
-import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 import { uploadImage } from "@/infra/aws"
 import { prisma } from "@/infra/connection/prisma"

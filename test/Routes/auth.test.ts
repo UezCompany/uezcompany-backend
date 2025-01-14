@@ -49,10 +49,11 @@ describe("Auth routes", async () => {
       },
     })
 
-    cookieWithAuthorization = response.headers["set-cookie"]
+    console.log(response.body)
+
+    cookieWithAuthorization = JSON.parse(response.body).token
 
     expect(response.statusCode, "Cliente logado com sucesso").toBe(200)
-    expect(response.headers["set-cookie"]).toBeDefined()
   })
 
   test("POST /logout", async () => {
@@ -60,7 +61,7 @@ describe("Auth routes", async () => {
       method: "POST",
       url: `/logout`,
       headers: {
-        cookie: cookieWithAuthorization,
+        authorization: `Bearer ${cookieWithAuthorization}`,
       },
     })
 
