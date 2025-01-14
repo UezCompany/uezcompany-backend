@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance } from "fastify"
 import GetClients from "./Client/get-clients"
 import GetUezers from "./Uezer/get-uezers"
 import GetSpecialities from "./Speciality/get-specialities"
@@ -31,51 +31,53 @@ import GetUsers from "./User/get-users"
 import CreatePortfolio from "./Uezer/Portfolio/create-portfolio"
 import DeletePortfolio from "./Uezer/Portfolio/delete-portfolio"
 import ForgotPassword from "./Auth/forgot-password"
+import UpdateUserProfileImage from "./User/update-user-profile-image"
 
 export async function SetupRoutes(app: FastifyInstance) {
-     app.get("/", (req, reply) => {
-          reply.status(200).send({ message: "Server is running" })
-     })
+  app.get("/", (req, reply) => {
+    reply.status(200).send({ message: "Server is running" })
+  })
 
-     // Auth
-     app.register(Register)
-     app.register(Auth)
-     app.register(Logout)
-     app.register(AuthWithGoogle)
-     app.register(ForgotPassword)
-     // User
-     app.register(GetUserBySlug)
-     app.register(GetUsers)
-     // Client
-     app.register(GetClient)
-     app.register(GetClients)
-     // Uezer
-     app.register(GetUezers)
-     app.register(GetUezerBySlug)
-     // Portfolio
-     app.register(GetPortfolios)
-     app.register(CreatePortfolio)
-     app.register(DeletePortfolio)
-     // Speciality
-     app.register(GetSpecialities)
-     app.register(GetSpeciality)
-     app.register(GetSpecialitiesByProfessionName)
-     app.register(GetProfessions)
-     // Order
-     app.register(GetOrders)
-     app.register(GetOrdersById)
-     app.register(GetOrdersCreatedByUser)
-     app.register(GetOrdersAssignedsToUser)
-     app.register(GetActiveOrders)
-     app.register(AssignOrderToUezer)
-     app.register(CreateOrder)
-     app.register(FinishOrder)
-     app.register(RateOrder)
-     // Notification
-     app.register(GetUserNotifications)
-     app.register(ReadNotification)
-     app.register(ReadAllNotificacions)
-     // Chat
-     app.register(CreateChat)
-     app.register(GetChats)
+  // Auth
+  app.register(Register)
+  app.register(Auth)
+  app.register(Logout)
+  app.register(AuthWithGoogle)
+  app.register(ForgotPassword)
+  // User
+  app.register(GetUserBySlug)
+  app.register(GetUsers)
+  app.register(UpdateUserProfileImage)
+  // Client
+  app.register(GetClient)
+  app.register(GetClients)
+  // Uezer
+  app.register(GetUezers)
+  app.register(GetUezerBySlug)
+  // Portfolio
+  app.register(GetPortfolios)
+  app.register(CreatePortfolio)
+  app.register(DeletePortfolio)
+  // Speciality
+  app.register(GetSpecialities)
+  app.register(GetSpeciality)
+  app.register(GetSpecialitiesByProfessionName)
+  app.register(GetProfessions)
+  // Order
+  app.register(GetOrders)
+  app.register(GetOrdersById)
+  app.register(GetOrdersCreatedByUser)
+  app.register(GetOrdersAssignedsToUser)
+  app.register(GetActiveOrders)
+  app.register(AssignOrderToUezer)
+  app.register(CreateOrder)
+  app.register(FinishOrder)
+  app.register(RateOrder)
+  // Notification
+  app.register(GetUserNotifications)
+  app.register(ReadNotification)
+  app.register(ReadAllNotificacions)
+  // Chat
+  app.register(CreateChat)
+  app.register(GetChats)
 }
