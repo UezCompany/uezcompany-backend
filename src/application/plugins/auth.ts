@@ -6,24 +6,24 @@ const authPlugin: FastifyPluginAsync = fp(async (app) => {
   app.decorate(
     "authenticate",
     async (request: FastifyRequest, reply: FastifyReply) => {
+      // checando se tem chave de API
       const apiKey = request.headers["x-api-key"]
-      const { token } = request.cookies
-
-      // Permitir acesso com chave API válida
       if (apiKey && apiKey === env.SERVICE_API_KEY) {
-        console.log("Acesso permitido com chave API")
         return // Acesso permitido
       }
 
+      const bearerToken = request.headers.authorization
+
       // Verificar token JWT nos cookies
-      if (!token) {
+      if (!bearerToken) {
         return reply.status(401).send({ message: "Token não informado" })
       }
+
+      const token = bearerToken.replace("Bearer ", "")
 
       try {
         const decryptedToken = app.jwt.verify(token) as FastifyRequest["user"]
         request.user = decryptedToken
-        console.log("Acesso permitido com token JWT")
       } catch (err) {
         return reply
           .status(401)

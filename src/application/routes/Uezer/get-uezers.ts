@@ -24,7 +24,6 @@ export default async function GetUezers(app: FastifyInstance) {
     },
     async (request, reply) => {
       const { page, pageSize } = request.query
-      console.log(request.user)
 
       const uezers = await uezerRepository.getUezers(page, pageSize)
       return reply.status(200).send(uezers)

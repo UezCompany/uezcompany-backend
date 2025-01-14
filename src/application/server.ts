@@ -11,26 +11,17 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from "fastify-type-provider-zod"
-import { Server } from "socket.io"
 import { errorHandler } from "./error-handler"
-import MessageForSocket from "./routes/Chat/ws/send-message"
-import JoinSocket from "./routes/Chat/ws/join"
-import BudgetForSocket from "./routes/Chat/ws/send-budget"
 import { env } from "@/../env"
 import authPlugin from "./plugins/auth"
 import { SetupRoutes } from "./routes/setup-routes"
 
-// Instancia do Fastify
 const app = fastify()
 
-// Compiladores
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
-
-// Error Handler
 app.setErrorHandler(errorHandler)
 
-// Plugins
 app.register(fastifySwagger, {
   swagger: {
     consumes: ["application/json"],
@@ -69,36 +60,4 @@ if (process.env.NODE_ENV !== "test") {
   console.log("CORS Habilitado. URL do domínio: " + env.FRONTEND_DOMAIN || "*")
 }
 
-// Iniciando servidor
-app.ready(() => {
-  app.io = new Server(app.server, {
-    cors: {
-      origin: env.FRONTEND_DOMAIN || "*",
-    },
-  })
-  app.io.on("connection", (socket) => {
-    const token = socket.handshake.auth?.token
-    if (!token) {
-      return
-    }
-    const decryptedToken: { id: string } = app.jwt.verify(token)
-    if (!decryptedToken) {
-      return
-    }
-    socket.data.userId = decryptedToken.id
-    BudgetForSocket(socket)
-    JoinSocket(socket)
-    MessageForSocket(socket)
-    socket.on("disconnect", () => {
-      socket.disconnect()
-    })
-  })
-})
-
 export default app
-
-declare module "fastify" {
-  interface FastifyInstance {
-    io: Server
-  }
-}

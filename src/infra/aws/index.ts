@@ -1,7 +1,7 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
 import { env } from "../../../env"
 
-const bucketName = "uezcompany-prod-images"
+const bucketName = "uez-prod-images"
 
 const region = env.AWS_REGION
 const accessKeyId = env.AWS_ACCESS_KEY_ID
@@ -18,26 +18,38 @@ const s3Client = new S3Client({
 })
 
 export const uploadImage = {
-  profileImage: async (file: Buffer, filename: string) => {
+  upload: async (
+    file: Buffer,
+    key: string,
+    contentType: string = "image/jpeg",
+  ): Promise<string> => {
     const command = new PutObjectCommand({
       Bucket: bucketName,
-      Key: filename,
+      Key: key,
       Body: file,
-      ContentType: "image/jpeg",
-      ACL: "public-read",
+      ContentType: contentType,
+      ACL: "public-read", // Para permitir acesso público ao arquivo
     })
 
-    return s3Client.send(command)
+    try {
+      await s3Client.send(command)
+      console.log(`Upload successful for key: ${key}`)
+
+      // Retorna a URL pública da imagem
+      return `https://${bucketName}.s3.${region}.amazonaws.com/${key}`
+    } catch (error) {
+      console.error(`Upload failed for key: ${key}`, error)
+      throw error
+    }
   },
-  bannerImage: async (file: Buffer, filename: string) => {
-    const command = new PutObjectCommand({
-      Bucket: bucketName,
-      Key: filename,
-      Body: file,
-      ContentType: "image/jpeg",
-      ACL: "public-read",
-    })
 
-    return s3Client.send(command)
+  profileImage: async (file: Buffer, filename: string): Promise<string> => {
+    const key = `profile-images/${filename}`
+    return uploadImage.upload(file, key)
+  },
+
+  bannerImage: async (file: Buffer, filename: string): Promise<string> => {
+    const key = `banner-images/${filename}`
+    return uploadImage.upload(file, key)
   },
 }

@@ -1,14 +1,18 @@
 import type { FastifyInstance } from "fastify"
 import { ClientError } from "./errors/ClientError"
 import { ZodError } from "zod"
+import { hasZodFastifySchemaValidationErrors } from "fastify-type-provider-zod"
 
 type FastifyErrorHandler = FastifyInstance["errorHandler"]
 
 export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
-  if (error instanceof ZodError) {
+  if (hasZodFastifySchemaValidationErrors(error)) {
     return reply.status(400).send({
       message: "Invalid Input",
-      errors: error.flatten().fieldErrors,
+      errors: error.validation.map((err) => ({
+        message: err.message,
+        field: err.instancePath,
+      })),
     })
   }
 
@@ -16,5 +20,5 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
     return reply.status(400).send({ message: error.message })
   }
 
-  return reply.status(500).send({ message: "Internal server error" })
+  return reply.status(500).send({ message: "Internal server error", error })
 }

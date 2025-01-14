@@ -41,8 +41,6 @@ export default async function Auth(app: FastifyInstance) {
 
         reply.setCookie("token", token, defaultAuthTokenConfig)
 
-        console.log("Login do ip: " + request.ip)
-
         return reply.status(200).send({
           message: "Login realizado com sucesso!",
           code: "AUTHORIZED",

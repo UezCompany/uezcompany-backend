@@ -24,7 +24,6 @@ export default async function GetUsers(app: FastifyInstance) {
     },
     async (request, reply) => {
       const { page, pageSize } = request.query
-      console.log(request.user)
 
       const users = await userRepository.getUsers(page, pageSize)
       return reply.status(200).send(users)

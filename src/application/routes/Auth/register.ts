@@ -13,9 +13,12 @@ export default async function Register(app: FastifyInstance) {
         tags: ["Auth"],
         summary: "Register a user",
         body: z.object({
-          name: z.string()
-            .min(1, 'O nome não pode estar vazio')
-            .transform((valor) => valor.trim().replace(/\b\w/g, (letra) => letra.toUpperCase())),
+          name: z
+            .string()
+            .min(1, "O nome não pode estar vazio")
+            .transform((valor) =>
+              valor.trim().replace(/\b\w/g, (letra) => letra.toUpperCase()),
+            ),
           email: z.string().email(),
           password: z
             .string()
@@ -68,7 +71,6 @@ export default async function Register(app: FastifyInstance) {
             : undefined,
         },
       })
-      console.log("chegou aqui")
 
       if (!newUser) {
         return reply.status(500).send({ message: "Erro ao cadastrar." })
