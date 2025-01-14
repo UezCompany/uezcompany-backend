@@ -1,4 +1,4 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance } from "fastify"
 import GetClients from "./Client/get-clients"
 import GetUezers from "./Uezer/get-uezers"
 import GetSpecialities from "./Speciality/get-specialities"
@@ -33,11 +33,12 @@ import DeletePortfolio from "./Uezer/Portfolio/delete-portfolio"
 import ForgotPassword from "./Auth/forgot-password"
 import UpdateClientBySlug from "./Client/update-client";
 import UpdateUezertBySlug from "./Uezer/update-uezer";
+import UpdateUserProfileImage from "./User/update-user-profile-image"
 
 export async function SetupRoutes(app: FastifyInstance) {
-     app.get("/", (req, reply) => {
-          reply.status(200).send({ message: "Server is running" })
-     })
+  app.get("/", (req, reply) => {
+    reply.status(200).send({ message: "Server is running" })
+  })
 
      // Auth
      app.register(Register)
@@ -48,6 +49,7 @@ export async function SetupRoutes(app: FastifyInstance) {
      // User
      app.register(GetUserBySlug)
      app.register(GetUsers)
+     app.register(UpdateUserProfileImage)
      // Client
      app.register(GetClient)
      app.register(GetClients)
@@ -83,3 +85,4 @@ export async function SetupRoutes(app: FastifyInstance) {
      app.register(CreateChat)
      app.register(GetChats)
 }
+

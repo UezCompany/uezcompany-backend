@@ -5,6 +5,7 @@ import fastifyCookie from "@fastify/cookie"
 import fastifyWebSocket from "fastify-socket.io"
 import fastifySwagger from "@fastify/swagger"
 import fastifySwaggerUI from "@fastify/swagger-ui"
+import fastifyMultipart from "@fastify/multipart"
 import {
   jsonSchemaTransform,
   serializerCompiler,
@@ -21,7 +22,6 @@ import { SetupRoutes } from "./routes/setup-routes"
 
 // Instancia do Fastify
 const app = fastify()
-
 
 // Compiladores
 app.setValidatorCompiler(validatorCompiler)
@@ -43,11 +43,10 @@ app.register(fastifySwagger, {
   },
   transform: jsonSchemaTransform,
 })
-
 app.register(fastifySwaggerUI, {
   routePrefix: "/docs",
 })
-
+app.register(fastifyMultipart)
 app.register(fastifyCors, {
   origin: true,
   credentials: true,
@@ -59,10 +58,9 @@ app.register(fastifyCookie, {
 app.register(fastifyJwt, {
   secret: env.SECRET || "SECRET CABULOSO",
 })
+app.register(fastifyWebSocket)
 
 app.register(authPlugin)
-
-app.register(fastifyWebSocket)
 
 // Setup Routes
 SetupRoutes(app)
@@ -71,8 +69,7 @@ if (process.env.NODE_ENV !== "test") {
   console.log("CORS Habilitado. URL do domínio: " + env.FRONTEND_DOMAIN || "*")
 }
 
-
-// Iniciando servidor 
+// Iniciando servidor
 app.ready(() => {
   app.io = new Server(app.server, {
     cors: {
