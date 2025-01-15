@@ -10,7 +10,7 @@ export default async function GetUsers(app: FastifyInstance) {
       onRequest: [app.authenticate],
       schema: {
         summary: "Get all Users",
-        tags: ["Uezer"],
+        tags: ["User"],
         querystring: z
           .object({
             page: z.optional(z.string()),

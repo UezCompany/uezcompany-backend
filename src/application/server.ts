@@ -20,17 +20,15 @@ const app = fastify()
 
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
-app.setErrorHandler(errorHandler)
 
 app.register(fastifySwagger, {
-  swagger: {
-    consumes: ["application/json"],
-    produces: ["application/json"],
+  openapi: {
     info: {
       title: "Uez Company Backend",
       description: "Especificações da API para o backend da UEZ Company",
-      version: "1.1.0",
+      version: "1.0",
     },
+    servers: [],
   },
   transform: jsonSchemaTransform,
 })
@@ -52,6 +50,8 @@ app.register(fastifyJwt, {
 app.register(fastifyWebSocket)
 
 app.register(authPlugin)
+
+app.setErrorHandler(errorHandler)
 
 // Setup Routes
 SetupRoutes(app)

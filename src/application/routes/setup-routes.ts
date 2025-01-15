@@ -46,28 +46,28 @@ export async function SetupRoutes(app: FastifyInstance) {
   app.register(Logout)
   app.register(AuthWithGoogle)
   app.register(ForgotPassword)
-  // User
+  // // User
   app.register(GetUserBySlug)
   app.register(GetUsers)
   app.register(UpdateUserProfileImage)
-  // Client
+  // // Client
   app.register(GetClient)
   app.register(GetClients)
   app.register(UpdateClientBySlug)
-  // Uezer
+  // // Uezer
   app.register(GetUezers)
   app.register(GetUezerBySlug)
   app.register(UpdateUezertBySlug)
-  // Portfolio
+  // // Portfolio
   app.register(GetPortfolios)
   app.register(CreatePortfolio)
   app.register(DeletePortfolio)
-  // Speciality
+  // // Speciality
   app.register(GetSpecialities)
   app.register(GetSpeciality)
   app.register(GetSpecialitiesByProfessionName)
   app.register(GetProfessions)
-  // Order
+  // // Order
   app.register(GetOrders)
   app.register(GetOrdersById)
   app.register(GetOrdersCreatedByUser)
@@ -77,11 +77,11 @@ export async function SetupRoutes(app: FastifyInstance) {
   app.register(CreateOrder)
   app.register(FinishOrder)
   app.register(RateOrder)
-  // Notification
+  // // Notification
   app.register(GetUserNotifications)
   app.register(ReadNotification)
   app.register(ReadAllNotificacions)
-  // Chat
+  // // Chat
   app.register(CreateChat)
   app.register(GetChats)
 }
