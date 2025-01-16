@@ -18,6 +18,9 @@ export default async function GetUserNotifications(app: FastifyInstance) {
           // @ts-expect-error has id
           receiverId: request.user.id,
         },
+        orderBy: {
+          readed: "asc",
+        },
       })
       if (!notifications) {
         return reply
