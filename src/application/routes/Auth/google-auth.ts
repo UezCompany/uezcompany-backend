@@ -26,9 +26,10 @@ export default async function AuthWithGoogle(app: FastifyInstance) {
               id: z.string(),
               name: z.string(),
               email: z.string(),
-              username: z.string(),
+              username: z.string().nullable(),
               image: z.string().url(),
               usertype: z.string(),
+              status: z.string(),
             }),
             token: z.string(),
           }),
@@ -39,15 +40,38 @@ export default async function AuthWithGoogle(app: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      const { email } = request.body
+      const { email, name, image } = request.body
 
       const user = await prisma.user.findUnique({ where: { email } })
 
       if (!user) {
-        return reply.status(404).send({
-          message:
-            "Usuário não encontrado, preencha o cadastro para prosseguir",
-          code: "NOT_FOUND",
+        const newUser = await prisma.user.create({
+          data: {
+            email,
+            name,
+            image: image ? image : undefined,
+            usertype: "BOTH",
+            status: "INCOMPLETE",
+          },
+        })
+
+        const token = app.jwt.sign({ id: newUser.id })
+
+        reply.setCookie("token", token, defaultAuthTokenConfig)
+
+        return reply.status(200).send({
+          message: "Login realizado com sucesso!",
+          code: "AUTHORIZED",
+          user: {
+            id: newUser.id,
+            name: newUser.name,
+            email: newUser.email,
+            username: newUser.username,
+            image: newUser.image,
+            usertype: newUser.usertype,
+            status: newUser.status,
+          },
+          token: token,
         })
       }
 
@@ -65,6 +89,7 @@ export default async function AuthWithGoogle(app: FastifyInstance) {
           username: user.username,
           image: user.image,
           usertype: user.usertype,
+          status: user.status,
         },
         token: token,
       })

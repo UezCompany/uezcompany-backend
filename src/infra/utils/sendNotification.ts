@@ -15,7 +15,7 @@ const sendNotification = {
             id: receiverId,
           },
         },
-        type: "congrats",
+        type: "congratsForSignup",
       },
     })
   },
@@ -46,6 +46,19 @@ const sendNotification = {
           },
         },
         type: "serviceRated",
+      },
+    })
+  },
+  serviceCompleted: async (receiverId: string, uezerName: string) => {
+    await prisma.notification.create({
+      data: {
+        content: `${uezerName} finalizou seu serviço, avalie-o.`,
+        receiver: {
+          connect: {
+            id: receiverId,
+          },
+        },
+        type: "serviceCompleted",
       },
     })
   },

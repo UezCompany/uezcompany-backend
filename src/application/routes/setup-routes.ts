@@ -34,6 +34,7 @@ import ForgotPassword from "./Auth/forgot-password"
 import UpdateClientBySlug from "./Client/update-client"
 import UpdateUezertBySlug from "./Uezer/update-uezer"
 import UpdateUserProfileImage from "./User/update-user-profile-image"
+import CompleteRegister from "./Auth/complete-register"
 
 export async function SetupRoutes(app: FastifyInstance) {
   app.get("/", (req, reply) => {
@@ -46,6 +47,7 @@ export async function SetupRoutes(app: FastifyInstance) {
   app.register(Logout)
   app.register(AuthWithGoogle)
   app.register(ForgotPassword)
+  app.register(CompleteRegister)
   // // User
   app.register(GetUserBySlug)
   app.register(GetUsers)

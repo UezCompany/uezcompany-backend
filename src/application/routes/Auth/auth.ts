@@ -51,6 +51,7 @@ export default async function Auth(app: FastifyInstance) {
             username: user.username,
             image: user.image,
             usertype: user.usertype,
+            status: user.status,
           },
           token: token,
         })

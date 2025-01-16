@@ -14,7 +14,7 @@ datasource db {
 
 model User {
   id                      String         @id @default(uuid())
-  username                String         @unique
+  username                String?        @unique
   name                    String
   email                   String         @unique
   password                String?
@@ -22,7 +22,7 @@ model User {
   // address                 Address?       @relation(fields: [addressId], references: [id])
   status                  USERSTATUS     @default(ACTIVE)
   block_reason            String?
-  birth_date              String
+  birth_date              String?
   created_at              DateTime       @default(now())
   phone                   String?
   usertype                USERTYPE
@@ -148,6 +148,7 @@ enum USERSTATUS {
   ACTIVE
   INACTIVE
   BLOCKED
+  INCOMPLETE // Usuario que ainda nao completou o cadastro
 }
 
 enum USERTYPE {
