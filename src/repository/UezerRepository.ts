@@ -42,7 +42,6 @@ const allDetails = {
   orders_amount: true,
   completed_orders_amount: true,
   rating: true,
-  ratings: true,
   created_at: true,
   speciality: {
     select: {

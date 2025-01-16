@@ -33,6 +33,7 @@ export default async function GetUserBySlug(app: FastifyInstance) {
         if (!user) {
           return reply.status(404).send({ message: "Usuário não encontrado" })
         }
+
         return reply.status(200).send(user)
       }
     },

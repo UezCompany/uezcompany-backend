@@ -1,26 +1,15 @@
 import app from "@/application/server"
 import { describe, expect, test } from "vitest"
+import { login } from "../test-utils"
 
 describe("Cliente routes", async () => {
-  const LoginResponse = await app.inject({
-    method: "POST",
-    url: `/auth`,
-    payload: {
-      email: "cliente@gmail.com",
-      password: "cliente123",
-    },
-  })
-
-  expect(LoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
-
-  const cookieWithAuthorization = JSON.parse(LoginResponse.body).token
-  // const cookieWithAuthorization = global.authorization.tokenClient
+  const { token } = await login("cliente@gmail.com", "cliente123")
 
   test("GET /clients", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        authorization: `Bearer ${cookieWithAuthorization}`,
+        authorization: `Bearer ${token}`,
       },
       url: `/clients`,
     })
@@ -32,7 +21,7 @@ describe("Cliente routes", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        authorization: `Bearer ${cookieWithAuthorization}`,
+        authorization: `Bearer ${token}`,
       },
 
       url: `/clients/${slug}`,
@@ -46,7 +35,7 @@ describe("Cliente routes", async () => {
     const response = await app.inject({
       method: "PATCH",
       headers: {
-        authorization: `Bearer ${cookieWithAuthorization}`,
+        authorization: `Bearer ${token}`,
       },
       url: `/clients/${slug}`,
       body: {
@@ -54,7 +43,6 @@ describe("Cliente routes", async () => {
       },
     })
 
-    console.log(JSON.parse(response.body))
     expect(response.statusCode).toBe(200)
   })
 })

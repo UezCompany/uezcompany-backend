@@ -52,7 +52,18 @@ class OrderRepository implements IOrderRepository {
   }
 
   async getOrderById(id: number | string) {
-    return await prisma.order.findUnique({ where: { id: String(id) } })
+    return await prisma.order.findUnique({
+      where: { id: String(id) },
+      include: {
+        client: true,
+        speciality: {
+          include: {
+            profession: true,
+          },
+        },
+        uezer: true,
+      },
+    })
   }
 
   async getActiveOrders() {

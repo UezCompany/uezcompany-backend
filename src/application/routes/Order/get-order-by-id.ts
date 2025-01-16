@@ -13,14 +13,14 @@ export default async function GetOrderById(app: FastifyInstance) {
         params: z.object({
           orderId: z.string().uuid(),
         }),
-        onRequest: [app.authenticate],
       },
+      onRequest: [app.authenticate],
     },
     async (request, reply) => {
       const { orderId } = request.params
 
-      const orders = orderRepository.getOrderById(orderId)
-      return reply.status(200).send(orders)
+      const order = await orderRepository.getOrderById(orderId)
+      return reply.status(200).send(order)
     },
   )
 }

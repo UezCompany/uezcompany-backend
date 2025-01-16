@@ -33,7 +33,6 @@ const allDetails = {
   last_online: true,
   last_login: true,
   rating: true,
-  ratings: true,
   created_at: true,
 }
 

@@ -1,26 +1,16 @@
 import app from "@/application/server"
 import { uezerRepository } from "@/repository/UezerRepository"
 import { describe, expect, test } from "vitest"
+import { login } from "../test-utils"
 
 describe("Chat routes", async () => {
-  const LoginResponse = await app.inject({
-    method: "POST",
-    url: `/auth`,
-    payload: {
-      email: "cliente@gmail.com",
-      password: "cliente123",
-    },
-  })
-
-  expect(LoginResponse.statusCode, "Cliente logado com sucesso").toBe(200)
-
-  const cookieWithAuthorization = JSON.parse(LoginResponse.body).token
+  const { token } = await login("cliente@gmail.com", "cliente123")
 
   test("GET /chats", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        authorization: `Bearer ${cookieWithAuthorization}`,
+        authorization: `Bearer ${token}`,
       },
       url: `/chats`,
     })
@@ -35,7 +25,7 @@ describe("Chat routes", async () => {
     const response = await app.inject({
       method: "POST",
       headers: {
-        authorization: `Bearer ${cookieWithAuthorization}`,
+        authorization: `Bearer ${token}`,
       },
       url: `/chat/create/${uezerId}`,
     })

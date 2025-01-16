@@ -1,25 +1,15 @@
 import app from "@/application/server"
 import { describe, expect, test } from "vitest"
+import { login } from "../test-utils"
 
 describe("Uezer Routes", async () => {
-  const LoginResponse = await app.inject({
-    method: "POST",
-    url: `/auth`,
-    payload: {
-      email: "uezer@gmail.com",
-      password: "uezer123",
-    },
-  })
-
-  expect(LoginResponse.statusCode, "Uezer logado com sucesso").toBe(200)
-
-  const cookieWithAuthorization = JSON.parse(LoginResponse.body).token
+  const { token } = await login("uezer@gmail.com", "uezer123")
 
   test("GET /uezers", async () => {
     const response = await app.inject({
       method: "GET",
       headers: {
-        authorization: `Bearer ${cookieWithAuthorization}`,
+        authorization: `Bearer ${token}`,
       },
       url: `/uezers`,
     })
@@ -29,12 +19,10 @@ describe("Uezer Routes", async () => {
   test("UPDATE /uezers/:slug", async () => {
     const slug = "uezer"
 
-    const cookieWithAuthorization = JSON.parse(LoginResponse.body).token
-
     const response = await app.inject({
       method: "PATCH",
       headers: {
-        authorization: `Bearer ${cookieWithAuthorization}`,
+        authorization: `Bearer ${token}`,
       },
       url: `/uezers/${slug}`,
       body: {

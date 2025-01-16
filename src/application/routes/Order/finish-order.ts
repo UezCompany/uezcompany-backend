@@ -27,7 +27,7 @@ export default async function FinishOrder(app: FastifyInstance) {
           id: orderId,
         },
         data: {
-          status: "A AVALIAR",
+          status: "WAITING_EVALUATION",
           available: false,
           uezer: {
             connect: {

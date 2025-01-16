@@ -1,31 +1,21 @@
 import app from "@/application/server"
 import { orderRepository } from "@/repository/OrderRepository"
 import { describe, expect, test } from "vitest"
+import { login } from "../test-utils"
 
 describe("Portifolio Route", async () => {
-  const userLoginResponse = await app.inject({
-    method: "POST",
-    url: `/auth`,
-    payload: {
-      email: "uezer@gmail.com",
-      password: "uezer123",
-    },
-  })
-
-  expect(userLoginResponse.statusCode, "Uezer logado com sucesso").toBe(200)
+  const { token } = await login("uezer@gmail.com", "uezer123")
 
   let orderId: string
 
   test("POST /portfolios", async () => {
-    const cookieWithAuthorization = JSON.parse(userLoginResponse.body).token
-
     const orders = await orderRepository.getOrders()
     const order = orders.find((order) => order.available === true)
 
     const response = await app.inject({
       method: "POST",
       headers: {
-        authorization: `Bearer ${cookieWithAuthorization}`,
+        authorization: `Bearer ${token}`,
       },
       url: `/portfolios`,
       body: {
@@ -41,12 +31,10 @@ describe("Portifolio Route", async () => {
   })
 
   test("Delete /portfolio/:id", async () => {
-    const cookieWithAuthorization = JSON.parse(userLoginResponse.body).token
-
     const response = await app.inject({
       method: "DELETE",
       headers: {
-        authorization: `Bearer ${cookieWithAuthorization}`,
+        authorization: `Bearer ${token}`,
       },
       url: `/portfolios/${orderId}`,
     })
@@ -60,12 +48,10 @@ describe("Portifolio Route", async () => {
   test("GET /portfolios/:slug", async () => {
     const slug = "uezer"
 
-    const cookieWithAuthorization = JSON.parse(userLoginResponse.body).token
-
     const response = await app.inject({
       method: "GET",
       headers: {
-        authorization: `Bearer ${cookieWithAuthorization}`,
+        authorization: `Bearer ${token}`,
       },
       url: `/portfolios/${slug}`,
     })

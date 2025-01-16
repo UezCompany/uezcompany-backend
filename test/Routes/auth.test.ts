@@ -2,18 +2,6 @@ import app from "@/application/server"
 import { prisma } from "@/infra/connection/prisma"
 import { describe, expect, test } from "vitest"
 
-/*
-  name,
-  email,
-  password,
-  birth_date,
-  phone,
-  username,
-  usertype,
-  image,
-  specialityId,
-*/
-
 describe("Auth routes", async () => {
   test("POST /register", async () => {
     const response = await app.inject({
@@ -49,8 +37,6 @@ describe("Auth routes", async () => {
       },
     })
 
-    console.log(response.body)
-
     cookieWithAuthorization = JSON.parse(response.body).token
 
     expect(response.statusCode, "Cliente logado com sucesso").toBe(200)
@@ -78,8 +64,6 @@ describe("Auth routes", async () => {
         email: "joao.silva@example.com",
       },
     })
-
-    console.log(response)
 
     expect(response.email).toBe("joao.silva@example.com")
     expect(response).not.toBeNull()

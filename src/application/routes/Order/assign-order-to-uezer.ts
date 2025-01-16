@@ -31,7 +31,7 @@ export default async function AssignOrderToUezer(app: FastifyInstance) {
             id: orderId,
           },
           data: {
-            status: "EM ANDAMENTO",
+            status: "IN_PROGRESS",
             available: false,
             value,
             uezer: {

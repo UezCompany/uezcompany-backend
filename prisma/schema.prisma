@@ -20,7 +20,7 @@ model User {
   password                String?
   // cpf                     String?        @unique
   // address                 Address?       @relation(fields: [addressId], references: [id])
-  status                  STATUS         @default(ACTIVE)
+  status                  USERSTATUS     @default(ACTIVE)
   block_reason            String?
   birth_date              String
   created_at              DateTime       @default(now())
@@ -31,8 +31,6 @@ model User {
   completed_orders_amount Int            @default(0)
   speciality              Speciality?    @relation(fields: [specialityId], references: [id])
   specialityId            String?
-  rating                  Float          @default(0.0)
-  ratings                 Float[]        @default([])
   last_online             DateTime?      @default(now())
   last_login              DateTime?
   banner                  String?        @default("https://uezcompanys3.s3.us-east-2.amazonaws.com/defaultbanner.jpg")
@@ -42,6 +40,9 @@ model User {
   assigned_orders         Order[]        @relation("assigned_uezer")
   chats                   Chat[]         @relation("UserChats")
   notifications           Notification[]
+  rating                  Float          @default(0.0)
+  RatingsReceived         Rating[]       @relation("ReceivedRatings")
+  RatingsGiven            Rating[]       @relation("GivenRatings")
 }
 
 model Speciality {
@@ -69,13 +70,12 @@ model Order {
   specialityId String
   title        String
   description  String      @default("Pedido criado na UezCompany, somente um Uezer pode finaliza-lo.")
-  status       String      @default("A REALIZAR")
+  status       ORDERSTATUS @default(OPEN)
   available    Boolean     @default(true)
   created_at   DateTime    @default(now())
   end_date     DateTime?
   value        Float       @default(0.0)
   images       String[]
-  rating       Float       @default(0.0)
   rated        Boolean     @default(false)
   Portfolio    Portfolio[]
   Messages     Message[]
@@ -83,12 +83,34 @@ model Order {
   clientId     String
   uezer        User?       @relation("assigned_uezer", fields: [uezerId], references: [id])
   uezerId      String?
+  rating       Rating? // relacao de um pra um com a tabela Rating
 }
 
 model Portfolio {
   id      String @id @default(uuid())
   order   Order  @relation(fields: [orderId], references: [id])
   orderId String
+}
+
+model Rating {
+  id String @id @default(uuid())
+
+  satisfaction Float @default(0.0)
+  speed        Float @default(0.0)
+  execution    Float @default(0.0)
+  average      Float @default(0.0)
+
+  feedback String @default("Avaliação feita na UezCompany, somente o cliente e o Uezer podem ver.")
+
+  created_at DateTime @default(now())
+
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade) // relacao de um pra um com a tabela Rating
+  orderId String @unique // relacao de um pra um com a tabela Rating
+
+  user        User   @relation("GivenRatings", fields: [userId], references: [id], onDelete: Cascade) // Quem fez a avaliação
+  userId      String
+  recipient   User   @relation("ReceivedRatings", fields: [recipientId], references: [id], onDelete: Cascade) // Quem recebeu a avaliação
+  recipientId String
 }
 
 model Notification {
@@ -122,11 +144,7 @@ model Message {
   orderId    String?
 }
 
-enum SPECIALITYTYPE {
-  ONLINE
-}
-
-enum STATUS {
+enum USERSTATUS {
   ACTIVE
   INACTIVE
   BLOCKED
@@ -138,6 +156,10 @@ enum USERTYPE {
   BOTH
 }
 
+enum SPECIALITYTYPE {
+  ONLINE
+}
+
 enum MESSAGETYPE {
   TEXT
   BUDGET
@@ -145,14 +167,10 @@ enum MESSAGETYPE {
   FILE
 }
 
-// model Address {
-//   id           String @id @default(uuid())
-//   zip          String
-//   street       String
-//   neighborhood String
-//   city         String
-//   state        String
-//   complement   String
-//   number       Int
-//   User         User[]
-// }
+enum ORDERSTATUS {
+  OPEN
+  CANCELLED
+  IN_PROGRESS
+  WAITING_EVALUATION
+  COMPLETED
+}

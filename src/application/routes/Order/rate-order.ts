@@ -15,7 +15,10 @@ export default async function RateOrder(app: FastifyInstance) {
           orderId: z.string().uuid(),
         }),
         body: z.object({
-          rating: z.coerce.number(),
+          feedback: z.string(),
+          satisfaction: z.number().min(0).max(5),
+          speed: z.number().min(0).max(5),
+          execution: z.number().min(0).max(5),
         }),
       },
       onRequest: [app.authenticate],
@@ -23,72 +26,94 @@ export default async function RateOrder(app: FastifyInstance) {
     async (request, reply) => {
       const { orderId } = request.params
 
-      const { rating } = request.body
+      // @ts-expect-error id is in the request
+      const userId = request.user.id
 
-      const estaAvaliado = await prisma.order.findUnique({
+      const { execution, feedback, satisfaction, speed } = request.body
+
+      const order = await prisma.order.findUnique({
         where: {
           id: orderId,
-          rated: true,
         },
       })
 
-      if (estaAvaliado) {
+      if (!order) {
+        return reply.status(404).send({ message: "Pedido não encontrado." })
+      }
+
+      if (order.rated) {
         return reply.status(400).send({ message: "O pedido ja foi avaliado." })
       }
 
-      const order = await prisma.order.update({
-        where: { id: orderId },
-        data: {
-          rated: true,
-          rating: Number(rating),
-          status: "CONCLUIDO",
-        },
-      })
-
-      const uezer = await prisma.user.update({
-        where: {
-          id: order.uezerId || "",
-        },
-        data: {
-          completed_orders_amount: {
-            increment: 1,
-          },
-          ratings: {
-            push: rating,
-          },
-        },
-      })
-
-      console.log(uezer)
-
-      const newAvaliacao =
-        uezer.ratings.length === 0
-          ? rating
-          : (uezer.ratings.reduce(
-              (acc, curr) => Number(acc) + Number(curr),
-              0,
-            ) +
-              Number(rating)) /
-              uezer.ratings.length +
-            1
-      const uezerAvaliado = await prisma.user.update({
-        where: {
-          id: uezer.id,
-        },
-        data: {
-          rating: newAvaliacao,
-        },
-      })
-
-      if (!uezerAvaliado || !order) {
-        return reply.status(400).send({ message: "Erro ao avaliar o pedido." })
+      if (!order.uezerId) {
+        return reply
+          .status(400)
+          .send({ message: "O pedido não tem um uezer atrelado." })
       }
 
-      await sendNotification.serviceRated(uezer.id, order.value, order.title)
+      if (order.clientId !== userId) {
+        return reply
+          .status(403)
+          .send({ message: "Você não tem permissão para avaliar este pedido." })
+      }
+
+      const newRating = await prisma.rating.create({
+        data: {
+          execution,
+          feedback,
+          satisfaction,
+          speed,
+          average: (execution + satisfaction + speed) / 3,
+          orderId,
+          userId: userId,
+          recipientId: order.uezerId,
+        },
+      })
+
+      await prisma.order.update({
+        where: {
+          id: orderId,
+        },
+        data: {
+          rated: true,
+          status: "COMPLETED",
+          rating: {
+            connect: {
+              id: newRating.id,
+            },
+          },
+        },
+      })
+
+      const newAverageRate = await prisma.rating
+        .findMany({
+          where: {
+            recipientId: order.uezerId,
+          },
+        })
+        .then((ratings) => {
+          const total = ratings.reduce((acc, rating) => acc + rating.average, 0)
+          return total / ratings.length
+        })
+
+      await prisma.user.update({
+        where: {
+          id: order.uezerId,
+        },
+        data: {
+          rating: newAverageRate,
+        },
+      })
+
+      await sendNotification.serviceRated(
+        order.uezerId,
+        order.value,
+        order.title,
+      )
 
       return reply
         .status(200)
-        .send({ message: "O pedido foi avaliado com sucesso.", order: order })
+        .send({ message: "O pedido foi avaliado com sucesso." })
     },
   )
 }
