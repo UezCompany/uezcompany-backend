@@ -22,7 +22,7 @@ describe("Order repository", () => {
     })
   })
 
-  test("lista a ordem pelo uezer", async () => {
+  test("lista o pedido pelo uezer", async () => {
     const id = TestUezer.id
     const TestOrders = await orderRepository.getOrdersByUezer(id)
 
@@ -44,7 +44,7 @@ describe("Order repository", () => {
     })
   })
 
-  test("lista a ordem pelo id", async () => {
+  test("lista o pedido pelo id", async () => {
     TestOrderRepository = await orderRepository.getOrders()
 
     const order = await orderRepository.getOrderById(TestOrderRepository[0].id)
@@ -54,7 +54,7 @@ describe("Order repository", () => {
     })
   })
 
-  test("lista a ordem pela disponibilidade", async () => {
+  test("lista o pedido pela disponibilidade", async () => {
     TestOrderRepository = await orderRepository.getActiveOrders()
 
     TestOrderRepository.forEach((order: any) => {
@@ -62,5 +62,23 @@ describe("Order repository", () => {
         expect(order).toHaveProperty(field)
       })
     })
+  })
+
+  test("atualiza o pedido", async () => {
+    const orderId = TestOrderRepository[0].id
+    const updateData = {
+      title: "Novo pedido atualizado",
+      description: "Esse é um teste de atualização de pedido",
+      specialityId: TestOrderRepository[0].specialityId,
+      value: 22222,
+    }
+
+    const updatedOrder = await orderRepository.updateOrder(orderId, updateData)
+
+    expect(updatedOrder).toHaveProperty("id", orderId)
+    expect(updatedOrder).toHaveProperty("title", updateData.title)
+    expect(updatedOrder).toHaveProperty("description", updateData.description)
+    expect(updatedOrder).toHaveProperty("specialityId", updateData.specialityId)
+    expect(updatedOrder).toHaveProperty("value", updateData.value)
   })
 })

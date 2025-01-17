@@ -92,18 +92,18 @@ describe("Order routes", () => {
     expect(order).toHaveProperty("id")
   })
 
-  test("PUT /orders/:orderId/finish", async () => {
+  test("PATCH /orders/:orderId/finish", async () => {
     const response = await app.inject({
-      method: "PUT",
+      method: "PATCH",
       headers: { authorization: `Bearer ${uezerToken}` },
       url: `/orders/${order.id}/finish`,
     })
     expect(response.statusCode).toBe(200)
   })
 
-  test("PUT /order/:orderId/rate", async () => {
+  test("PATCH /order/:orderId/rate", async () => {
     const response = await app.inject({
-      method: "PUT",
+      method: "PATCH",
       headers: { authorization: `Bearer ${clientToken}` },
       body: {
         feedback: "O serviço ficou muito bem feito, parabéns!",
@@ -116,13 +116,35 @@ describe("Order routes", () => {
     expect(response.statusCode).toBe(200)
   })
 
-  test("PUT /order/:orderId/assign", async () => {
+  test("PATCH /order/:orderId/assign", async () => {
     const response = await app.inject({
-      method: "PUT",
+      method: "PATCH",
       headers: { authorization: `Bearer ${clientToken}` },
       body: { value: 5, uezerId },
       url: `/orders/${order.id}/assign`,
     })
     expect(response.statusCode).toBe(200)
+  })
+
+  test("PATCH /orders/:orderId", async () => {
+    const updateData = {
+      title: "Updated Order Title",
+      description: "Updated Order Description",
+      value: 999,
+    }
+
+    const response = await app.inject({
+      method: "PATCH",
+      headers: { authorization: `Bearer ${clientToken}` },
+      url: `/orders/${order.id}`,
+      body: updateData,
+    })
+
+    expect(response.statusCode).toBe(200)
+    const updatedOrder = JSON.parse(response.body)
+    expect(updatedOrder).toHaveProperty("id", order.id)
+    expect(updatedOrder).toHaveProperty("title", updateData.title)
+    expect(updatedOrder).toHaveProperty("description", updateData.description)
+    expect(updatedOrder).toHaveProperty("value", updateData.value)
   })
 })
