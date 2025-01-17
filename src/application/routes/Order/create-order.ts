@@ -15,32 +15,38 @@ export default async function CreateOrder(app: FastifyInstance) {
           specialityId: z.string(),
           value: z.optional(z.number()),
           title: z.string(),
+          description: z.optional(z.string()),
         }),
       },
       onRequest: [app.authenticate],
     },
     async (request, reply) => {
-      const { specialityId, title, value } = request.body
+      const { specialityId, title, value, description } = request.body
 
       const order = await prisma.order.create({
         data: {
           value,
           title,
-          client: {
-            connect: {
-              // @ts-expect-error has id
-              id: request.user.id,
-            },
-          },
-          speciality: {
-            connect: {
-              id: specialityId,
-            },
-          },
+          // @ts-expect-error has id
+          clientId: request.user.id,
+          specialityId,
+          description: description ? description : undefined,
         },
         include: {
           client: true,
           speciality: true,
+        },
+      })
+
+      await prisma.user.update({
+        where: {
+          // @ts-expect-error has id
+          id: request.user.id,
+        },
+        data: {
+          orders_amount: {
+            increment: 1,
+          },
         },
       })
       if (!order) {
