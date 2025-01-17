@@ -35,6 +35,7 @@ import UpdateClientBySlug from "./Client/update-client"
 import UpdateUezertBySlug from "./Uezer/update-uezer"
 import UpdateUserProfileImage from "./User/update-user-profile-image"
 import CompleteRegister from "./Auth/complete-register"
+import UpdateOrder from "./Order/update-order"
 
 export async function SetupRoutes(app: FastifyInstance) {
   app.get("/", (req, reply) => {
@@ -79,6 +80,7 @@ export async function SetupRoutes(app: FastifyInstance) {
   app.register(CreateOrder)
   app.register(FinishOrder)
   app.register(RateOrder)
+  app.register(UpdateOrder)
   // // Notification
   app.register(GetUserNotifications)
   app.register(ReadNotification)

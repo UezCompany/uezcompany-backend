@@ -5,7 +5,7 @@ import { sendNotification } from "@/infra/utils/sendNotification"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function RateOrder(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().put(
+  app.withTypeProvider<ZodTypeProvider>().patch(
     "/orders/:orderId/rate",
     {
       schema: {

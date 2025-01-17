@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client"
 import { prisma } from "../infra/connection/prisma"
 
 interface IOrderRepository {
@@ -6,6 +7,7 @@ interface IOrderRepository {
   getCreatedOrdersByUser(idClient: number | string): Promise<any>
   getOrderById(id: number | string): Promise<any>
   getActiveOrders(): Promise<any>
+  updateOrder(id: number | string, data: Prisma.OrderUpdateInput): Promise<any>
 }
 
 class OrderRepository implements IOrderRepository {
@@ -78,6 +80,13 @@ class OrderRepository implements IOrderRepository {
           },
         },
       },
+    })
+  }
+
+  async updateOrder(id: number | string, data: Prisma.OrderUpdateInput) {
+    return await prisma.order.update({
+      where: { id: String(id) },
+      data,
     })
   }
 }

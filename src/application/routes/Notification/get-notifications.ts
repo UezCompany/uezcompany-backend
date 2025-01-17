@@ -27,7 +27,7 @@ export default async function GetUserNotifications(app: FastifyInstance) {
           .status(404)
           .send({ message: "O usuário não tem notificações" })
       }
-      return reply.status(200).send({ notifications })
+      return reply.status(200).send(notifications)
     },
   )
 }

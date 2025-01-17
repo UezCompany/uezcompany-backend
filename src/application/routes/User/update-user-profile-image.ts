@@ -6,7 +6,7 @@ import { prisma } from "@/infra/connection/prisma"
 const allowedMimes = ["image/jpeg", "image/png", "image/gif"]
 
 export default async function UpdateUserImages(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().put(
+  app.withTypeProvider<ZodTypeProvider>().patch(
     "/users/image",
     {
       // schema: {
@@ -68,7 +68,7 @@ export default async function UpdateUserImages(app: FastifyInstance) {
         .send({ message: "Imagem atualizada com sucesso!" })
     },
   )
-  app.withTypeProvider<ZodTypeProvider>().put(
+  app.withTypeProvider<ZodTypeProvider>().patch(
     "/users/banner",
     {
       // schema: {

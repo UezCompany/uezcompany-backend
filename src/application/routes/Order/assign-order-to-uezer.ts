@@ -4,7 +4,7 @@ import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 
 export default async function AssignOrderToUezer(app: FastifyInstance) {
-  app.withTypeProvider<ZodTypeProvider>().put(
+  app.withTypeProvider<ZodTypeProvider>().patch(
     "/orders/:orderId/assign",
     {
       schema: {
