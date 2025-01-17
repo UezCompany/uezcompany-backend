@@ -89,6 +89,16 @@ class OrderRepository implements IOrderRepository {
       data,
     })
   }
+
+  async cancelOrder(id: string) {
+    return await prisma.order.update({
+      where: { id: String(id) },
+      data: {
+        status: "CANCELLED",
+        available: false,
+      },
+    })
+  }
 }
 
 export const orderRepository = new OrderRepository()

@@ -1,7 +1,15 @@
 import { prisma } from "../src/infra/connection/prisma"
 import bcrypt from "bcrypt"
 
-async function main() {
+export async function main() {
+  console.log("Cleaning database...")
+
+  // Deletando todos os registros das tabelas relevantes
+  await prisma.order.deleteMany({})
+  await prisma.user.deleteMany({})
+  await prisma.speciality.deleteMany({})
+  await prisma.profession.deleteMany({})
+
   console.log("Seeding development data...")
 
   // Criando as profissãos
@@ -168,6 +176,111 @@ async function main() {
       },
     },
   })
+  // Criando múltiplos pedidos (orders)
+  const ordersData = [
+    {
+      title: "Order 1",
+      description: "Description 1",
+      clientId: client.id,
+      uezerId: uezer.id,
+      specialityName: "Fullstack",
+    },
+    {
+      title: "Order 2",
+      description: "Description 2",
+      clientId: client.id,
+      uezerId: uezer.id,
+      specialityName: "Frontend",
+    },
+    {
+      title: "Order 3",
+      description: "Description 3",
+      clientId: client.id,
+      uezerId: uezer.id,
+      specialityName: "Backend",
+    },
+  ]
+
+  for (const orderData of ordersData) {
+    await prisma.order.create({
+      data: {
+        title: orderData.title,
+        description: orderData.description,
+        client: {
+          connect: {
+            id: orderData.clientId,
+          },
+        },
+        uezer: {
+          connect: {
+            id: orderData.uezerId,
+          },
+        },
+        speciality: {
+          connect: {
+            name: orderData.specialityName,
+          },
+        },
+      },
+    })
+  }
+  // Criando pedidos (orders) com e sem uezer
+  const mixedOrdersData = [
+    {
+      title: "Order 4",
+      description: "Description 4",
+      clientId: client.id,
+      uezerId: uezer.id,
+      specialityName: "Games",
+    },
+    {
+      title: "Order 5",
+      description: "Description 5",
+      clientId: client.id,
+      uezerId: null,
+      specialityName: "Mobile",
+    },
+    {
+      title: "Order 6",
+      description: "Description 6",
+      clientId: client.id,
+      uezerId: uezer.id,
+      specialityName: "Web",
+    },
+    {
+      title: "Order 7",
+      description: "Description 7",
+      clientId: client.id,
+      uezerId: null,
+      specialityName: "Criação de logo",
+    },
+  ]
+
+  for (const orderData of mixedOrdersData) {
+    await prisma.order.create({
+      data: {
+        title: orderData.title,
+        description: orderData.description,
+        client: {
+          connect: {
+            id: orderData.clientId,
+          },
+        },
+        uezer: orderData.uezerId
+          ? {
+              connect: {
+                id: orderData.uezerId,
+              },
+            }
+          : undefined,
+        speciality: {
+          connect: {
+            name: orderData.specialityName,
+          },
+        },
+      },
+    })
+  }
 
   console.log(client, uezer, order)
 }

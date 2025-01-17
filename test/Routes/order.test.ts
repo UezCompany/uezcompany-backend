@@ -147,4 +147,16 @@ describe("Order routes", () => {
     expect(updatedOrder).toHaveProperty("description", updateData.description)
     expect(updatedOrder).toHaveProperty("value", updateData.value)
   })
+
+  test("PATCH /orders/:orderId/cancel", async () => {
+    const response = await app.inject({
+      method: "DELETE",
+      headers: { authorization: `Bearer ${clientToken}` },
+      url: `/orders/${order.id}/cancel`,
+    })
+    expect(response.statusCode).toBe(200)
+    const cancelledOrder = JSON.parse(response.body)
+    expect(cancelledOrder).toHaveProperty("id", order.id)
+    expect(cancelledOrder).toHaveProperty("status", "CANCELLED")
+  })
 })

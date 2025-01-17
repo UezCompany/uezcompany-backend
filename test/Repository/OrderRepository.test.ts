@@ -81,4 +81,13 @@ describe("Order repository", () => {
     expect(updatedOrder).toHaveProperty("specialityId", updateData.specialityId)
     expect(updatedOrder).toHaveProperty("value", updateData.value)
   })
+
+  test("cancela o pedido", async () => {
+    const orderId = TestOrderRepository[0].id
+    const cancelledOrder = await orderRepository.cancelOrder(orderId)
+
+    expect(cancelledOrder).toHaveProperty("id", orderId)
+    expect(cancelledOrder).toHaveProperty("status", "CANCELLED")
+    expect(cancelledOrder).toHaveProperty("available", false)
+  })
 })
