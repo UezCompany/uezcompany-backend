@@ -92,6 +92,28 @@ describe("Order routes", () => {
     expect(order).toHaveProperty("id")
   })
 
+  test("PATCH /orders/:orderId", async () => {
+    const updateData = {
+      title: "Updated Order Title",
+      description: "Updated Order Description",
+      value: 999,
+    }
+
+    const response = await app.inject({
+      method: "PATCH",
+      headers: { authorization: `Bearer ${clientToken}` },
+      url: `/orders/${order.id}`,
+      body: updateData,
+    })
+
+    expect(response.statusCode).toBe(200)
+    const updatedOrder = JSON.parse(response.body)
+    expect(updatedOrder).toHaveProperty("id", order.id)
+    expect(updatedOrder).toHaveProperty("title", updateData.title)
+    expect(updatedOrder).toHaveProperty("description", updateData.description)
+    expect(updatedOrder).toHaveProperty("value", updateData.value)
+  })
+
   test("PATCH /orders/:orderId/finish", async () => {
     const response = await app.inject({
       method: "PATCH",
@@ -124,28 +146,6 @@ describe("Order routes", () => {
       url: `/orders/${order.id}/assign`,
     })
     expect(response.statusCode).toBe(200)
-  })
-
-  test("PATCH /orders/:orderId", async () => {
-    const updateData = {
-      title: "Updated Order Title",
-      description: "Updated Order Description",
-      value: 999,
-    }
-
-    const response = await app.inject({
-      method: "PATCH",
-      headers: { authorization: `Bearer ${clientToken}` },
-      url: `/orders/${order.id}`,
-      body: updateData,
-    })
-
-    expect(response.statusCode).toBe(200)
-    const updatedOrder = JSON.parse(response.body)
-    expect(updatedOrder).toHaveProperty("id", order.id)
-    expect(updatedOrder).toHaveProperty("title", updateData.title)
-    expect(updatedOrder).toHaveProperty("description", updateData.description)
-    expect(updatedOrder).toHaveProperty("value", updateData.value)
   })
 
   test("PATCH /orders/:orderId/cancel", async () => {
