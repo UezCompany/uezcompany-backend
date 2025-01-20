@@ -33,7 +33,7 @@ model User {
   specialityId            String?
   last_online             DateTime?      @default(now())
   last_login              DateTime?
-  banner                  String?        @default("https://uezcompanys3.s3.us-east-2.amazonaws.com/defaultbanner.jpg")
+  banner                  String?        @default("https://uez-prod-images.s3.sa-east-1.amazonaws.com/defaults/defaultbanner.jpg")
   bio                     String?        @default("Usuario criado na UezCompany, somente ele mesmo pode edita-lo.")
   addressId               String?
   owner_orders            Order[]        @relation("client")

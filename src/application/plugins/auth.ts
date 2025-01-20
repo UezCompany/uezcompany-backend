@@ -11,11 +11,15 @@ const authPlugin: FastifyPluginAsync = fp(async (app) => {
       if (apiKey && apiKey === env.SERVICE_API_KEY) {
         const bearerToken = request.headers.authorization
 
-        // Verificar token JWT nos cookies
+        // Verificar token JWT opcional nos cookies
         if (bearerToken && bearerToken.startsWith("Bearer ")) {
-          const token = bearerToken.replace("Bearer ", "")
-          const decryptedToken = app.jwt.verify(token) as FastifyRequest["user"]
-          request.user = decryptedToken
+          try {
+            const token = bearerToken.replace("Bearer ", "")
+            const decryptedToken = app.jwt.verify(token)
+            request.user = decryptedToken
+          } catch {
+            return
+          }
         }
         return // Acesso permitido
       }

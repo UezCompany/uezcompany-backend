@@ -40,6 +40,12 @@ export default async function UpdateOrder(app: FastifyInstance) {
           .send({ message: "Somente quem criou o pedido pode edita-lo" })
       }
 
+      if (respectiveOrder?.status !== "OPEN") {
+        return reply
+          .status(400)
+          .send({ message: "Só é possivel editar pedidos em aberto." })
+      }
+
       const order = await orderRepository.updateOrder(orderId, {
         title,
         description,
