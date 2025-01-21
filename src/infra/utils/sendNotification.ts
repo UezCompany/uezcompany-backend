@@ -62,6 +62,85 @@ const sendNotification = {
       },
     })
   },
+
+  clientMessageRequest:  async (receiverId: string, client: string) => {
+    await prisma.notification.create({
+      data: {
+        content: `${client} mandou mensagem para você!`,
+        receiver: {
+          connect: {
+            id: receiverId,
+          },
+        },
+        type: "clientMessageRequest",
+      },
+    })
+  },
+  quoteAccepted: async (receiverId: string, client: string, balance: string) => {
+    await prisma.notification.create({
+      data: {
+        content: `${client} Aceitou seu orçamento no valor de R$ ${balance}`,
+        receiver: {
+          connect: {
+            id: receiverId,
+          },
+        },
+        type: "quoteAccepted",
+      },
+    })
+  },
+  quoteDeclined: async (receiverId: string, client: string, balance: string) => {
+    await prisma.notification.create({
+      data: {
+        content: `${client} recusou seu orçamento no valor de ${balance}`,
+        receiver: {
+          connect: {
+            id: receiverId,
+          },
+        },
+        type: "quoteDeclined",
+      },
+    })
+  },
+  errorOcurred: async (receiverId: string, service: string, ) => {
+    await prisma.notification.create({
+      data: {
+        content: `O serviço ${service} está sendo analisado`,
+        receiver: {
+          connect: {
+            id: receiverId,
+          },
+        },
+        type: "errorOcurred",
+      },
+    })
+  },
+  uzerMessageRequest: async (receiverId: string, uezer: string, ) => {
+    await prisma.notification.create({
+      data: {
+        content: `${uezer} mandou mensagem para você!`,
+        receiver: {
+          connect: {
+            id: receiverId,
+          },
+        },
+        type: "uzerMessageRequest",
+      },
+    })
+  },
+  uezerSendedQuote:  async (receiverId: string, uezer: string, ) => {
+    await prisma.notification.create({
+      data: {
+        content: `${uezer} mandou um orçamento para você!`,
+        receiver: {
+          connect: {
+            id: receiverId,
+          },
+        },
+        type: "uezerSendedQuote",
+      },
+    })
+  },
 }
 
 export { sendNotification }
