@@ -2,7 +2,7 @@ import app from "@/application/server"
 import { orderRepository } from "@/repository/OrderRepository"
 import { specialityRepository } from "@/repository/SpecialityRepository"
 import { Order } from "@prisma/client"
-import { describe, expect, test, beforeAll, afterAll } from "vitest"
+import { describe, expect, test, beforeAll } from "vitest"
 import { login } from "../test-utils"
 
 describe("Order routes", () => {
