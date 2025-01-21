@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify"
 import { prisma } from "@/infra/connection/prisma"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
+import { notificationRepository } from "@/repository/notificationRepository"
 
 export default async function GetUserNotifications(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
@@ -13,15 +14,9 @@ export default async function GetUserNotifications(app: FastifyInstance) {
       onRequest: [app.authenticate],
     },
     async (request, reply) => {
-      const notifications = await prisma.notification.findMany({
-        where: {
-          // @ts-expect-error has id
-          receiverId: request.user.id,
-        },
-        orderBy: {
-          readed: "asc",
-        },
-      })
+      // @ts-expect-error has id
+      const notifications = await notificationRepository.getUserNotifications(request.user.it.todo('should'))
+    
       if (!notifications) {
         return reply
           .status(404)
