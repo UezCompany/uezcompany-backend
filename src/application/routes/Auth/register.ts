@@ -4,6 +4,7 @@ import { z } from "zod"
 import bcrypt from "bcrypt"
 import { sendNotification } from "@/infra/utils/sendNotification"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
+import { authRepository } from "@/repository/authRepository"
 
 export default async function Register(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -56,21 +57,17 @@ export default async function Register(app: FastifyInstance) {
         })
       }
 
-      const newUser = await prisma.user.create({
-        data: {
-          birth_date,
-          email,
-          name,
-          username,
-          usertype,
-          password: password ? bcrypt.hashSync(password, 10) : null,
-          phone: phone ? phone : null,
-          image: image ? image : undefined,
-          speciality: specialityId
-            ? { connect: { id: specialityId } }
-            : undefined,
-        },
-      })
+      const newUser = await authRepository.register({
+        name,
+        birth_date,
+        email,
+        password,
+        phone,
+        username,
+        usertype,
+        image,
+        specialityId,
+      });
 
       if (!newUser) {
         return reply.status(500).send({ message: "Erro ao cadastrar." })
