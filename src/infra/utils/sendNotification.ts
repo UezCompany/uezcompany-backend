@@ -63,7 +63,7 @@ const sendNotification = {
     })
   },
 
-  clientMessageRequest:  async (receiverId: string, client: string) => {
+  clientMessageRequest: async (receiverId: string, client: string) => {
     await prisma.notification.create({
       data: {
         content: `${client} mandou mensagem para você!`,
@@ -76,7 +76,11 @@ const sendNotification = {
       },
     })
   },
-  quoteAccepted: async (receiverId: string, client: string, balance: string) => {
+  quoteAccepted: async (
+    receiverId: string,
+    client: string,
+    balance: string,
+  ) => {
     await prisma.notification.create({
       data: {
         content: `${client} Aceitou seu orçamento no valor de R$ ${balance}`,
@@ -89,7 +93,11 @@ const sendNotification = {
       },
     })
   },
-  quoteDeclined: async (receiverId: string, client: string, balance: string) => {
+  quoteDeclined: async (
+    receiverId: string,
+    client: string,
+    balance: string,
+  ) => {
     await prisma.notification.create({
       data: {
         content: `${client} recusou seu orçamento no valor de ${balance}`,
@@ -102,7 +110,7 @@ const sendNotification = {
       },
     })
   },
-  errorOcurred: async (receiverId: string, service: string, ) => {
+  errorOcurred: async (receiverId: string, service: string) => {
     await prisma.notification.create({
       data: {
         content: `O serviço ${service} está sendo analisado`,
@@ -115,7 +123,7 @@ const sendNotification = {
       },
     })
   },
-  uzerMessageRequest: async (receiverId: string, uezer: string, ) => {
+  uzerMessageRequest: async (receiverId: string, uezer: string) => {
     await prisma.notification.create({
       data: {
         content: `${uezer} mandou mensagem para você!`,
@@ -128,7 +136,7 @@ const sendNotification = {
       },
     })
   },
-  uezerSendedQuote:  async (receiverId: string, uezer: string, ) => {
+  uezerSendedQuote: async (receiverId: string, uezer: string) => {
     await prisma.notification.create({
       data: {
         content: `${uezer} mandou um orçamento para você!`,
