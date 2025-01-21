@@ -2,6 +2,8 @@ import { FastifyInstance } from "fastify"
 import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
+import { uezerRepository } from "@/repository/UezerRepository"
+import { portfolioRepository } from "@/repository/portfolioRepository"
 
 export default async function GetPortfolios(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
@@ -23,45 +25,26 @@ export default async function GetPortfolios(app: FastifyInstance) {
       const { success } = uuidSchema.safeParse(slug)
 
       if (!success) {
-        const existUser = await prisma.user.findUnique({
-          where: { username: slug },
-        })
+        const existUser = await uezerRepository.getUezerById(slug)
 
         if (!existUser)
           return reply.send({
             Message: "Não existe nenhum usuario com o username informado",
           })
 
-        const portfolio = await prisma.portfolio.findMany({
-          where: {
-            order: {
-              uezer: {
-                username: slug,
-              },
-            },
-          },
-        })
+        const portfolio = await  portfolioRepository.getAllPortfolioBySlug(slug)
+
         return reply.status(200).send(portfolio)
       } else {
-        const existUser = await prisma.user.findUnique({ where: { id: slug } })
+        const existUser = await uezerRepository.getUezerByUsername(slug)
 
         if (!existUser)
           return reply.send({
             Message: "Não existe nenhum usuario com o ID informado",
           })
 
-        const portfolio = await prisma.portfolio.findMany({
-          where: {
-            order: {
-              uezer: {
-                id: slug,
-              },
-            },
-          },
-          include: {
-            order: true,
-          },
-        })
+        const portfolio = await portfolioRepository.getAllPortfolioBySlugOnOrder(slug)
+
         return reply.status(200).send(portfolio)
       }
     },

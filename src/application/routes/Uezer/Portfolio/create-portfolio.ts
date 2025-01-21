@@ -1,4 +1,4 @@
-import { prisma } from "@/infra/connection/prisma"
+import { portfolioRepository } from "@/repository/portfolioRepository"
 import { FastifyInstance } from "fastify"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 import { z } from "zod"
@@ -19,9 +19,7 @@ export default async function CreatePortfolio(app: FastifyInstance) {
     async (request, reply) => {
       const { order_id } = request.body
 
-      const existOrder = await prisma.order.findUnique({
-        where: { id: order_id },
-      })
+      const existOrder = await portfolioRepository.getPortfolioById(order_id)
 
       if (!existOrder)
         return reply.status(400).send({
@@ -29,15 +27,7 @@ export default async function CreatePortfolio(app: FastifyInstance) {
             "Não e possivel fazer um portfolio de um serviço inexistente",
         })
 
-      const portfolio = await prisma.portfolio.create({
-        data: {
-          order: {
-            connect: {
-              id: order_id,
-            },
-          },
-        },
-      })
+      const portfolio = await portfolioRepository.createPortfolio(order_id)
 
       return reply.status(201).send(portfolio)
     },
