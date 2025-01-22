@@ -1,4 +1,5 @@
 import { prisma } from "@/infra/connection/prisma"
+import { chatRepository } from "@/repository/chatRepository"
 import { Socket } from "socket.io"
 import { z } from "zod"
 
@@ -14,18 +15,7 @@ export default function MessageForSocket(socket: Socket) {
 
     const myId = socket.data.userId
 
-    const newMessage = await prisma.message.create({
-      data: {
-        content,
-        senderId: myId,
-        receiverId,
-        chat: {
-          connect: {
-            id: chatId,
-          },
-        },
-      },
-    })
+    const newMessage = await chatRepository.sendMessage(content, chatId, receiverId, myId)
 
     return socket.to(receiverId).emit("message", newMessage)
   })
