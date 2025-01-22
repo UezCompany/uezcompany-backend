@@ -25,25 +25,26 @@ export default async function GetPortfolios(app: FastifyInstance) {
       const { success } = uuidSchema.safeParse(slug)
 
       if (!success) {
-        const existUser = await uezerRepository.getUezerById(slug)
-
-        if (!existUser)
-          return reply.send({
-            Message: "Não existe nenhum usuario com o username informado",
-          })
-
-        const portfolio = await  portfolioRepository.getAllPortfolioBySlug(slug)
-
-        return reply.status(200).send(portfolio)
-      } else {
         const existUser = await uezerRepository.getUezerByUsername(slug)
 
         if (!existUser)
-          return reply.send({
+          return reply.status(404).send({
+            Message: "Não existe nenhum usuario com o username informado",
+          })
+
+        const portfolio = await portfolioRepository.getAllPortfolioBySlug(slug)
+
+        return reply.status(200).send(portfolio)
+      } else {
+        const existUser = await uezerRepository.getUezerById(slug)
+
+        if (!existUser)
+          return reply.status(404).send({
             Message: "Não existe nenhum usuario com o ID informado",
           })
 
-        const portfolio = await portfolioRepository.getAllPortfolioBySlugOnOrder(slug)
+        const portfolio =
+          await portfolioRepository.getAllPortfolioBySlugOnOrder(slug)
 
         return reply.status(200).send(portfolio)
       }

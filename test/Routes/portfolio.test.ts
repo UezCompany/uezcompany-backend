@@ -1,15 +1,20 @@
 import app from "@/application/server"
 import { orderRepository } from "@/repository/OrderRepository"
-import { describe, expect, test } from "vitest"
+import { describe, expect, test, beforeAll } from "vitest"
 import { login } from "../test-utils"
 
-describe("Portifolio Route", async () => {
-  const { token } = await login("uezer@gmail.com", "uezer123")
+describe("Portifolio Route", () => {
+  let token: string
+  let porfolioId: string
+  let orders: Array<any> = []
 
-  let orderId: string
+  beforeAll(async () => {
+    const { token: userToken } = await login("uezer@gmail.com", "uezer123")
+    token = userToken
+    orders = await orderRepository.getOrders()
+  })
 
   test("POST /portfolios", async () => {
-    const orders = await orderRepository.getOrders()
     const order = orders.find((order) => order.available === true)
 
     const response = await app.inject({
@@ -19,30 +24,13 @@ describe("Portifolio Route", async () => {
       },
       url: `/portfolios`,
       body: {
-        order_id: order?.id,
+        orderId: order?.id,
       },
     })
 
-    const { id } = JSON.parse(response.body)
-
-    orderId = id
+    console.log(response)
 
     expect(response.statusCode).toBe(201)
-  })
-
-  test("Delete /portfolio/:id", async () => {
-    const response = await app.inject({
-      method: "DELETE",
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-      url: `/portfolios/${orderId}`,
-    })
-
-    const { Message } = JSON.parse(response.body)
-
-    expect(Message).toBe("O portfolio foi deletado com sucesso")
-    expect(response.statusCode).toBe(200)
   })
 
   test("GET /portfolios/:slug", async () => {
@@ -55,8 +43,26 @@ describe("Portifolio Route", async () => {
       },
       url: `/portfolios/${slug}`,
     })
+    console.log("a", await JSON.parse(response.body)[0].id)
+
+    porfolioId = await JSON.parse(response.body)[0].id
 
     expect(response.statusCode).toBe(200)
     // Fazer testes do retorno payload
+  })
+
+  test("Delete /portfolio/:id", async () => {
+    const response = await app.inject({
+      method: "DELETE",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+      url: `/portfolios/${porfolioId}`,
+    })
+
+    const { Message } = JSON.parse(response.body)
+
+    expect(Message).toBe("O portfolio foi deletado com sucesso")
+    expect(response.statusCode).toBe(200)
   })
 })

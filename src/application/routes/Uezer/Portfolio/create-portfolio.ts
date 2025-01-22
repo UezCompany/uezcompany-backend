@@ -1,3 +1,4 @@
+import { orderRepository } from "@/repository/OrderRepository"
 import { portfolioRepository } from "@/repository/portfolioRepository"
 import { FastifyInstance } from "fastify"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
@@ -11,23 +12,23 @@ export default async function CreatePortfolio(app: FastifyInstance) {
         summary: "Create Portfolio by Order Id",
         tags: ["Uezer", "Portfolio"],
         body: z.object({
-          order_id: z.string(),
+          orderId: z.string(),
         }),
       },
       onRequest: [app.authenticate],
     },
     async (request, reply) => {
-      const { order_id } = request.body
+      const { orderId } = request.body
 
-      const existOrder = await portfolioRepository.getPortfolioById(order_id)
+      const existOrder = await orderRepository.getOrderById(orderId)
 
       if (!existOrder)
         return reply.status(400).send({
           Message:
-            "Não e possivel fazer um portfolio de um serviço inexistente",
+            "Não é possivel fazer um portfolio de um serviço inexistente",
         })
 
-      const portfolio = await portfolioRepository.createPortfolio(order_id)
+      const portfolio = await portfolioRepository.createPortfolio(orderId)
 
       return reply.status(201).send(portfolio)
     },

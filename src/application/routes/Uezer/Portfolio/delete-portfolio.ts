@@ -19,12 +19,11 @@ export default async function DeletePortfolio(app: FastifyInstance) {
     },
     async (request, reply) => {
       const { id } = request.params
-
       const existPortfolio = await portfolioRepository.getPortfolioById(id)
 
       if (!existPortfolio)
         return reply
-          .status(400)
+          .status(404)
           .send({ Message: "Não existe nenhum portfolio com esse ID" })
 
       await portfolioRepository.deletePortfolio(id)
