@@ -4,6 +4,7 @@ import { z } from "zod"
 import bcrypt from "bcrypt"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 import { defaultAuthTokenConfig } from "@/infra/utils/cookies/defaultAuthTokenConfig"
+import { authRepository } from "@/repository/authRepository"
 
 export default async function Auth(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -28,15 +29,9 @@ export default async function Auth(app: FastifyInstance) {
       }
 
       if (bcrypt.compareSync(password, user.password)) {
-        await prisma.user.update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            last_login: new Date(),
-          },
-        })
 
+        await authRepository.loginUser(user.id)
+        
         const token = app.jwt.sign({ id: user.id })
 
         reply.setCookie("token", token, defaultAuthTokenConfig)

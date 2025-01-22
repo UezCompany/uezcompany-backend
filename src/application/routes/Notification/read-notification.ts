@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify"
-import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
+import { notificationRepository } from "@/repository/notificationRepository"
 
 export default async function ReadNotificacao(app: FastifyInstance) {
   app.post(
@@ -22,14 +22,7 @@ export default async function ReadNotificacao(app: FastifyInstance) {
 
       const { id } = params.parse(request.params)
 
-      const notification = await prisma.notification.update({
-        where: {
-          id,
-        },
-        data: {
-          readed: true,
-        },
-      })
+      const notification = await notificationRepository.readNotification(id)
 
       if (!notification) {
         return reply.status(404).send({

@@ -1,4 +1,5 @@
 import { prisma } from "@/infra/connection/prisma"
+import { portfolioRepository } from "@/repository/portfolioRepository"
 import { FastifyInstance } from "fastify"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 import { z } from "zod"
@@ -19,14 +20,14 @@ export default async function DeletePortfolio(app: FastifyInstance) {
     async (request, reply) => {
       const { id } = request.params
 
-      const existPortfolio = await prisma.portfolio.findMany({ where: { id } })
+      const existPortfolio = await portfolioRepository.getPortfolioById(id)
 
       if (!existPortfolio)
         return reply
           .status(400)
           .send({ Message: "Não existe nenhum portfolio com esse ID" })
 
-      await prisma.portfolio.delete({ where: { id } })
+      await portfolioRepository.deletePortfolio(id)
 
       return reply
         .status(200)

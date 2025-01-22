@@ -4,6 +4,7 @@ import { z } from "zod"
 import bcrypt from "bcrypt"
 import { sendNotification } from "@/infra/utils/sendNotification"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
+import { authRepository } from "@/repository/authRepository"
 
 export default async function CompleteRegister(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -49,25 +50,18 @@ export default async function CompleteRegister(app: FastifyInstance) {
       // @ts-expect-error - O usuário está sendo acessado no request
       const userId = request.user?.id
 
-      const updatedUser = await prisma.user.update({
-        where: {
-          email,
-          id: userId,
-        },
-        data: {
-          birth_date,
-          name,
-          username,
-          usertype,
-          password: password ? bcrypt.hashSync(password, 10) : null,
-          phone: phone ? phone : null,
-          image: image ? image : undefined,
-          speciality: specialityId
-            ? { connect: { id: specialityId } }
-            : undefined,
-          status: "ACTIVE",
-        },
-      })
+      const updatedUser = await authRepository.completeRegister({
+        userId,
+        name,
+        birth_date,
+        email,
+        password,
+        phone,
+        username,
+        usertype,
+        image,
+        specialityId,
+      });
 
       if (!updatedUser) {
         return reply
