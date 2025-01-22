@@ -29,9 +29,8 @@ export default async function Auth(app: FastifyInstance) {
       }
 
       if (bcrypt.compareSync(password, user.password)) {
-
         await authRepository.loginUser(user.id)
-        
+
         const token = app.jwt.sign({ id: user.id })
 
         reply.setCookie("token", token, defaultAuthTokenConfig)

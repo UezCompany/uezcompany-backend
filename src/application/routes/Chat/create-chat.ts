@@ -66,7 +66,10 @@ export default async function CreateChat(app: FastifyInstance) {
         })
       }
 
-      const chat = await chatRepository.createChat(myContact.id, requestedContact.id)
+      const chat = await chatRepository.createChat(
+        myContact.id,
+        requestedContact.id,
+      )
 
       if (!chat) {
         return reply.status(400).send({ message: "Erro ao criar o chat." })

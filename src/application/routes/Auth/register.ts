@@ -67,7 +67,7 @@ export default async function Register(app: FastifyInstance) {
         usertype,
         image,
         specialityId,
-      });
+      })
 
       if (!newUser) {
         return reply.status(500).send({ message: "Erro ao cadastrar." })

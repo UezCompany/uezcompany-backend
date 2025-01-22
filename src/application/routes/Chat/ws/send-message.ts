@@ -15,7 +15,12 @@ export default function MessageForSocket(socket: Socket) {
 
     const myId = socket.data.userId
 
-    const newMessage = await chatRepository.sendMessage(content, chatId, receiverId, myId)
+    const newMessage = await chatRepository.sendMessage(
+      content,
+      chatId,
+      receiverId,
+      myId,
+    )
 
     return socket.to(receiverId).emit("message", newMessage)
   })

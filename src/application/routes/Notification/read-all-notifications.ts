@@ -12,9 +12,11 @@ export default async function ReadAllNotificacoes(app: FastifyInstance) {
       },
       onRequest: [app.authenticate],
     },
-    async (request, reply) => { 
+    async (request, reply) => {
       // @ts-expect-error has id
-      const notifications = await notificationRepository.readAllNotificacoes(request.user.id)
+      const notifications = await notificationRepository.readAllNotificacoes(
+        request.user.id,
+      )
 
       if (!notifications) {
         return reply.status(404).send({

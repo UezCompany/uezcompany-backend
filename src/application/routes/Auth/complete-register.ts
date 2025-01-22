@@ -61,7 +61,7 @@ export default async function CompleteRegister(app: FastifyInstance) {
         usertype,
         image,
         specialityId,
-      });
+      })
 
       if (!updatedUser) {
         return reply

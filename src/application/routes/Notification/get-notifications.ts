@@ -15,8 +15,10 @@ export default async function GetUserNotifications(app: FastifyInstance) {
     },
     async (request, reply) => {
       // @ts-expect-error has id
-      const notifications = await notificationRepository.getUserNotifications(request.user.it.todo('should'))
-    
+      const notifications = await notificationRepository.getUserNotifications(
+        request.user.it.todo("should"),
+      )
+
       if (!notifications) {
         return reply
           .status(404)

@@ -16,7 +16,13 @@ export default function BudgetForSocket(socket: Socket) {
 
     const myId = socket.data.userId
 
-    const newMessage = await chatRepository.sendBudget(chatId, value, idPedido, receiverId, myId)
+    const newMessage = await chatRepository.sendBudget(
+      chatId,
+      value,
+      idPedido,
+      receiverId,
+      myId,
+    )
 
     socket.to(myId).emit("message", newMessage)
     return socket.to(receiverId).emit("message", newMessage)
