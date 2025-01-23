@@ -2,11 +2,11 @@ import { Prisma } from "@prisma/client"
 import { prisma } from "../infra/connection/prisma"
 
 interface IOrderRepository {
-  getOrders(filters: GetOrdersFilters): Promise<any>
+  getOrders(filters?: GetOrdersFilters): Promise<any>
   getOrdersByUezer(idUezer: number | string): Promise<any>
   getCreatedOrdersByUser(idClient: number | string): Promise<any>
   getOrderById(id: number | string): Promise<any>
-  getActiveOrders(filters: GetOrdersFilters): Promise<any>
+  getActiveOrders(filters?: GetOrdersFilters): Promise<any>
   updateOrder(id: number | string, data: Prisma.OrderUpdateInput): Promise<any>
 }
 
@@ -21,47 +21,42 @@ interface GetOrdersFilters {
 }
 
 class OrderRepository implements IOrderRepository {
-  async getOrders(filters: GetOrdersFilters) {
-    const {
-      search,
-      orderBy,
-      minValue,
-      maxValue,
-      toMatch,
-      profession,
-      speciality,
-    } = filters
-    return await prisma.order.findMany({
-      where: {
-        AND: [
-          search ? { title: { contains: search } } : {},
-          minValue ? { value: { gte: minValue } } : {},
-          maxValue ? { value: { lte: maxValue } } : {},
-          toMatch ? { value: 0 } : {},
-          profession
-            ? { speciality: { profession: { name: profession } } }
-            : {},
-          speciality ? { speciality: { name: speciality } } : {},
-        ],
-      },
-      orderBy:
-        orderBy === "newest"
-          ? { created_at: "desc" }
-          : orderBy === "older"
-            ? { created_at: "asc" }
-            : orderBy === "rentable"
-              ? { value: "desc" }
-              : orderBy === "norentable"
-                ? { value: "asc" }
+  async getOrders(filters?: GetOrdersFilters) {
+    return filters
+      ? await prisma.order.findMany({
+          where: {
+            AND: [
+              filters.search ? { title: { contains: filters.search } } : {},
+              filters.minValue ? { value: { gte: filters.minValue } } : {},
+              filters.maxValue ? { value: { lte: filters.maxValue } } : {},
+              filters.toMatch ? { value: 0 } : {},
+              filters.profession
+                ? { speciality: { profession: { name: filters.profession } } }
                 : {},
-      include: {
-        speciality: {
-          include: {
-            profession: true,
+              filters.speciality
+                ? { speciality: { name: filters.speciality } }
+                : {},
+            ],
           },
-        },
-      },
-    })
+          orderBy:
+            filters.orderBy === "newest"
+              ? { created_at: "desc" }
+              : filters.orderBy === "older"
+                ? { created_at: "asc" }
+                : filters.orderBy === "rentable"
+                  ? { value: "desc" }
+                  : filters.orderBy === "norentable"
+                    ? { value: "asc" }
+                    : {},
+          include: {
+            speciality: {
+              include: {
+                profession: true,
+              },
+            },
+          },
+        })
+      : await prisma.order.findMany({})
   }
 
   async getOrdersByUezer(id: number | string) {
@@ -109,49 +104,44 @@ class OrderRepository implements IOrderRepository {
     })
   }
 
-  async getActiveOrders(filters: GetOrdersFilters) {
-    const {
-      search,
-      orderBy,
-      minValue,
-      maxValue,
-      toMatch,
-      profession,
-      speciality,
-    } = filters
-    return await prisma.order.findMany({
-      where: {
-        AND: [
-          search ? { title: { contains: search } } : {},
-          minValue ? { value: { gte: minValue } } : {},
-          maxValue ? { value: { lte: maxValue } } : {},
-          toMatch ? { value: 0 } : {},
-          profession
-            ? { speciality: { profession: { name: profession } } }
-            : {},
-          speciality ? { speciality: { name: speciality } } : {},
-        ],
-        available: true,
-      },
-      orderBy:
-        orderBy === "newest"
-          ? { created_at: "desc" }
-          : orderBy === "older"
-            ? { created_at: "asc" }
-            : orderBy === "rentable"
-              ? { value: "desc" }
-              : orderBy === "norentable"
-                ? { value: "asc" }
+  async getActiveOrders(filters?: GetOrdersFilters) {
+    return filters
+      ? await prisma.order.findMany({
+          where: {
+            AND: [
+              filters.search ? { title: { contains: filters.search } } : {},
+              filters.minValue ? { value: { gte: filters.minValue } } : {},
+              filters.maxValue ? { value: { lte: filters.maxValue } } : {},
+              filters.toMatch ? { value: 0 } : {},
+              filters.profession
+                ? { speciality: { profession: { name: filters.profession } } }
                 : {},
-      include: {
-        speciality: {
-          include: {
-            profession: true,
+              filters.speciality
+                ? { speciality: { name: filters.speciality } }
+                : {},
+            ],
+            available: true,
           },
-        },
-        client: true,
-      },
-    })
+          orderBy:
+            filters.orderBy === "newest"
+              ? { created_at: "desc" }
+              : filters.orderBy === "older"
+                ? { created_at: "asc" }
+                : filters.orderBy === "rentable"
+                  ? { value: "desc" }
+                  : filters.orderBy === "norentable"
+                    ? { value: "asc" }
+                    : {},
+          include: {
+            speciality: {
+              include: {
+                profession: true,
+              },
+            },
+            client: true,
+          },
+        })
+      : await prisma.order.findMany({ where: { available: true } })
   }
 
   async updateOrder(id: number | string, data: Prisma.OrderUpdateInput) {

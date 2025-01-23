@@ -11,11 +11,11 @@ describe("Portifolio Route", () => {
   beforeAll(async () => {
     const { token: userToken } = await login("uezer@gmail.com", "uezer123")
     token = userToken
-    orders = await orderRepository.getOrders()
+    orders = await orderRepository.getActiveOrders()
   })
 
   test("POST /portfolios", async () => {
-    const order = orders.find((order) => order.available === true)
+    const order = orders[0]
 
     const response = await app.inject({
       method: "POST",
@@ -24,7 +24,7 @@ describe("Portifolio Route", () => {
       },
       url: `/portfolios`,
       body: {
-        orderId: order?.id,
+        orderId: order.id,
       },
     })
 
@@ -43,8 +43,6 @@ describe("Portifolio Route", () => {
       },
       url: `/portfolios/${slug}`,
     })
-    console.log("a", await JSON.parse(response.body)[0].id)
-
     porfolioId = await JSON.parse(response.body)[0].id
 
     expect(response.statusCode).toBe(200)
