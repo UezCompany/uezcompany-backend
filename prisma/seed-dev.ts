@@ -128,8 +128,8 @@ export async function main() {
   // Criando um usuário cliente
   const client = await prisma.user.create({
     data: {
-      name: "Cliente",
-      birth_date: "1990-01-01",
+      name: "Anna Julia Alexandre Guimarães",
+      birth_date: "2006-02-06",
       username: "cliente",
       email: "cliente@gmail.com",
       usertype: "CLIENT",
@@ -140,8 +140,8 @@ export async function main() {
   // Criando um usuário uezer
   const uezer = await prisma.user.create({
     data: {
-      name: "Uezer",
-      birth_date: "1990-01-01",
+      name: "João David de Oliveira Carneiro",
+      birth_date: "2006-08-11",
       username: "uezer",
       email: "uezer@gmail.com",
       usertype: "UEZER",
@@ -157,8 +157,9 @@ export async function main() {
   // Criando um pedido (order)
   const order = await prisma.order.create({
     data: {
-      title: "Order",
-      description: "Description",
+      title: "Desenvolvimento de Aplicativo",
+      description:
+        "Desenvolvimento de um aplicativo móvel para gerenciamento de tarefas pessoais. O aplicativo deve permitir adicionar, editar e excluir tarefas, além de definir lembretes e prioridades para cada tarefa.",
       client: {
         connect: {
           id: client.id,
@@ -176,28 +177,56 @@ export async function main() {
       },
     },
   })
+
   // Criando múltiplos pedidos (orders)
   const ordersData = [
     {
-      title: "Order 1",
-      description: "Description 1",
+      title: "Logo para café boutique",
+      description:
+        'Estou abrindo um café chamado "Doce Aroma" e preciso de um logotipo único. As cores principais devem ser bege, marrom e dourado, para transmitir sofisticação. Gostaria de receber os códigos das cores, fontes e todo o material necessário para aplicar a marca em diferentes lugares.',
       clientId: client.id,
-      uezerId: uezer.id,
-      specialityName: "Fullstack",
+      uezerId: null,
+      specialityName: "Criação de logo",
     },
     {
-      title: "Order 2",
-      description: "Description 2",
+      title: "E-commerce para loja de roupas",
+      description:
+        "Preciso de um site moderno para minha loja de roupas online, chamada 'Trend Fashion'. Deve incluir uma página inicial atraente, catálogo de produtos, carrinho de compras e integração com meios de pagamento. O design precisa ser clean e responsivo.",
       clientId: client.id,
-      uezerId: uezer.id,
+      uezerId: null,
       specialityName: "Frontend",
     },
     {
-      title: "Order 3",
-      description: "Description 3",
+      title: "Jogo educativo para crianças",
+      description:
+        "Estou procurando alguém para desenvolver um jogo educativo para crianças de 6 a 10 anos. O jogo deve ensinar matemática básica de forma divertida e interativa. Seria ótimo se o design fosse colorido e amigável para crianças.",
       clientId: client.id,
       uezerId: uezer.id,
-      specialityName: "Backend",
+      specialityName: "Games",
+    },
+    {
+      title: "Aplicativo de agenda médica",
+      description:
+        "Preciso de um aplicativo mobile onde médicos e pacientes possam agendar consultas de forma fácil. Deve ter login para médicos e pacientes, lista de horários disponíveis e notificações automáticas.",
+      clientId: client.id,
+      uezerId: null,
+      specialityName: "Mobile",
+    },
+    {
+      title: "Landing page para evento",
+      description:
+        "Estou organizando um evento de tecnologia chamado 'TechX' e preciso de uma landing page atrativa para capturar inscrições. A página deve conter informações sobre o evento, formulário de inscrição e design moderno.",
+      clientId: client.id,
+      uezerId: null,
+      specialityName: "Web",
+    },
+    {
+      title: "Rebranding para loja de cosméticos",
+      description:
+        'Minha loja de cosméticos "Beleza Natural" precisa de um novo logotipo e identidade visual. Quero algo minimalista, com foco em tons pastel e elementos que remetam à natureza.',
+      clientId: client.id,
+      uezerId: null,
+      specialityName: "Criação de logo",
     },
   ]
 
@@ -206,61 +235,7 @@ export async function main() {
       data: {
         title: orderData.title,
         description: orderData.description,
-        client: {
-          connect: {
-            id: orderData.clientId,
-          },
-        },
-        uezer: {
-          connect: {
-            id: orderData.uezerId,
-          },
-        },
-        speciality: {
-          connect: {
-            name: orderData.specialityName,
-          },
-        },
-      },
-    })
-  }
-  // Criando pedidos (orders) com e sem uezer
-  const mixedOrdersData = [
-    {
-      title: "Order 4",
-      description: "Description 4",
-      clientId: client.id,
-      uezerId: uezer.id,
-      specialityName: "Games",
-    },
-    {
-      title: "Order 5",
-      description: "Description 5",
-      clientId: client.id,
-      uezerId: null,
-      specialityName: "Mobile",
-    },
-    {
-      title: "Order 6",
-      description: "Description 6",
-      clientId: client.id,
-      uezerId: uezer.id,
-      specialityName: "Web",
-    },
-    {
-      title: "Order 7",
-      description: "Description 7",
-      clientId: client.id,
-      uezerId: null,
-      specialityName: "Criação de logo",
-    },
-  ]
-
-  for (const orderData of mixedOrdersData) {
-    await prisma.order.create({
-      data: {
-        title: orderData.title,
-        description: orderData.description,
+        available: orderData.uezerId ? false : true,
         client: {
           connect: {
             id: orderData.clientId,

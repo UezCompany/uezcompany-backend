@@ -2,33 +2,37 @@ import { prisma } from "../src/infra/connection/prisma"
 
 async function main() {
   console.log("Seeding production data...")
-  // Criando as profissãos
-  const arrayOfProfissãos = [
+  // Criando as profissões
+  const arrayOfProfessions = [
     "Programação",
     "Videomaking",
     "Design",
     "Social Media",
   ]
 
-  // Criando as profissãos no banco de dados
+  // Criando as profissões no banco de dados
   const professionData = await prisma.profession.createMany({
-    data: arrayOfProfissãos.map((name: string) => ({ name })),
+    data: arrayOfProfessions.map((name: string) => ({ name })),
     skipDuplicates: true,
   })
 
   // Dados dos Especialidades
   const specialitiesData = [
-    { name: "Fullstack", type: "ONLINE", professionName: "Programação" },
-    { name: "Frontend", type: "ONLINE", professionName: "Programação" },
-    { name: "Backend", type: "ONLINE", professionName: "Programação" },
-    { name: "Games", type: "ONLINE", professionName: "Programação" },
-    { name: "Mobile", type: "ONLINE", professionName: "Programação" },
+    {
+      name: "Fullstack",
+      type: "ONLINE",
+      professionName: arrayOfProfessions[0],
+    },
+    { name: "Frontend", type: "ONLINE", professionName: arrayOfProfessions[0] },
+    { name: "Backend", type: "ONLINE", professionName: arrayOfProfessions[0] },
+    { name: "Games", type: "ONLINE", professionName: arrayOfProfessions[0] },
+    { name: "Mobile", type: "ONLINE", professionName: arrayOfProfessions[0] },
     {
       name: "Engenharia de dados",
       type: "ONLINE",
-      professionName: "Programação",
+      professionName: arrayOfProfessions[0],
     },
-    { name: "Web", type: "ONLINE", professionName: "Programação" },
+    { name: "Web", type: "ONLINE", professionName: arrayOfProfessions[0] },
     { name: "Criação de logo", type: "ONLINE", professionName: "Design" },
     { name: "Papelaria", type: "ONLINE", professionName: "Design" },
     { name: "Tipografia", type: "ONLINE", professionName: "Design" },
