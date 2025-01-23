@@ -13,7 +13,7 @@ class NotificationRepository implements INotificationRepository {
         receiverId: id,
       },
       orderBy: {
-        readed: "asc",
+        created_at: "desc",
       },
     })
   }
