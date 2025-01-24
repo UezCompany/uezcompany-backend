@@ -16,13 +16,13 @@ interface registerBody {
   password: string
   phone?: string
   username: string
-  usertype: string
+  usertype: "UEZER" | "CLIENT" | "BOTH"
   image?: string
   specialityId?: string
 }
 
 class AuthRepository implements IAuthRepository {
-  async register(data: Partial<registerBody>): Promise<any> {
+  async register(data: registerBody): Promise<any> {
     return await prisma.user.create({
       data: {
         birth_date: data.birth_date,

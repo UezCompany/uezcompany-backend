@@ -6,9 +6,10 @@ import { prisma } from "../infra/connection/prisma"
 
 interface ISpecialityRepository {
   getSpecialities(): Promise<any>
-  getSpecialitiesByProfession(profession: string): Promise<any>
+  getSpecialitiesByProfession(professionName: string): Promise<any>
   getSpecialitiesById(id: string): Promise<any>
   getProfessions(): Promise<any>
+  getProfessionByName(professionName: string): Promise<any>
 }
 
 class SpecialityRepository implements ISpecialityRepository {
@@ -25,11 +26,11 @@ class SpecialityRepository implements ISpecialityRepository {
       },
     })
 
-  async getSpecialitiesByProfession(profession: "Programação" | any) {
+  async getSpecialitiesByProfession(professionName: string) {
     return await prisma.speciality.findMany({
       where: {
         profession: {
-          name: profession,
+          name: professionName,
         },
       },
     })
@@ -48,6 +49,14 @@ class SpecialityRepository implements ISpecialityRepository {
 
   async getProfessions() {
     return await prisma.profession.findMany()
+  }
+
+  async getProfessionByName(professionName: string) {
+    return await prisma.profession.findUnique({
+      where: {
+        name: professionName,
+      },
+    })
   }
 }
 

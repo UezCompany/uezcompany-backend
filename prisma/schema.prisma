@@ -18,8 +18,6 @@ model User {
   name                    String
   email                   String         @unique
   password                String?
-  // cpf                     String?        @unique
-  // address                 Address?       @relation(fields: [addressId], references: [id])
   status                  USERSTATUS     @default(ACTIVE)
   block_reason            String?
   birth_date              String?
@@ -41,8 +39,9 @@ model User {
   chats                   Chat[]         @relation("UserChats")
   notifications           Notification[]
   rating                  Float          @default(0.0)
-  RatingsReceived         Rating[]       @relation("ReceivedRatings")
-  RatingsGiven            Rating[]       @relation("GivenRatings")
+  ratingsReceived         Rating[]       @relation("ReceivedRatings")
+  ratingsGiven            Rating[]       @relation("GivenRatings")
+  portfolio               Portfolio[]
 }
 
 model Speciality {
@@ -56,12 +55,15 @@ model Speciality {
   orders                  Order[]
   users                   User[]
   professionId            String
+  Portfolio               Portfolio?     @relation(fields: [portfolioId], references: [id])
+  portfolioId             String?
 }
 
 model Profession {
   id           String       @id @default(uuid())
   name         String       @unique
   specialities Speciality[]
+  Portfolio    Portfolio[]
 }
 
 model Order {
@@ -75,21 +77,46 @@ model Order {
   created_at   DateTime    @default(now())
   end_date     DateTime?
   value        Float       @default(0.0)
-  images       String[]
+  media        Media[]
   rated        Boolean     @default(false)
-  Portfolio    Portfolio[]
   Messages     Message[]
   client       User        @relation("client", fields: [clientId], references: [id])
   clientId     String
   uezer        User?       @relation("assigned_uezer", fields: [uezerId], references: [id])
   uezerId      String?
   rating       Rating? // relacao de um pra um com a tabela Rating
+  Portfolio    Portfolio?
 }
 
 model Portfolio {
-  id      String @id @default(uuid())
-  order   Order  @relation(fields: [orderId], references: [id])
-  orderId String
+  id           String       @id @default(uuid())
+  title        String
+  description  String       @default("Descrição do projeto.")
+  media        Media[]
+  visibility   VISIBILITY   @default(PUBLIC)
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @updatedAt
+  owner        User         @relation(fields: [ownerId], references: [id])
+  ownerId      String
+  order        Order?       @relation(fields: [orderId], references: [id])
+  orderId      String?      @unique
+  profession   Profession   @relation(fields: [professionId], references: [id])
+  professionId String
+  specialities Speciality[]
+}
+
+model Media {
+  id          String     @id @default(uuid())
+  title       String
+  description String?
+  type        MEDIATYPE
+  image       String?
+  text        String?
+  url         String?
+  Portfolio   Portfolio? @relation(fields: [portfolioId], references: [id])
+  portfolioId String?
+  Order       Order?     @relation(fields: [orderId], references: [id])
+  orderId     String?
 }
 
 model Rating {
@@ -144,11 +171,23 @@ model Message {
   orderId    String?
 }
 
+enum VISIBILITY {
+  PUBLIC
+  PRIVATE
+}
+
 enum USERSTATUS {
   ACTIVE
   INACTIVE
   BLOCKED
   INCOMPLETE // Usuario que ainda nao completou o cadastro
+}
+
+enum MEDIATYPE {
+  image
+  video
+  text
+  link
 }
 
 enum USERTYPE {

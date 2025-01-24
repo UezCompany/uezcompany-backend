@@ -113,6 +113,15 @@ describe("Order routes", () => {
     expect(updatedOrder).toHaveProperty("description", updateData.description)
     expect(updatedOrder).toHaveProperty("value", updateData.value)
   })
+  test("PATCH /order/:orderId/assign", async () => {
+    const response = await app.inject({
+      method: "PATCH",
+      headers: { authorization: `Bearer ${clientToken}` },
+      body: { value: 5, uezerId },
+      url: `/orders/${order.id}/assign`,
+    })
+    expect(response.statusCode).toBe(200)
+  })
 
   test("PATCH /orders/:orderId/finish", async () => {
     const response = await app.inject({
@@ -138,25 +147,16 @@ describe("Order routes", () => {
     expect(response.statusCode).toBe(200)
   })
 
-  test("PATCH /order/:orderId/assign", async () => {
-    const response = await app.inject({
-      method: "PATCH",
-      headers: { authorization: `Bearer ${clientToken}` },
-      body: { value: 5, uezerId },
-      url: `/orders/${order.id}/assign`,
-    })
-    expect(response.statusCode).toBe(200)
-  })
-
-  test("PATCH /orders/:orderId/cancel", async () => {
+  test("DELETE /orders/:orderId/cancel", async () => {
+    const activeOrders = await orderRepository.getActiveOrders()
     const response = await app.inject({
       method: "DELETE",
       headers: { authorization: `Bearer ${clientToken}` },
-      url: `/orders/${order.id}/cancel`,
+      url: `/orders/${activeOrders[0].id}/cancel`,
     })
     expect(response.statusCode).toBe(200)
     const cancelledOrder = JSON.parse(response.body)
-    expect(cancelledOrder).toHaveProperty("id", order.id)
+    expect(cancelledOrder).toHaveProperty("id", activeOrders[0].id)
     expect(cancelledOrder).toHaveProperty("status", "CANCELLED")
   })
 })

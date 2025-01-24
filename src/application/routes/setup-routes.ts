@@ -37,6 +37,7 @@ import UpdateUserProfileImage from "./User/update-user-profile-image"
 import CompleteRegister from "./Auth/complete-register"
 import UpdateOrder from "./Order/update-order"
 import CancelOrder from "./Order/cancel-order"
+import CreatePortfolioAssignedToOrder from "./Uezer/Portfolio/create-portfolio-assigned-to-order"
 
 export async function SetupRoutes(app: FastifyInstance) {
   app.get("/", (req, reply) => {
@@ -65,6 +66,7 @@ export async function SetupRoutes(app: FastifyInstance) {
   // // Portfolio
   app.register(GetPortfolios)
   app.register(CreatePortfolio)
+  app.register(CreatePortfolioAssignedToOrder)
   app.register(DeletePortfolio)
   // // Speciality
   app.register(GetSpecialities)

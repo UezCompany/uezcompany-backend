@@ -1,5 +1,4 @@
 import { FastifyInstance } from "fastify"
-import { prisma } from "@/infra/connection/prisma"
 import { z } from "zod"
 import { ZodTypeProvider } from "fastify-type-provider-zod"
 import { uezerRepository } from "@/repository/UezerRepository"
@@ -21,32 +20,38 @@ export default async function GetPortfolios(app: FastifyInstance) {
     async (request, reply) => {
       const { slug } = request.params
 
-      const uuidSchema = z.string().uuid()
-      const { success } = uuidSchema.safeParse(slug)
+      const isUUID = z.string().uuid().safeParse(slug).success
 
-      if (!success) {
-        const existUser = await uezerRepository.getUezerByUsername(slug)
+      try {
+        let user, portfolios
 
-        if (!existUser)
-          return reply.status(404).send({
-            Message: "Não existe nenhum usuario com o username informado",
-          })
+        if (isUUID) {
+          user = await uezerRepository.getUezerById(slug)
+          if (!user) {
+            return reply.status(404).send({
+              message: "Nenhum usuário encontrado com o ID informado.",
+            })
+          }
 
-        const portfolio = await portfolioRepository.getAllPortfolioBySlug(slug)
+          portfolios =
+            await portfolioRepository.getAllPortfolioBySlugOnOrder(slug)
+        } else {
+          user = await uezerRepository.getUezerByUsername(slug)
+          if (!user) {
+            return reply.status(404).send({
+              message: "Nenhum usuário encontrado com o username informado.",
+            })
+          }
 
-        return reply.status(200).send(portfolio)
-      } else {
-        const existUser = await uezerRepository.getUezerById(slug)
+          portfolios = await portfolioRepository.getAllPortfolioBySlug(slug)
+        }
 
-        if (!existUser)
-          return reply.status(404).send({
-            Message: "Não existe nenhum usuario com o ID informado",
-          })
-
-        const portfolio =
-          await portfolioRepository.getAllPortfolioBySlugOnOrder(slug)
-
-        return reply.status(200).send(portfolio)
+        return reply.status(200).send(portfolios)
+      } catch (error) {
+        console.error("Erro ao buscar o portfólio:", error)
+        return reply.status(500).send({
+          message: "Erro interno no servidor ao buscar o portfólio.",
+        })
       }
     },
   )

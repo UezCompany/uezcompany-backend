@@ -7,6 +7,7 @@ interface IOrderRepository {
   getCreatedOrdersByUser(idClient: number | string): Promise<any>
   getOrderById(id: number | string): Promise<any>
   getActiveOrders(filters?: GetOrdersFilters): Promise<any>
+  getConcludedOrders(filters?: GetOrdersFilters): Promise<any>
   updateOrder(id: number | string, data: Prisma.OrderUpdateInput): Promise<any>
 }
 
@@ -159,6 +160,45 @@ class OrderRepository implements IOrderRepository {
         available: false,
       },
     })
+  }
+
+  async getConcludedOrders(filters?: GetOrdersFilters): Promise<any> {
+    return filters
+      ? await prisma.order.findMany({
+          where: {
+            AND: [
+              filters.search ? { title: { contains: filters.search } } : {},
+              filters.minValue ? { value: { gte: filters.minValue } } : {},
+              filters.maxValue ? { value: { lte: filters.maxValue } } : {},
+              filters.toMatch ? { value: 0 } : {},
+              filters.profession
+                ? { speciality: { profession: { name: filters.profession } } }
+                : {},
+              filters.speciality
+                ? { speciality: { name: filters.speciality } }
+                : {},
+            ],
+            status: "COMPLETED",
+          },
+          orderBy:
+            filters.orderBy === "newest"
+              ? { created_at: "desc" }
+              : filters.orderBy === "older"
+                ? { created_at: "asc" }
+                : filters.orderBy === "rentable"
+                  ? { value: "desc" }
+                  : filters.orderBy === "norentable"
+                    ? { value: "asc" }
+                    : {},
+          include: {
+            speciality: {
+              include: {
+                profession: true,
+              },
+            },
+          },
+        })
+      : await prisma.order.findMany({ where: { status: "COMPLETED" } })
   }
 }
 

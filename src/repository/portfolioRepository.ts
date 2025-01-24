@@ -1,7 +1,6 @@
 import { prisma } from "@/infra/connection/prisma"
 
 interface IPortfolioRepository {
-  createPortfolio(id: string): Promise<any>
   getPortfolioById(id: string): Promise<any>
   deletePortfolio(id: string): Promise<any>
   getAllPortfolioBySlug(slug: string): Promise<any>
@@ -37,23 +36,26 @@ class PortfolioRepository implements IPortfolioRepository {
   }
 
   async deletePortfolio(id: string): Promise<any> {
-    return await prisma.portfolio.delete({ where: { id } })
+    console.log("id", id)
+    const deletedPortfolio = await prisma.portfolio.delete({ where: { id } })
+    if (deletedPortfolio.orderId) {
+      await prisma.order.update({
+        where: {
+          id: deletedPortfolio.orderId,
+        },
+        data: {
+          Portfolio: {
+            disconnect: true,
+          },
+        },
+      })
+    }
+
+    return deletedPortfolio
   }
   async getPortfolioById(id: string): Promise<any> {
     return await prisma.portfolio.findUnique({
       where: { id },
-    })
-  }
-
-  async createPortfolio(id: string): Promise<any> {
-    return await prisma.portfolio.create({
-      data: {
-        order: {
-          connect: {
-            id,
-          },
-        },
-      },
     })
   }
 }

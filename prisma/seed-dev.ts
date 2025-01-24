@@ -5,10 +5,12 @@ export async function main() {
   console.log("Cleaning database...")
 
   // Deletando todos os registros das tabelas relevantes
-  await prisma.order.deleteMany({})
+  await prisma.portfolio.deleteMany({})
+  await prisma.notification.deleteMany({})
   await prisma.user.deleteMany({})
   await prisma.speciality.deleteMany({})
   await prisma.profession.deleteMany({})
+  await prisma.order.deleteMany({})
 
   console.log("Seeding development data...")
 
@@ -236,6 +238,7 @@ export async function main() {
         title: orderData.title,
         description: orderData.description,
         available: orderData.uezerId ? false : true,
+        status: orderData.uezerId ? "IN_PROGRESS" : "OPEN",
         client: {
           connect: {
             id: orderData.clientId,

@@ -26,8 +26,7 @@ export default async function UpdateOrder(app: FastifyInstance) {
     },
     async (request, reply) => {
       const { orderId } = request.params
-      const { title, description, professionId, specialityId, value } =
-        request.body
+      const { title, description, specialityId, value } = request.body
 
       //@ts-expect-error has id
       const userId = request.user.id
