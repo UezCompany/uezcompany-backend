@@ -1,3 +1,4 @@
+import { paginate } from "@/infra/utils/paginate"
 import { prisma } from "../infra/connection/prisma"
 
 interface IUezerRepository {
@@ -73,10 +74,10 @@ interface updateDetails {
 
 class UezerRepository implements IUezerRepository {
   async getUezers(page: number, pageSize: number) {
-    const offset = (page <= 1 ? 0 : page - 1) * pageSize
+    const { skip, take } = paginate(page, pageSize)
     return await prisma.user.findMany({
-      skip: offset,
-      take: pageSize,
+      skip,
+      take,
       where: {
         OR: [{ usertype: "UEZER" }, { usertype: "BOTH" }],
       },

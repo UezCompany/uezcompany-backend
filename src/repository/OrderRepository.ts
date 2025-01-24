@@ -1,12 +1,17 @@
 import { Prisma } from "@prisma/client"
 import { prisma } from "../infra/connection/prisma"
+import { paginate } from "@/infra/utils/paginate"
 
 interface IOrderRepository {
   getOrders(filters?: GetOrdersFilters): Promise<any>
   getOrdersByUezer(idUezer: number | string): Promise<any>
   getCreatedOrdersByUser(idClient: number | string): Promise<any>
   getOrderById(id: number | string): Promise<any>
-  getActiveOrders(filters?: GetOrdersFilters): Promise<any>
+  getActiveOrders(
+    page: number,
+    pageSize: number,
+    filters?: GetOrdersFilters,
+  ): Promise<any>
   getConcludedOrders(filters?: GetOrdersFilters): Promise<any>
   updateOrder(id: number | string, data: Prisma.OrderUpdateInput): Promise<any>
 }
@@ -105,7 +110,12 @@ class OrderRepository implements IOrderRepository {
     })
   }
 
-  async getActiveOrders(filters?: GetOrdersFilters) {
+  async getActiveOrders(
+    page: number,
+    pageSize: number,
+    filters?: GetOrdersFilters,
+  ) {
+    const { skip, take } = paginate(page, pageSize)
     return filters
       ? await prisma.order.findMany({
           where: {
@@ -123,6 +133,8 @@ class OrderRepository implements IOrderRepository {
             ],
             available: true,
           },
+          skip,
+          take,
           orderBy:
             filters.orderBy === "newest"
               ? { created_at: "desc" }
@@ -142,7 +154,7 @@ class OrderRepository implements IOrderRepository {
             client: true,
           },
         })
-      : await prisma.order.findMany({ where: { available: true } })
+      : await prisma.order.findMany({ where: { available: true }, skip, take })
   }
 
   async updateOrder(id: number | string, data: Prisma.OrderUpdateInput) {

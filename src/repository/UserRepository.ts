@@ -1,3 +1,4 @@
+import { paginate } from "@/infra/utils/paginate"
 import { prisma } from "../infra/connection/prisma"
 
 interface IUserRepository {
@@ -63,10 +64,10 @@ const allDetails = {
 
 class UserRepository implements IUserRepository {
   async getUsers(page: number, pageSize: number) {
-    const offset = (page <= 1 ? 0 : page - 1) * pageSize
+    const { skip, take } = paginate(page, pageSize)
     return await prisma.user.findMany({
-      skip: offset,
-      take: pageSize,
+      skip,
+      take,
       select: optimizedDetails,
     })
   }
