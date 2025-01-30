@@ -72,17 +72,43 @@ interface updateDetails {
   birth_date: string
 }
 
+interface GetUezersFilters {
+  search?: string
+  orderByProfession?: string
+}
+
 class UezerRepository implements IUezerRepository {
-  async getUezers(page: number, pageSize: number) {
+  async getUezers(page: number, pageSize: number, filters?: GetUezersFilters) {
     const { skip, take } = paginate(page, pageSize)
-    return await prisma.user.findMany({
-      skip,
-      take,
-      where: {
-        OR: [{ usertype: "UEZER" }, { usertype: "BOTH" }],
-      },
-      select: optimizedDetails,
-    })
+    return filters
+      ? prisma.user.findMany({
+          skip,
+          take,
+          where: {
+            OR: [{ usertype: "UEZER" }, { usertype: "BOTH" }],
+            AND: [
+              filters.search ? { name: { contains: filters.search } } : {},
+              filters.orderByProfession !== "default"
+                ? {
+                    speciality: {
+                      profession: {
+                        name: { contains: filters.orderByProfession },
+                      },
+                    },
+                  }
+                : {},
+            ],
+          },
+          select: optimizedDetails,
+        })
+      : await prisma.user.findMany({
+          skip,
+          take,
+          where: {
+            OR: [{ usertype: "UEZER" }, { usertype: "BOTH" }],
+          },
+          select: optimizedDetails,
+        })
   }
 
   async getUezerByUsername(username: string) {

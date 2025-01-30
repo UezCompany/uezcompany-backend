@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client"
 import { prisma } from "../src/infra/connection/prisma"
 import bcrypt from "bcrypt"
 
@@ -125,7 +126,33 @@ export async function main() {
     }
   }
 
-  console.log(professionData)
+  const clientsData: Prisma.UserCreateManyInput[] = [
+    {
+      name: "Danilo Romão",
+      birth_date: "2006-02-06",
+      username: "danilodev",
+      email: "danilo@gmail.com",
+      usertype: "CLIENT",
+      password: bcrypt.hashSync("cliente123", 10),
+    },
+  ]
+
+  const uezersData: Prisma.UserCreateManyInput[] = [
+    {
+      name: "Maria Eduarda",
+      birth_date: "2006-08-11",
+      username: "mariaeduarda",
+      email: "duda@gmail.com",
+      usertype: "UEZER",
+      password: bcrypt.hashSync("uezer123", 10),
+      // @ts-expect-error é isso mesmo
+      speciality: {
+        connect: {
+          name: "Fullstack",
+        },
+      },
+    },
+  ]
 
   // Criando um usuário cliente
   const client = await prisma.user.create({
@@ -154,6 +181,15 @@ export async function main() {
         },
       },
     },
+  })
+
+  await prisma.user.createMany({
+    data: clientsData.map((client) => client),
+    skipDuplicates: true,
+  })
+  await prisma.user.createMany({
+    data: uezersData.map((uezer) => uezer),
+    skipDuplicates: true,
   })
 
   // Criando um pedido (order)
@@ -259,8 +295,6 @@ export async function main() {
       },
     })
   }
-
-  console.log(client, uezer, order)
 }
 
 main()

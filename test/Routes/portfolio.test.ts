@@ -78,7 +78,6 @@ describe("Portfolio Route", () => {
 
     const responseBody = JSON.parse(response.body)
 
-    console.log("amo2", responseBody)
     expect(response.statusCode).toBe(200)
     expect(Array.isArray(responseBody)).toBe(true)
   })
@@ -96,7 +95,6 @@ describe("Portfolio Route", () => {
     })
 
     const responseBody = JSON.parse(response.body)
-    console.log("DELETE /portfolio/:id response:", responseBody)
 
     expect(response.statusCode).toBe(200)
     expect(responseBody.Message).toBe("O portfolio foi deletado com sucesso")
@@ -117,7 +115,6 @@ describe("Portfolio Route", () => {
     })
 
     const responseBody = JSON.parse(response.body)
-    console.log("DELETE /portfolio/:id response:", responseBody)
 
     expect(response.statusCode).toBe(200)
     expect(responseBody.Message).toBe("O portfolio foi deletado com sucesso")

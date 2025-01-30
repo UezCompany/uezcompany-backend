@@ -36,7 +36,6 @@ class PortfolioRepository implements IPortfolioRepository {
   }
 
   async deletePortfolio(id: string): Promise<any> {
-    console.log("id", id)
     const deletedPortfolio = await prisma.portfolio.delete({ where: { id } })
     if (deletedPortfolio.orderId) {
       await prisma.order.update({

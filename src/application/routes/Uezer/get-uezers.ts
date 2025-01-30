@@ -13,10 +13,13 @@ export default async function GetUezers(app: FastifyInstance) {
         tags: ["Uezer"],
         querystring: z
           .object({
+            search: z.optional(z.string()),
+            orderByProfession: z.string().default("default"),
             page: z.optional(z.string()),
             pageSize: z.optional(z.string()),
           })
           .transform((data) => ({
+            ...data,
             page: data.page ? parseInt(data.page, 10) : 1,
             pageSize: data.pageSize ? parseInt(data.pageSize, 10) : 50,
           })),
@@ -25,7 +28,11 @@ export default async function GetUezers(app: FastifyInstance) {
     async (request, reply) => {
       const { page, pageSize } = request.query
 
-      const uezers = await uezerRepository.getUezers(page, pageSize)
+      const uezers = await uezerRepository.getUezers(
+        page,
+        pageSize,
+        request.query,
+      )
       return reply.status(200).send(uezers)
     },
   )
